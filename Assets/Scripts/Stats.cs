@@ -7,6 +7,16 @@
     int m_Defense;
     float m_PlayRate;
 
+    public Stats()
+    {
+        m_Level = 0;
+        m_EXP = 0;
+        m_HP = 0;
+        m_Attack = 0;
+        m_Defense = 0;
+        m_PlayRate = 0.0f;
+    }
+    
     public int Level
     {
         get
