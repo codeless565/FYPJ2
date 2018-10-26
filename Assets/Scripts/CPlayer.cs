@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerClass : EntityInterface {
-    private Stats m_PlayerStats;
+public class CPlayer : IEntity {
+    private CStats m_PlayerStats;
     private bool m_IsImmortal;
     private Sprite m_PlayerSprite;
 
-    public PlayerClass()
+    public CPlayer()
     {
-        m_PlayerStats = new Stats();
+        m_PlayerStats = new CStats();
         m_IsImmortal = false;
         m_PlayerSprite = null;
     }
@@ -29,7 +29,7 @@ public class PlayerClass : EntityInterface {
         return m_PlayerSprite;
     }
 
-    public Stats GetStats()
+    public CStats GetStats()
     {
         return m_PlayerStats;
     }

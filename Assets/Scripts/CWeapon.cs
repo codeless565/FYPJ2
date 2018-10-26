@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponClass
+public class CWeapon
 {
-    private Stats m_WeaponStats;
+    private CStats m_WeaponStats;
     private Sprite m_WeaponSprite;
 
-    public WeaponClass()
+    public CWeapon()
     {
-        m_WeaponStats = new Stats();
+        m_WeaponStats = new CStats();
         m_WeaponSprite = null;
     }
 
