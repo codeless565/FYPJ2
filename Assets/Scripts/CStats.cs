@@ -1,4 +1,4 @@
-﻿public class Stats
+﻿public class CStats
 {
     int m_Level;
     int m_EXP;
@@ -7,7 +7,7 @@
     int m_Defense;
     float m_PlayRate;
 
-    public Stats()
+    public CStats()
     {
         m_Level = 0;
         m_EXP = 0;

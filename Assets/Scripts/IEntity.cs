@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface EntityInterface {
+public interface IEntity {
     void Spawn();
     void Delete();
     void IsDamaged(int damage);
     bool GetIsImmortalObject();
-    Stats GetStats();
+    CStats GetStats();
     void SetStats(int _level, int _exp, int _hp, int _attack, int _defense, float _playrate);
     Sprite GetSprite();
     void SetSprite(Sprite _sprite); 
