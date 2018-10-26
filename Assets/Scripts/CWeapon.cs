@@ -15,17 +15,17 @@ public class CWeapon
 
     public void NormalAttack()
     {
-
+        //Create NormalAttack prefab or smthing with projectile script
     }
 
     public void ChargeAttack()
     {
-
+        //Create normal attack prefab or smthing with projectile script
     }
 
     public void SpecialAttack()
     {
-
+        //Create SpecialAttack prefab or smthing with projectile script
     }
 
     public Sprite GetWeaponSprite()
