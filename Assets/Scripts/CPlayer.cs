@@ -2,16 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CPlayer : IEntity {
+public class CPlayer : MonoBehaviour ,IEntity
+{
     private CStats m_PlayerStats;
     private bool m_IsImmortal;
     private Sprite m_PlayerSprite;
+
+    public void Start()
+    {
+        this.name = "Player";
+        PostOffice.Instance.Register(this.name, this.gameObject); // TODO Move to Spawn() ?
+        // Delete/Despawn remove from post office 
+    }
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+            PostOffice.Instance.Send("Player", Message.MESSAGE_TYPE.HELLOWORLD);
+    }
 
     public CPlayer()
     {
         m_PlayerStats = new CStats();
         m_IsImmortal = false;
         m_PlayerSprite = null;
+        
     }
 
     public void Delete()
