@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class CBoardGenerator : MonoBehaviour
 {
+    public int pixelPerBlock = 100;
     public int numFloors = 100;
     public int columns = 100;                                 // The number of columns on the board (how wide it will be).
     public int rows = 100;                                    // The number of rows on the board (how tall it will be).
+    public int currFloor;
 
-    private List<CLevel> DungeonLevels;
+    public IntRange rooms = new IntRange(3,5);
+    public IntRange corridors = new IntRange(3, 5);
+    public IntRange roomWidth = new IntRange(5, 10);
+    public IntRange roomHeight = new IntRange(5, 10);
+    public IntRange corridorLength = new IntRange(4, 8);
 
     public GameObject[] floorTiles;                           // An array of floor tile prefabs.
     public GameObject[] wallTiles;                            // An array of wall tile prefabs.
@@ -16,24 +22,29 @@ public class CBoardGenerator : MonoBehaviour
 
     public GameObject boardHolder;                           // GameObject that acts as a container for all other tiles.
 
-    public void Init()
+    public void Start()
     {
-        if (DungeonLevels.Count == 0)
+        currFloor = CDungeon.Instance.currentFloor;
+
+        if (currFloor < 0)
         {
-            CreateLevels(numFloors);
+            currFloor = 1;
+            CDungeon.Instance.currentFloor = currFloor;
         }
-        CreateBoard(/*get current floor*/ - 1);
+
+        CreateNewFloor();        
+        CreateBoard(currFloor);
     }
 
-    public void CreateLevels(int _floors)
+    public void CreateNewFloor()
     {
-        DungeonLevels = new List<CLevel>();
+        CFloor temp = new CFloor();
+        temp.Name = "Floor_" + currFloor;
+        temp.InitNewLevel(columns, rows, rooms, corridors, roomWidth, roomHeight, corridorLength);
 
-        for (int i = 0; i < _floors; ++i)
-        {
-            CLevel temp = new CLevel();
-            //Init the level;
-        }
+        Debug.Log("Floor Created");
+
+        CDungeon.Instance.AddNewFloor(currFloor, temp);
     }
 
     public void CreateBoard(int _currentFloor)
@@ -43,11 +54,15 @@ public class CBoardGenerator : MonoBehaviour
             boardHolder = new GameObject("Level");
         }
 
-        if (_currentFloor < 0) // Floor must be >= 0
+        if (_currentFloor <= 0) // Floor must be > 0
             return;
 
-        InstantiateTiles(DungeonLevels[_currentFloor].GetTiles());
-        InstantiateOuterWalls(DungeonLevels[_currentFloor].columns, DungeonLevels[_currentFloor].rows);
+        Debug.Log("CurrLevel not 0");
+
+        InstantiateTiles(CDungeon.Instance.Floors[_currentFloor].GetTiles());
+        InstantiateOuterWalls(CDungeon.Instance.Floors[_currentFloor].columns, CDungeon.Instance.Floors[_currentFloor].rows);
+
+        Debug.Log("Board Created");
     }
 
     void InstantiateTiles(TileType[][] _tiles)
@@ -61,11 +76,14 @@ public class CBoardGenerator : MonoBehaviour
                 if (_tiles[i][j] == TileType.Wall)
                 {
                     // ... instantiate a wall.
-                    InstantiateFromArray(wallTiles, i, j);
-                    continue;
+                    InstantiateFromArray(wallTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                    //InstantiateFromArray(wallTiles, i, j);
                 }
-                // If not, Instantiate a floor
-                InstantiateFromArray(floorTiles, i, j);
+                else  // If not, Instantiate a floor
+                {
+                    //InstantiateFromArray(floorTiles, i, j);
+                    InstantiateFromArray(floorTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                }
             }
         }
     }
@@ -74,9 +92,9 @@ public class CBoardGenerator : MonoBehaviour
     {
         // The outer walls are one unit left, right, up and down from the board.
         float leftEdgeX = -1f;
-        float rightEdgeX = columns + 0f;
+        float rightEdgeX = _levelColumns + 0f;
         float bottomEdgeY = -1f;
-        float topEdgeY = rows + 0f;
+        float topEdgeY = _levelRows + 0f;
 
         // Instantiate both vertical walls (one on each side).
         InstantiateVerticalOuterWall(leftEdgeX, bottomEdgeY, topEdgeY);
@@ -96,7 +114,7 @@ public class CBoardGenerator : MonoBehaviour
         while (currentY <= endingY)
         {
             // ... instantiate an outer wall tile at the x coordinate and the current y coordinate.
-            InstantiateFromArray(outerWallTiles, xCoord, currentY);
+            InstantiateFromArray(outerWallTiles, xCoord / 100 * pixelPerBlock, currentY / 100 * pixelPerBlock);
 
             currentY++;
         }
@@ -111,7 +129,7 @@ public class CBoardGenerator : MonoBehaviour
         while (currentX <= endingX)
         {
             // ... instantiate an outer wall tile at the y coordinate and the current x coordinate.
-            InstantiateFromArray(outerWallTiles, currentX, yCoord);
+            InstantiateFromArray(outerWallTiles, currentX / 100 * pixelPerBlock, yCoord / 100 * pixelPerBlock);
 
             currentX++;
         }

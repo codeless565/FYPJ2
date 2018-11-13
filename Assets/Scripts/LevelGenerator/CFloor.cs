@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CLevel
+public class CFloor
 {
     public int columns;                                 // The number of columns on the board (how wide it will be).
     public int rows;                                    // The number of rows on the board (how tall it will be).
-
+    string levelName;
     private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
     private CRoom[] rooms;                                     // All the rooms that are created for this board.
     private List<CCorridor> corridors;                             // All the corridors that connect the rooms.
-
-    public void Init(int _columns, int _rows, IntRange _numRooms, IntRange _numCorridors, IntRange _roomWidth, IntRange _roomHeight, IntRange _corridorLength)
+    
+    public void InitNewLevel(int _columns, int _rows, IntRange _numRooms, IntRange _numCorridors, IntRange _roomWidth, IntRange _roomHeight, IntRange _corridorLength)
     {
         columns = _columns;
         rows = _rows;
@@ -31,8 +31,14 @@ public class CLevel
         SetTilesValuesForCorridors();
     }
 
+    //public void InitLevelFromSave()
+    //{
+        
+    //}
+
     void SetupTilesArray()
     {
+        Debug.Log("CF - colums: " + columns + " Rows " + rows);
         // Set the tiles jagged array to the correct width.
         tiles = new TileType[columns][];
 
@@ -178,6 +184,32 @@ public class CLevel
 
     public TileType[][] GetTiles()
     { return tiles; }
+
+    public string Name
+    {
+        get
+        { return levelName; }
+
+        set
+        { levelName = value; }
+    }
+
+    //public void SaveLevel()
+    //{
+    //    string temp = "";
+    //    for (int i = 0; i < tiles.Length; i++)
+    //    {
+    //        for (int j = 0; j <tiles[i].Length; j++)
+    //        {
+    //            temp = temp + tiles[i][j].ToString();
+    //        }
+    //        temp = temp + "/";
+    //    }
+    //    //Create a line of 0 and 1 for each  of the level
+    //    PlayerPrefs.SetString(levelName + "_data", temp);
+    //    PlayerPrefs.SetString(levelName + "_row", rows.ToString());
+    //    PlayerPrefs.SetString(levelName + "_column", columns.ToString());
+    //}
 }
 
 // The type of tile that will be laid in a specific position.
