@@ -5,7 +5,8 @@ using UnityEngine;
 public class Message {
     public enum MESSAGE_TYPE
     {
-        HELLOWORLD,
-        OHYEA
+        ADDHPPOT,
+        USEHPPOT
+
     }
 }

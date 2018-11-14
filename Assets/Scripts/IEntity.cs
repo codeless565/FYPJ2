@@ -8,7 +8,7 @@ public interface IEntity {
     void IsDamaged(int damage);
     bool GetIsImmortalObject();
     CStats GetStats();
-    void SetStats(int _level, int _exp, int _hp, int _attack, int _defense, float _playrate);
+    void SetStats(int _level, int _exp, int _hp, int _attack, int _defense, float _playrate, float _movespeed);
     Sprite GetSprite();
     void SetSprite(Sprite _sprite); 
 }
