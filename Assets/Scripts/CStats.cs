@@ -6,6 +6,7 @@
     int m_Attack;
     int m_Defense;
     float m_PlayRate;
+    float m_MovementSpeed;
 
     public CStats()
     {
@@ -15,6 +16,7 @@
         m_Attack = 0;
         m_Defense = 0;
         m_PlayRate = 0.0f;
+        m_MovementSpeed = 1.0f;
     }
     
     public int Level
@@ -88,5 +90,16 @@
             m_PlayRate = value;
         }
     }
-
+    
+    public float MoveSpeed
+    {
+        get
+        {
+            return m_MovementSpeed;
+        }
+        set
+        {
+            m_MovementSpeed = value;
+        }
+    }
 }

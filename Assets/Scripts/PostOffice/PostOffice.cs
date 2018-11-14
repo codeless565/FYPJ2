@@ -18,6 +18,7 @@ public class PostOffice {
     private PostOffice()
     {
         m_addressBook = new Dictionary<string, GameObject>();
+        //Debug.Log("Singleton - Post Office created");
     }
 
     public void Register(string addressname, GameObject go)
@@ -29,6 +30,16 @@ public class PostOffice {
         m_addressBook.Add(addressname, go);
     }
 
+    public void Remove(string addressname, GameObject go)
+    {
+        if (go == null)
+            return;
+        if (!m_addressBook.ContainsKey(addressname))
+            return;
+
+        m_addressBook.Remove(addressname);
+    }
+
     public bool Send(string receiveraddress, Message.MESSAGE_TYPE message)
     {
         if (!m_addressBook.ContainsKey(receiveraddress))
@@ -37,26 +48,11 @@ public class PostOffice {
         {
             GameObject temp;
             m_addressBook.TryGetValue(receiveraddress, out temp);
-            Handle(temp, message);
+            MessageHandler.Instance.Handle(temp, message);
         }
         
 
         return false;
     }
 
-    public void Handle(GameObject go, Message.MESSAGE_TYPE message)
-    {
-        if (!go)
-            return;
-
-        switch(message)
-        {
-            case Message.MESSAGE_TYPE.HELLOWORLD:
-                Debug.Log("helloWorld");
-                break;
-            case Message.MESSAGE_TYPE.OHYEA:
-                Debug.Log("ohyea");
-                break;
-        }
-    }
 }
