@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class CTCorridor
 {
+    public bool connectedTo;
     public int startXPos;         // The x coordinate for the start of the corridor.
     public int startYPos;         // The y coordinate for the start of the corridor.
     public int corridorLength;    // How many units long the corridor is.
     public Direction direction;   // Which direction the corridor is heading from it's room.
-    public bool connectedTo;
 
+    public CTRoomCoordinate endRoomCoord;
     public CTRoom prevRoom;
 
     public int EndPositionX
@@ -51,18 +52,22 @@ public class CTCorridor
                 // ... the starting position in the x axis can be random but within the width of the room.
                 startXPos = _prevRoom.xPos + (_prevRoom.roomWidth / 2);
                 startYPos = _prevRoom.yPos + _prevRoom.roomHeight;
+                endRoomCoord = new CTRoomCoordinate(prevRoom.coordinate.x, prevRoom.coordinate.y + 1);
                 break;
             case Direction.EAST:
                 startXPos = _prevRoom.xPos + _prevRoom.roomWidth;
                 startYPos = _prevRoom.yPos + _prevRoom.roomHeight / 2;
+                endRoomCoord = new CTRoomCoordinate(prevRoom.coordinate.x + 1, prevRoom.coordinate.y);
                 break;
             case Direction.SOUTH:
                 startXPos = _prevRoom.xPos + _prevRoom.roomWidth / 2;
                 startYPos = _prevRoom.yPos - 1;
+                endRoomCoord = new CTRoomCoordinate(prevRoom.coordinate.x, prevRoom.coordinate.y - 1);
                 break;
             case Direction.WEST:
                 startXPos = _prevRoom.xPos - 1;
                 startYPos = _prevRoom.yPos + _prevRoom.roomHeight / 2;
+                endRoomCoord = new CTRoomCoordinate(prevRoom.coordinate.x - 1, prevRoom.coordinate.y);
                 break;
         }
     }
