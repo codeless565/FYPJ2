@@ -4,26 +4,32 @@ using UnityEngine;
 
 public class CTBoardGenerator : MonoBehaviour
 {
-    public int pixelPerBlock = 100;
-    public int numFloors = 100;
-    public int columns = 100;                                 // The number of columns on the board (how wide it will be).
-    public int rows = 100;                                    // The number of rows on the board (how tall it will be).
-    public int currFloor;
+    private int gridSize;
+    private int columns;        // The number of columns on the board (how wide it will be).
+    private int rows;           // The number of rows on the board (how tall it will be).
 
-    public IntRange rooms = new IntRange(3, 5);
-    public IntRange corridors = new IntRange(3, 5);
-    public int roomWidth = 10;
-    public int roomHeight = 10;
+    public int rooms = 20;
+    public int roomWidth = 11;
+    public int roomHeight = 11;
     public int corridorLength = 8;
 
-    public GameObject[] floorTiles;                           // An array of floor tile prefabs.
-    public GameObject[] wallTiles;                            // An array of wall tile prefabs.
-    public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
+    public int numFloors = 100;
+    public int currFloor;
 
-    public GameObject boardHolder;                           // GameObject that acts as a container for all other tiles.
+    public GameObject[] floorTiles;             // An array of floor tile prefabs.
+    public GameObject[] wallTiles;              // An array of wall tile prefabs.
+    public GameObject[] outerWallTiles;         // An array of outer wall tile prefabs.
+
+    public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
     public void Start()
     {
+        gridSize = rooms / 2;
+        if (gridSize * gridSize <= rooms)
+            gridSize += gridSize;
+        columns = gridSize * (roomWidth + corridorLength) + 2 * (roomWidth + corridorLength);
+        rows = gridSize * (roomHeight + corridorLength) + 2 * (roomHeight + corridorLength);
+
         currFloor = CTDungeon.Instance.currentFloor;
 
         if (currFloor < 0)
@@ -40,7 +46,7 @@ public class CTBoardGenerator : MonoBehaviour
     {
         CTFloor temp = new CTFloor();
         temp.Name = "Floor_" + currFloor;
-        temp.InitNewLevel(columns, rows, rooms, roomWidth, roomHeight, corridorLength);
+        temp.InitNewLevel(columns, rows, rooms, gridSize, roomWidth, roomHeight, corridorLength);
 
         Debug.Log("CT: Floor Created");
 
@@ -60,7 +66,7 @@ public class CTBoardGenerator : MonoBehaviour
         Debug.Log("CurrLevel not 0");
 
         InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].GetTiles());
-        //InstantiateOuterWalls(CDungeon.Instance.Floors[_currentFloor].columns, CDungeon.Instance.Floors[_currentFloor].rows);
+        InstantiateOuterWalls(CTDungeon.Instance.Floors[_currentFloor].columns, CTDungeon.Instance.Floors[_currentFloor].rows);
 
         Debug.Log("Board Created");
     }
@@ -76,13 +82,13 @@ public class CTBoardGenerator : MonoBehaviour
                 if (_tiles[i][j] == TileType.Wall)
                 {
                     // ... instantiate a wall.
-                    InstantiateFromArray(wallTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                    InstantiateFromArray(wallTiles, i, j);
                     //InstantiateFromArray(wallTiles, i, j);
                 }
                 else  // If not, Instantiate a floor
                 {
                     //InstantiateFromArray(floorTiles, i, j);
-                    InstantiateFromArray(floorTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                    InstantiateFromArray(floorTiles, i, j);
                 }
             }
         }
@@ -114,7 +120,7 @@ public class CTBoardGenerator : MonoBehaviour
         while (currentY <= endingY)
         {
             // ... instantiate an outer wall tile at the x coordinate and the current y coordinate.
-            InstantiateFromArray(outerWallTiles, xCoord / 100 * pixelPerBlock, currentY / 100 * pixelPerBlock);
+            InstantiateFromArray(outerWallTiles, xCoord, currentY);
 
             currentY++;
         }
@@ -129,7 +135,7 @@ public class CTBoardGenerator : MonoBehaviour
         while (currentX <= endingX)
         {
             // ... instantiate an outer wall tile at the y coordinate and the current x coordinate.
-            InstantiateFromArray(outerWallTiles, currentX / 100 * pixelPerBlock, yCoord / 100 * pixelPerBlock);
+            InstantiateFromArray(outerWallTiles, currentX, yCoord);
 
             currentX++;
         }

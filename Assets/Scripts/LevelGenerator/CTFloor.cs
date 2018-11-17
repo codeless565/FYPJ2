@@ -15,36 +15,22 @@ public class CTFloor
     private List<CTCorridor> corridors;                             // All the corridors that connect the rooms.
     private CTRoomCoordinate StartingRoom;
 
-    public void InitNewLevel(int _columns, int _rows, IntRange _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
+    public void InitNewLevel(int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
     {
         columns = _columns;
         rows = _rows;
 
         // Set up Gameboard and Starting Room Coordinates
         StartingRoom = new CTRoomCoordinate(0,0);
+
         int gameboardColum;
-        if (columns % (int)Mathf.Sqrt(columns) == 0)
-        {
-            gameboardColum = (int)Mathf.Sqrt(columns) + 1;
-            StartingRoom.x = gameboardColum / 2 + 1;
-        }
-        else
-        {
-            gameboardColum = (int)Mathf.Sqrt(columns);
-            StartingRoom.x = gameboardColum / 2;
-        }
+        gameboardColum = _gridSize;
+        StartingRoom.x = gameboardColum / 2;
 
         int gameboardRow;
-        if (rows % (int)Mathf.Sqrt(rows) == 0)
-        {
-            gameboardRow = (int)Mathf.Sqrt(rows) + 1;
-            StartingRoom.y = gameboardRow / 2 + 1;
-        }
-        else
-        {
-            gameboardRow = (int)Mathf.Sqrt(rows);
-            StartingRoom.y = gameboardRow / 2;
-        }
+        gameboardRow = _gridSize;
+        StartingRoom.y = gameboardRow / 2;
+
         Debug.Log("ColumsSqrt: " + gameboardColum);
         Debug.Log("RowsSqrt: " + gameboardRow);
         Debug.Log("StartingRm: " + StartingRoom.x + ", " + StartingRoom.y);
@@ -84,7 +70,7 @@ public class CTFloor
         }
     }
 
-    void CreateRoomsAndCorridors(IntRange _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
+    void CreateRoomsAndCorridors(int _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
     {
         // Create the rooms array with a random size.
         rooms = new List<CTRoom>();
@@ -96,10 +82,10 @@ public class CTFloor
         // Create the first room and corridor.
         CTRoom firstRoom = new CTRoom();
         rooms.Add(firstRoom);
-        // Setup the first room, there is no previous corridor so we do not use one.
-        firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, StartingRoom,
-            0, 10, ref gameBoard, ref rooms, ref corridors);
-        Debug.Log("Total Rooms: " + rooms.Count);
+        // Setup the first room, RMCount will start from 0
+        int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, StartingRoom,
+            _numRooms, ref gameBoard, ref rooms, ref corridors);
+        Debug.Log("Total Rooms: " + rooms.Count + " GeneratedRooms: " + totalRooms);
     }
 
     void SetTilesValuesForRooms()
