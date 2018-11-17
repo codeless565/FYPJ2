@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CBoardGenerator : MonoBehaviour
 {
-    public int pixelPerBlock = 100;
     public int numFloors = 100;
     public int columns = 100;                                 // The number of columns on the board (how wide it will be).
     public int rows = 100;                                    // The number of rows on the board (how tall it will be).
@@ -76,13 +75,13 @@ public class CBoardGenerator : MonoBehaviour
                 if (_tiles[i][j] == TileType.Wall)
                 {
                     // ... instantiate a wall.
-                    InstantiateFromArray(wallTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                    InstantiateFromArray(wallTiles, i, j);
                     //InstantiateFromArray(wallTiles, i, j);
                 }
                 else  // If not, Instantiate a floor
                 {
                     //InstantiateFromArray(floorTiles, i, j);
-                    InstantiateFromArray(floorTiles, i * pixelPerBlock / 100, j * pixelPerBlock / 100);
+                    InstantiateFromArray(floorTiles, i, j);
                 }
             }
         }
@@ -114,7 +113,7 @@ public class CBoardGenerator : MonoBehaviour
         while (currentY <= endingY)
         {
             // ... instantiate an outer wall tile at the x coordinate and the current y coordinate.
-            InstantiateFromArray(outerWallTiles, xCoord / 100 * pixelPerBlock, currentY / 100 * pixelPerBlock);
+            InstantiateFromArray(outerWallTiles, xCoord, currentY);
 
             currentY++;
         }
@@ -129,7 +128,7 @@ public class CBoardGenerator : MonoBehaviour
         while (currentX <= endingX)
         {
             // ... instantiate an outer wall tile at the y coordinate and the current x coordinate.
-            InstantiateFromArray(outerWallTiles, currentX / 100 * pixelPerBlock, yCoord / 100 * pixelPerBlock);
+            InstantiateFromArray(outerWallTiles, currentX, yCoord);
 
             currentX++;
         }
