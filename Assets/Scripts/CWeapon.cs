@@ -4,37 +4,62 @@ using UnityEngine;
 
 public class CWeapon
 {
-    private CStats m_WeaponStats;
-    private Sprite m_WeaponSprite;
+    protected CWeaponStats m_WeaponStats;
+    protected Sprite m_WeaponSprite;
 
     public CWeapon()
     {
-        m_WeaponStats = new CStats();
+        m_WeaponStats = new CWeaponStats();
         m_WeaponSprite = null;
     }
 
-    public void NormalAttack()
+    public virtual void NormalAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
     {
         //Create NormalAttack prefab or smthing with projectile script
+        Debug.Log("Using base function: CWeapon.NormalAttack");
     }
 
-    public void ChargeAttack()
+    public virtual void ChargeAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
     {
         //Create normal attack prefab or smthing with projectile script
+        Debug.Log("Using base function: CWeapon.ChargeAttack");
     }
 
-    public void SpecialAttack()
+    public virtual void SpecialAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
     {
         //Create SpecialAttack prefab or smthing with projectile script
+        Debug.Log("Using base function: CWeapon.SpecialAttack");
     }
 
-    public Sprite GetWeaponSprite()
+    public Sprite WeaponSprite
     {
-        return m_WeaponSprite;
+        get
+        {
+            return m_WeaponSprite;
+        }
+
+        set
+        {
+            m_WeaponSprite = value;
+        }
     }
 
-    public void SetWeaponSprite(Sprite _sprite)
+    public CWeaponStats Stats
     {
-        m_WeaponSprite = _sprite;
+        get
+        {
+            return m_WeaponStats;
+        }
+
+        set
+        {
+            m_WeaponStats = value;
+        }
+    }
+
+    public void SetWeaponStats(float _attackMultiplier, int _attackRange)
+    {
+        m_WeaponStats.AttackMultiplier = _attackMultiplier;
+        m_WeaponStats.Range = _attackRange;
     }
 }
