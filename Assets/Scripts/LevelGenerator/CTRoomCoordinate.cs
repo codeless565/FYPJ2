@@ -10,6 +10,12 @@ public class CTRoomCoordinate
         y = _y;
     }
 
+    public CTRoomCoordinate(CTRoomCoordinate _mirror)
+    {
+        x = _mirror.x;
+        y = _mirror.y;
+    }
+
     public void setCoordinate(int _x, int _y)
     {
         x = _x;
