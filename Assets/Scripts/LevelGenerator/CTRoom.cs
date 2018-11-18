@@ -34,7 +34,7 @@ public class CTRoom
         xPos = (int)(_boardWidth * 0.5f - roomWidth * 0.5f);
         yPos = (int)(_boardHeight * 0.5f - roomHeight * 0.5f);
 
-        coordinate = _startingCoord;
+        coordinate = new CTRoomCoordinate(_startingCoord);
         _gameBoard[coordinate.x][coordinate.y] = true;
 
         generated = true;
@@ -158,6 +158,9 @@ public class CTRoom
         if (_roomCoordinate.y >= _gameBoard[0].Length)
             return;
 
+        if (_gameBoard[_roomCoordinate.x][_roomCoordinate.y])
+            return;
+
         // Init Values
         // Set the entering corridor direction.
         nextCorridors = new List<CTCorridor>();
@@ -167,7 +170,7 @@ public class CTRoom
         roomHeight = _height;
         roomDepth = _depth + 1;
 
-        coordinate = _roomCoordinate;
+        coordinate = new CTRoomCoordinate(_roomCoordinate);
 
         //Create Room
         switch (_prevCorridor.direction)
@@ -198,7 +201,7 @@ public class CTRoom
         // room created successfully!
         _prevCorridor.connectedTo = true;
         generated = true;
-        _gameBoard[coordinate.x][coordinate.y] = true;
+        _gameBoard[_roomCoordinate.x][_roomCoordinate.y] = true;
 
         _availableRooms--;
         _numRooms++;
@@ -236,7 +239,7 @@ public class CTRoom
                             continue;
                         case Direction.SOUTH:
                             if (coordinate.y - 1 >= 0)
-                                if (_gameBoard[coordinate.x][coordinate.y - 1])
+                                if (!_gameBoard[coordinate.x][coordinate.y - 1])
                                     break;
                             continue;
                         case Direction.EAST:
@@ -366,104 +369,104 @@ public class CTRoom
         //Create Corridors
         Debug.Log("Setup EndRooms Called");
         Debug.Log("EndRm Coord: " + coordinate.x + ", " + coordinate.y);
-        //int startDir = Random.Range(0, (int)Direction.Size);
-        //for (int i = 0; i < (int)Direction.Size; ++i, ++startDir)
-        //{
-        //    Direction nextDir = (Direction)(startDir % (int)Direction.Size);
-        //    //if ((startDir % (int)Direction.Size) != (int)prevCorridor)
-        //    {
-        //        //Create Corridors
-        //        if (Random.Range(0.0f, 1.0f) <= 0.5f - i * 0.1f)
-        //        {
-        //            // Safety Check  if not, create a corridor for the room
-        //            switch (nextDir)
-        //            {
-        //                case Direction.NORTH:
-        //                    //if the next room will be out of board
-        //                    if (coordinate.y + 1 >= _gameBoard[0].Length)
-        //                        continue;
-        //                    //if corridor has a room already?
-        //                    if (_gameBoard[coordinate.x][coordinate.y + 1])
-        //                        continue;
-        //                    break;
-        //                case Direction.SOUTH:
-        //                    if (coordinate.y - 1 < 0)
-        //                        continue;
-        //                    if (_gameBoard[coordinate.x][coordinate.y - 1])
-        //                        continue;
-        //                    break;
-        //                case Direction.EAST:
-        //                    if (coordinate.x + 1 >= _gameBoard.Length)
-        //                        continue;
-        //                    if (_gameBoard[coordinate.x + 1][coordinate.y])
-        //                        continue;
-        //                    break;
-        //                case Direction.WEST:
-        //                    if (coordinate.x - 1 < 0)
-        //                        continue;
-        //                    if (_gameBoard[coordinate.x - 1][coordinate.y])
-        //                        continue;
-        //                    break;
-        //            }
-
-        //            Debug.Log("prev: " + prevCorridor + " next: " + nextDir);
-        //            CTCorridor newCor = new CTCorridor();
-        //            newCor.SetupCorridor(this, _corridorLength, nextDir);
-        //            _corridors.Add(newCor);
-        //            nextCorridors.Add(newCor);
-        //        }
-        //    }
-        //}
-
-        //Create the same direction 
-        if (Random.Range(0.0f, 1.0f) <= 0.5f)
+        int startDir = Random.Range(0, (int)Direction.Size);
+        for (int i = 0; i < (int)Direction.Size; ++i, ++startDir)
         {
-            // Safety Check  if not, create a corridor for the room
-            switch (prevCorridor)
+            Direction nextDir = (Direction)(startDir % (int)Direction.Size);
+            //if ((startDir % (int)Direction.Size) != (int)prevCorridor)
             {
-                case Direction.NORTH:
-                    //if the next room will be out of board
-                    if (coordinate.y + 1 < _gameBoard[0].Length)
-                        if (!_gameBoard[coordinate.x][coordinate.y + 1])
-                        {
-                            CTCorridor newCor = new CTCorridor();
-                            newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-                            _corridors.Add(newCor);
-                            nextCorridors.Add(newCor);
-                        }
-                    break;
-                case Direction.SOUTH:
-                    if (coordinate.y - 1 >= 0)
-                        if (!_gameBoard[coordinate.x][coordinate.y - 1])
-                        {
-                            CTCorridor newCor = new CTCorridor();
-                            newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-                            _corridors.Add(newCor);
-                            nextCorridors.Add(newCor);
-                        }
-                    break;
-                case Direction.EAST:
-                    if (coordinate.x + 1 < _gameBoard.Length)
-                        if (!_gameBoard[coordinate.x + 1][coordinate.y])
-                        {
-                            CTCorridor newCor = new CTCorridor();
-                            newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-                            _corridors.Add(newCor);
-                            nextCorridors.Add(newCor);
-                        }
-                    break;
-                case Direction.WEST:
-                    if (coordinate.x - 1 >= 0)
-                        if (!_gameBoard[coordinate.x - 1][coordinate.y])
-                        {
-                            CTCorridor newCor = new CTCorridor();
-                            newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-                            _corridors.Add(newCor);
-                            nextCorridors.Add(newCor);
-                        }
-                    break;
+                //Create Corridors
+                if (Random.Range(0.0f, 1.0f) <= 0.5f - i * 0.1f)
+                {
+                    // Safety Check  if not, create a corridor for the room
+                    switch (nextDir)
+                    {
+                        case Direction.NORTH:
+                            //if the next room will be out of board
+                            if (coordinate.y + 1 >= _gameBoard[0].Length)
+                                continue;
+                            //if corridor has a room already?
+                            if (_gameBoard[coordinate.x][coordinate.y + 1])
+                                continue;
+                            break;
+                        case Direction.SOUTH:
+                            if (coordinate.y - 1 < 0)
+                                continue;
+                            if (_gameBoard[coordinate.x][coordinate.y - 1])
+                                continue;
+                            break;
+                        case Direction.EAST:
+                            if (coordinate.x + 1 >= _gameBoard.Length)
+                                continue;
+                            if (_gameBoard[coordinate.x + 1][coordinate.y])
+                                continue;
+                            break;
+                        case Direction.WEST:
+                            if (coordinate.x - 1 < 0)
+                                continue;
+                            if (_gameBoard[coordinate.x - 1][coordinate.y])
+                                continue;
+                            break;
+                    }
+
+                    Debug.Log("prev: " + prevCorridor + " next: " + nextDir);
+                    CTCorridor newCor = new CTCorridor();
+                    newCor.SetupCorridor(this, _corridorLength, nextDir);
+                    _corridors.Add(newCor);
+                    nextCorridors.Add(newCor);
+                }
             }
         }
+
+        //Create the same direction 
+        //if (Random.Range(0.0f, 1.0f) <= 0.5f)
+        //{
+        //    // Safety Check  if not, create a corridor for the room
+        //    switch (prevCorridor)
+        //    {
+        //        case Direction.NORTH:
+        //            //if the next room will be out of board
+        //            if (coordinate.y + 1 < _gameBoard[0].Length)
+        //                if (!_gameBoard[coordinate.x][coordinate.y + 1])
+        //                {
+        //                    CTCorridor newCor = new CTCorridor();
+        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
+        //                    _corridors.Add(newCor);
+        //                    nextCorridors.Add(newCor);
+        //                }
+        //            break;
+        //        case Direction.SOUTH:
+        //            if (coordinate.y - 1 >= 0)
+        //                if (!_gameBoard[coordinate.x][coordinate.y - 1])
+        //                {
+        //                    CTCorridor newCor = new CTCorridor();
+        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
+        //                    _corridors.Add(newCor);
+        //                    nextCorridors.Add(newCor);
+        //                }
+        //            break;
+        //        case Direction.EAST:
+        //            if (coordinate.x + 1 < _gameBoard.Length)
+        //                if (!_gameBoard[coordinate.x + 1][coordinate.y])
+        //                {
+        //                    CTCorridor newCor = new CTCorridor();
+        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
+        //                    _corridors.Add(newCor);
+        //                    nextCorridors.Add(newCor);
+        //                }
+        //            break;
+        //        case Direction.WEST:
+        //            if (coordinate.x - 1 >= 0)
+        //                if (!_gameBoard[coordinate.x - 1][coordinate.y])
+        //                {
+        //                    CTCorridor newCor = new CTCorridor();
+        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
+        //                    _corridors.Add(newCor);
+        //                    nextCorridors.Add(newCor);
+        //                }
+        //            break;
+        //    }
+        //}
 
 
         // Create 1 End Room
