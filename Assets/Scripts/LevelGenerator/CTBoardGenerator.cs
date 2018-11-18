@@ -83,11 +83,9 @@ public class CTBoardGenerator : MonoBehaviour
                 {
                     // ... instantiate a wall.
                     InstantiateFromArray(wallTiles, i, j);
-                    //InstantiateFromArray(wallTiles, i, j);
                 }
                 else  // If not, Instantiate a floor
                 {
-                    //InstantiateFromArray(floorTiles, i, j);
                     InstantiateFromArray(floorTiles, i, j);
                 }
             }
