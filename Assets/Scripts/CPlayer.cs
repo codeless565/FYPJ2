@@ -5,16 +5,19 @@ using UnityEngine;
 [RequireComponent(typeof(Sprite))]
 public class CPlayer : MonoBehaviour ,IEntity
 {
-    private CStats m_PlayerStats;
     private bool m_IsImmortal;
+
+    private CStats m_PlayerStats;
     private Sprite m_PlayerSprite;
+
     public Dictionary<string, CItem> m_ItemDictonary;
     CWeapon m_EquippedWeapon;
 
-    public void Start()
+    public void init()
     {
         Spawn();
     }
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
@@ -36,11 +39,13 @@ public class CPlayer : MonoBehaviour ,IEntity
 
 
         Attack();
+
+        m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
     }
     public void Attack()
     {
         if (Input.GetMouseButtonDown(0))
-            m_EquippedWeapon.NormalAttack();
+            m_EquippedWeapon.NormalAttack(m_PlayerStats.Attack, transform.position, (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized, m_PlayerStats.PlayRate);
     }
 
     public void UseItem(string _itemname)
@@ -57,7 +62,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Move()
     {
         if (Input.GetKey(KeyCode.W))
-            transform.position += new Vector3(0,1) * m_PlayerStats.MoveSpeed * Time.deltaTime;
+            transform.position += new Vector3(0, 1) * m_PlayerStats.MoveSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.S))
             transform.position -= new Vector3(0, 1) * m_PlayerStats.MoveSpeed * Time.deltaTime;
@@ -124,8 +129,12 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         m_ItemDictonary = new Dictionary<string, CItem>();
         m_PlayerStats = new CStats();
+        SetStats(1, 0, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
-        m_PlayerSprite = null;
+        m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
+
+        m_EquippedWeapon = new TestWeapon();
+        Debug.Log("Weapon Created");
         //m_PrimaryWeapon = new Firebolt();
     }
 
