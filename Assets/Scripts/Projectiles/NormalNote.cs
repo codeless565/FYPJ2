@@ -70,7 +70,19 @@ public class NormalNote : MonoBehaviour, IProjectile
     {
         CheckTravelDist();
 
-        transform.rotation = Quaternion.LookRotation(m_direction, Vector2.up);
+        //transform.rotation = Quaternion.LookRotation(m_direction, Vector2.up);
         transform.Translate(m_direction * m_speed * Time.deltaTime);
 	}
+
+    private void OnTriggerEnter2D(Collider2D _other)
+    {
+        if (_other.tag == "Player")
+            return;
+
+        Debug.Log("collided name: " + _other.tag);
+        if(_other.tag == "Wall")
+        {
+            Destroy(gameObject);
+        }
+    }
 }
