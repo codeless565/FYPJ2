@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CWeapon
 {
+    protected float firingDelay;
     protected CWeaponStats m_WeaponStats;
     protected Sprite m_WeaponSprite;
 
@@ -17,19 +18,26 @@ public class CWeapon
         m_WeaponSprite = null;
     }
 
-    public virtual void NormalAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public virtual void UpdateWeapon(float _dt)
+    {
+        Debug.Log("Using base function: CWeapon.UpdateWeapon");
+        if (firingDelay > 0)
+            firingDelay -= _dt;
+    }
+
+    public virtual void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.NormalAttack");
     }
 
-    public virtual void ChargeAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public virtual void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create normal attack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.ChargeAttack");
     }
 
-    public virtual void SpecialAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public virtual void SpecialAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create SpecialAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.SpecialAttack");
