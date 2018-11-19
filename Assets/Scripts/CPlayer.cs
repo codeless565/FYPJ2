@@ -9,6 +9,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     private bool m_IsImmortal;
     private Sprite m_PlayerSprite;
     public Dictionary<string, CItem> m_ItemDictonary;
+    CWeapon m_EquippedWeapon;
 
     public void Start()
     {
@@ -32,6 +33,14 @@ public class CPlayer : MonoBehaviour ,IEntity
             PostOffice.Instance.Send("Player", Message.MESSAGE_TYPE.USEHPPOT);
         }
         Move();
+
+
+        Attack();
+    }
+    public void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+            m_EquippedWeapon.NormalAttack();
     }
 
     public void UseItem(string _itemname)
@@ -47,17 +56,17 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void Move()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-            transform.position += new Vector3(0,1) * m_PlayerStats.MoveSpeed;
+        if (Input.GetKey(KeyCode.W))
+            transform.position += new Vector3(0,1) * m_PlayerStats.MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.S))
-            transform.position -= new Vector3(0, 1) * m_PlayerStats.MoveSpeed;
+        if (Input.GetKey(KeyCode.S))
+            transform.position -= new Vector3(0, 1) * m_PlayerStats.MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.D))
-            transform.position += new Vector3(1, 0) * m_PlayerStats.MoveSpeed;
+        if (Input.GetKey(KeyCode.D))
+            transform.position += new Vector3(1, 0) * m_PlayerStats.MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.A))
-            transform.position -= new Vector3(1, 0) * m_PlayerStats.MoveSpeed;
+        if (Input.GetKey(KeyCode.A))
+            transform.position -= new Vector3(1, 0) * m_PlayerStats.MoveSpeed * Time.deltaTime;
     }
 
     public CPlayer()
@@ -117,6 +126,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerStats = new CStats();
         m_IsImmortal = false;
         m_PlayerSprite = null;
+        //m_PrimaryWeapon = new Firebolt();
     }
 
     public void AddItem(string _itemname)
