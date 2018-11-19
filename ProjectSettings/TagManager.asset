@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -40,4 +41,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Dungeon
+    uniqueID: 3801947203
+    locked: 0
+  - name: Traps
+    uniqueID: 507947417
+    locked: 0
+  - name: Items
+    uniqueID: 2587579311
+    locked: 0
+  - name: Bullets
+    uniqueID: 2570107511
+    locked: 0
+  - name: Monsters
+    uniqueID: 3517950633
+    locked: 0
+  - name: Player
+    uniqueID: 2831492797
     locked: 0
