@@ -7,6 +7,10 @@ public class CWeapon
     protected CWeaponStats m_WeaponStats;
     protected Sprite m_WeaponSprite;
 
+    protected GameObject NormalBullet;
+    protected GameObject ChargeBullet;
+    protected GameObject SpecialBullet;
+
     public CWeapon()
     {
         m_WeaponStats = new CWeaponStats();
