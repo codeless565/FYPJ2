@@ -530,4 +530,9 @@ public class CTRoom
         }
 
     }
+
+    public Vector2 CenterPoint()
+    {
+        return new Vector2(xPos + roomWidth * 0.5f, yPos + roomHeight * 0.5f);
+    }
 }

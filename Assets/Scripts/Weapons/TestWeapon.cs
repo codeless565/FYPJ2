@@ -12,26 +12,38 @@ public class TestWeapon : CWeapon
         m_WeaponStats.Range = 10;
         m_WeaponStats.AttackMultiplier = 1;
 
-        NormalBullet = (GameObject)Resources.Load("/Prefabs/Projectiles/NormalNote");
-        ChargeBullet = (GameObject)Resources.Load("/Prefabs/Projectiles/NormalNote");
-        SpecialBullet = (GameObject)Resources.Load("/Prefabs/Projectiles/NormalNote");
+        NormalBullet = (GameObject)Resources.Load("Projectiles/NormalNote");
+        ChargeBullet = (GameObject)Resources.Load("Projectiles/NormalNote");
+        SpecialBullet = (GameObject)Resources.Load("Projectiles/NormalNote");
     }
 
-    public override void NormalAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public override void UpdateWeapon(float _dt)
     {
-        //Create NormalAttack prefab or smthing with projectile script
-        Debug.Log("TestWeapon.NormalAttack Called");
-        GameObject newBullet = Object.Instantiate(NormalBullet, _position, Quaternion.identity);
-        newBullet.GetComponent<NormalNote>().Init((int)(_damage * m_WeaponStats.AttackMultiplier), _speed, m_WeaponStats.Range, _direction);
+        if (firingDelay > 0)
+            firingDelay -= _dt;
     }
 
-    public override void ChargeAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public override void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    {
+        if (firingDelay > 0)
+        {
+            Debug.Log("TestWeapon.NormalAttack Called - FiringDelay > 0");
+            return;
+        }
+        //Create NormalAttack prefab or smthing with projectile script
+        Debug.Log("TestWeapon.NormalAttack Called - Fired");
+        GameObject newBullet = Object.Instantiate(NormalBullet, _position, Quaternion.identity);
+        newBullet.GetComponent<NormalNote>().Init((int)(_damage * m_WeaponStats.AttackMultiplier), 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
+        firingDelay = _firingDelay;
+    }
+
+    public override void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create normal attack prefab or smthing with projectile script
         Debug.Log("TestWeapon.ChargeAttack Called");
     }
 
-    public override void SpecialAttack(int _damage, int _speed, Vector2 _position, Vector2 _direction, ProjectileType _projectileType, AttackType _attackType)
+    public override void SpecialAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create SpecialAttack prefab or smthing with projectile script
         Debug.Log("TestWeapon.SpecialAttack Called");
