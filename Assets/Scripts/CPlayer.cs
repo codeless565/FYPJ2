@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Sprite))]
 public class CPlayer : MonoBehaviour ,IEntity
@@ -13,6 +14,8 @@ public class CPlayer : MonoBehaviour ,IEntity
     public Dictionary<string, CItem> m_ItemDictonary;
     CWeapon m_EquippedWeapon;
 
+    public Slider HPSlider;
+
     public void init()
     {
         Spawn();
@@ -23,7 +26,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
 
-
+        HPSlider.value = m_PlayerStats.HP;
 
 
         if (Input.GetKeyDown(KeyCode.U))
@@ -35,6 +38,13 @@ public class CPlayer : MonoBehaviour ,IEntity
         {
             PostOffice.Instance.Send("Player", Message.MESSAGE_TYPE.USEHPPOT);
         }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            m_PlayerStats.HP -= 10;
+        }
+
+
         Move();
 
 
@@ -111,11 +121,12 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = _sprite;
     }
 
-    public void SetStats(int _level, int _exp, int _hp, int _attack, int _defense, float _playrate, float _movespeed)
+    public void SetStats(int _level, int _exp, int _hp, int _maxhp, int _attack, int _defense, float _playrate, float _movespeed)
     {
         m_PlayerStats.Level = _level;
         m_PlayerStats.EXP = _exp;
         m_PlayerStats.HP = _hp;
+        m_PlayerStats.MaxHP = _maxhp;
         m_PlayerStats.Attack = _attack;
         m_PlayerStats.Defense = _defense;
         m_PlayerStats.PlayRate = _playrate;
@@ -129,13 +140,15 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         m_ItemDictonary = new Dictionary<string, CItem>();
         m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 10, 10, 1, 5);
+        SetStats(1, 0, 10, 100, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
         m_EquippedWeapon = new TestWeapon();
         Debug.Log("Weapon Created");
         //m_PrimaryWeapon = new Firebolt();
+
+        HPSlider.maxValue = m_PlayerStats.MaxHP;
     }
 
     public void AddItem(string _itemname)

@@ -3,6 +3,7 @@
     int m_Level;
     int m_EXP;
     int m_HP;
+    int m_MaxHP;
     int m_Attack;
     int m_Defense;
     float m_PlayRate;
@@ -52,6 +53,18 @@
         set
         {
             m_HP = value;
+        }
+    }
+
+    public int MaxHP
+    {
+        get
+        {
+            return m_MaxHP;
+        }
+        set
+        {
+            m_MaxHP = value;
         }
     }
 

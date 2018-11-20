@@ -66,7 +66,7 @@ public class CItem
         switch (_itemname)
         {
             case "HP_POTION":
-                _player.GetComponent<CPlayer>().GetStats().HP += 100000;
+                _player.GetComponent<CPlayer>().GetStats().HP += 10;
                 UpdateItemQuantity(_player, _itemname);
                 break;
                 // TODO the other items :')
