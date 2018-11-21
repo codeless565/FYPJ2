@@ -212,10 +212,4 @@ public class CFloor
     //}
 }
 
-// The type of tile that will be laid in a specific position.
-public enum TileType
-{
-    Wall, Floor
-}
-
 
