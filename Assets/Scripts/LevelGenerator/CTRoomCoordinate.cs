@@ -26,6 +26,11 @@ public class CTRoomCoordinate
 /******************
  * General Codes
  ******************/
+// The type of tile that will be laid in a specific position.
+public enum TileType
+{
+    None, Wall, Floor
+}
 
 public enum Direction
 {

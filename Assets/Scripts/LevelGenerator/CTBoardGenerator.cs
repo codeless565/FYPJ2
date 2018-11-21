@@ -79,14 +79,17 @@ public class CTBoardGenerator : MonoBehaviour
             for (int j = 0; j < _tiles[i].Length; j++)
             {
                 // If the tile type is Wall...
-                if (_tiles[i][j] == TileType.Wall)
+                switch(_tiles[i][j])
                 {
-                    // ... instantiate a wall.
-                    InstantiateFromArray(wallTiles, i, j);
-                }
-                else  // If not, Instantiate a floor
-                {
-                    InstantiateFromArray(floorTiles, i, j);
+                    case TileType.Wall:
+                        // instantiate a wall.
+                        InstantiateFromArray(wallTiles, i, j);
+                        break;
+
+                    case TileType.Floor:
+                        // instantiate a floor
+                        InstantiateFromArray(floorTiles, i, j);
+                        break;
                 }
             }
         }
