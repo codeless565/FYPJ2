@@ -1,11 +1,18 @@
 ﻿public class CStats
 {
     int m_Level;
-    int m_EXP;
-    int m_HP;
-    int m_MaxHP;
+    float m_EXP;
+    float m_MaxEXP;
+
+    float m_HP;
+    float m_MaxHP;
+
+    float m_SP;
+    float m_MaxSP;
+
     int m_Attack;
     int m_Defense;
+
     float m_PlayRate;
     float m_MovementSpeed;
 
@@ -13,9 +20,17 @@
     {
         m_Level = 0;
         m_EXP = 0;
+        m_MaxEXP = 0;
+
         m_HP = 0;
+        m_MaxHP = 0;
+
+        m_SP = 0;
+        m_MaxSP = 0;
+
         m_Attack = 0;
         m_Defense = 0;
+
         m_PlayRate = 0.0f;
         m_MovementSpeed = 1.0f;
     }
@@ -32,7 +47,7 @@
         }
     }
 
-    public int EXP
+    public float EXP
     {
         get
         {
@@ -44,7 +59,19 @@
         }
     }
 
-    public int HP
+    public float MaxEXP
+    {
+        get
+        {
+            return m_MaxEXP;
+        }
+        set
+        {
+            m_MaxEXP = value;
+        }
+    }
+
+    public float HP
     {
         get
         {
@@ -56,7 +83,7 @@
         }
     }
 
-    public int MaxHP
+    public float MaxHP
     {
         get
         {
@@ -65,6 +92,30 @@
         set
         {
             m_MaxHP = value;
+        }
+    }
+
+    public float SP
+    {
+        get
+        {
+            return m_SP;
+        }
+        set
+        {
+            m_SP = value;
+        }
+    }
+
+    public float MaxSP
+    {
+        get
+        {
+            return m_MaxSP;
+        }
+        set
+        {
+            m_MaxSP = value;
         }
     }
 
