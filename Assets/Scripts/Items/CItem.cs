@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CItem
 {
-
     string m_ItemName;
     Sprite m_ItemSprite;
 
@@ -56,32 +55,32 @@ public class CItem
         set { m_Quantity = value; }
     }
 
-    public void PlayerUseItem(GameObject _player, string _itemname)
-    {
-        if (!_player.GetComponent<CPlayer>().m_ItemDictonary.ContainsKey(_itemname))
-        {
-            //Debug.Log("NO ITEM");
-            return; // TODO user does not have item
-        }
-        switch (_itemname)
-        {
-            case "HP_POTION":
-                _player.GetComponent<CPlayer>().GetStats().HP += 100000;
-                UpdateItemQuantity(_player, _itemname);
-                break;
-                // TODO the other items :')
-        }
-    }
+    //public void PlayerUseItem(GameObject _player, string _itemname)
+    //{
+    //    if (!_player.GetComponent<CPlayer>().m_ItemDictonary.ContainsKey(_itemname))
+    //    {
+    //        //Debug.Log("NO ITEM");
+    //        return; // TODO user does not have item
+    //    }
+    //    switch (_itemname)
+    //    {
+    //        case "HP_POTION":
+    //            _player.GetComponent<CPlayer>().GetStats().HP += 100000;
+    //            UpdateItemQuantity(_player, _itemname);
+    //            break;
+    //            // TODO the other items :')
+    //    }
+    //}
 
-    public void UpdateItemQuantity(GameObject _player, string _itemname)
-    {
-        if (_player.GetComponent<CPlayer>().m_ItemDictonary.ContainsKey(_itemname))
+    //public void UpdateItemQuantity(GameObject _player, string _itemname)
+    //{
+    //    if (_player.GetComponent<CPlayer>().m_ItemDictonary.ContainsKey(_itemname))
 
-            if (_player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity >= 1)
-            {
-                _player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity -= 1;
-                if (_player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity == 0)
-                    _player.GetComponent<CPlayer>().m_ItemDictonary.Remove(_itemname);
-            }
-    }
+    //        if (_player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity >= 1)
+    //        {
+    //            _player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity -= 1;
+    //            if (_player.GetComponent<CPlayer>().m_ItemDictonary[_itemname].Quantity == 0)
+    //                _player.GetComponent<CPlayer>().m_ItemDictonary.Remove(_itemname);
+    //        }
+    //}
 }
