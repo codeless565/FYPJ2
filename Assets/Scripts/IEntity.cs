@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IEntity {
-    void Spawn();
+    void Init();
     void Delete();
     void IsDamaged(int damage);
     bool GetIsImmortalObject();

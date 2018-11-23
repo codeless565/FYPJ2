@@ -22,7 +22,7 @@ public class CTBoardGenerator : MonoBehaviour
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
-    public void init()
+    public void Init()
     {
         gridSize = rooms / 2;
         if (gridSize * gridSize <= rooms)
