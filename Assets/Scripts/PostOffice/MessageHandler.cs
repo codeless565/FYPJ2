@@ -26,12 +26,6 @@ public class MessageHandler{
 
         switch (message)
         {
-            case Message.MESSAGE_TYPE.ADDHPPOT:
-                go.GetComponent<CPlayer>().AddItem("HP_POTION");
-                break;
-            case Message.MESSAGE_TYPE.USEHPPOT:
-                go.GetComponent<CPlayer>().UseItem("HP_POTION");
-                break;
         }
     }
 }
