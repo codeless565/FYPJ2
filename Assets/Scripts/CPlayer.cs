@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Sprite))]
 public class CPlayer : MonoBehaviour ,IEntity
@@ -13,6 +14,8 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public CInventory m_Inventory;
     CWeapon m_EquippedWeapon;
+    
+    public Slider HPSlider;
 
     public CPlayer()
     {
@@ -24,7 +27,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         this.name = "Player";
         m_Inventory = new CInventory();
         m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 10, 10, 1, 5);
+        SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
@@ -126,13 +129,21 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = _sprite;
     }
 
-    public void SetStats(int _level, int _exp, int _hp, int _attack, int _defense, float _playrate, float _movespeed)
+    public void SetStats(int _level, float _exp, float _maxexp, float _hp, float _maxhp, float _sp, float _maxsp,int _attack, int _defense, float _playrate, float _movespeed)
     {
         m_PlayerStats.Level = _level;
         m_PlayerStats.EXP = _exp;
+        m_PlayerStats.MaxEXP = _maxexp;
+        
         m_PlayerStats.HP = _hp;
+        m_PlayerStats.MaxHP = _maxhp;
+        
+        m_PlayerStats.SP = _sp;
+        m_PlayerStats.MaxSP = _maxsp;
+        
         m_PlayerStats.Attack = _attack;
         m_PlayerStats.Defense = _defense;
+        
         m_PlayerStats.PlayRate = _playrate;
         m_PlayerStats.MoveSpeed = _movespeed;
     }
