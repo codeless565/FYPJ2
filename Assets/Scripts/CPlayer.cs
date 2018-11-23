@@ -40,6 +40,9 @@ public class CPlayer : MonoBehaviour ,IEntity
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
 
+        if (Input.GetKeyDown(KeyCode.L))
+            m_PlayerStats.HP -= 1;
+
         //Test Add
         if (Input.GetKeyDown(KeyCode.Z))
             m_Inventory.AddItem(new HPPotion());
@@ -91,8 +94,8 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         if (temp != null)
         {
-            temp.UseItem(ref m_PlayerStats);
-            m_Inventory.RemoveItem(_itemKey);
+            if (temp.UseItem(ref m_PlayerStats))
+                m_Inventory.RemoveItem(_itemKey);
             return;
         }
         Debug.Log("Item dont exist");
