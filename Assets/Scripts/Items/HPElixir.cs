@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HPPotion : MonoBehaviour, IItem
+public class HPElixir : MonoBehaviour, IItem
 {
     Sprite m_ItemSprite;
 
@@ -16,10 +16,7 @@ public class HPPotion : MonoBehaviour, IItem
         if (_playerStats.HP >= _playerStats.MaxHP)
             return false;
 
-        _playerStats.HP += _playerStats.MaxHP * 0.5f;
-
-        if (_playerStats.HP > _playerStats.MaxHP)
-            _playerStats.HP = _playerStats.MaxHP;
+        _playerStats.HP = _playerStats.MaxHP;
 
         Debug.Log("Player hp: " + _playerStats.HP + " Max: " + _playerStats.MaxHP);
         return true;
@@ -29,7 +26,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "HPPOTION";
+            return "HPELIXIR";
         }
     }
 
@@ -37,7 +34,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Health Potion";
+            return "Health Elixir";
         }
     }
 
@@ -45,7 +42,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Recovers 50% of your max health upon use.";
+            return "Fully recovers your health upon use.";
         }
     }
 

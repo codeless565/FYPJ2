@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HPPotion : MonoBehaviour, IItem
+public class SPPotion : MonoBehaviour, IItem
 {
     Sprite m_ItemSprite;
 
@@ -13,15 +13,15 @@ public class HPPotion : MonoBehaviour, IItem
 
     public bool UseItem(ref CStats _playerStats)
     {
-        if (_playerStats.HP >= _playerStats.MaxHP)
+        if (_playerStats.SP >= _playerStats.MaxSP)
             return false;
 
-        _playerStats.HP += _playerStats.MaxHP * 0.5f;
+        _playerStats.SP += _playerStats.MaxSP * 0.5f;
 
-        if (_playerStats.HP > _playerStats.MaxHP)
-            _playerStats.HP = _playerStats.MaxHP;
+        if (_playerStats.SP > _playerStats.MaxSP)
+            _playerStats.SP = _playerStats.MaxSP;
 
-        Debug.Log("Player hp: " + _playerStats.HP + " Max: " + _playerStats.MaxHP);
+        Debug.Log("Player sp: " + _playerStats.SP + " Max: " + _playerStats.MaxSP);
         return true;
     }
 
@@ -29,7 +29,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "HPPOTION";
+            return "SPPOTION";
         }
     }
 
@@ -37,7 +37,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Health Potion";
+            return "Spirit Potion";
         }
     }
 
@@ -45,7 +45,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Recovers 50% of your max health upon use.";
+            return "Recovers 50% of your max spirit upon use.";
         }
     }
 
