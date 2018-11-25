@@ -50,6 +50,8 @@ public class SPElixir : MonoBehaviour, IItem
     {
         get
         {
+            if (m_ItemSprite == null)
+                m_ItemSprite = GetComponent<SpriteRenderer>().sprite;
             return m_ItemSprite;
         }
     }
