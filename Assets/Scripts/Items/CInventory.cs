@@ -7,12 +7,22 @@ public class CInventory
     private int m_Notes;    //Regular Currency
     private int m_Gems;     //Premium Currency
     private List<CItemSlot> m_Items;
+    private CInventorySlots m_HotBar;
 
     public CInventory()
     {
         m_Notes = 0;
         m_Gems = 0;
         m_Items = new List<CItemSlot>();
+        m_HotBar = null;
+    }
+
+    public CInventory(CInventorySlots _HotbarScript)
+    {
+        m_Notes = 0;
+        m_Gems = 0;
+        m_Items = new List<CItemSlot>();
+        m_HotBar = _HotbarScript;
     }
 
     public void AddItem(IItem _newItem, int _quantity = 1)
@@ -22,6 +32,7 @@ public class CInventory
             if (slot.itemInfo.ItemKey == _newItem.ItemKey)
             {
                 slot.quantity += _quantity;
+                AddItem2Itembar(slot);
                 Debug.Log(_newItem.ItemKey + "'s quantity is " + slot.quantity);
                 return;
             }
@@ -30,6 +41,8 @@ public class CInventory
         CItemSlot newItem = new CItemSlot(_newItem, _quantity);
         m_Items.Add(newItem);
         Debug.Log(_newItem.ItemKey + " has been added to inventory, quantity is " + m_Items[m_Items.Count - 1].quantity);
+
+        AddItem2Itembar(newItem);
     }
 
     public bool RemoveItem(string _itemKey, int _quantity = 1)
@@ -57,6 +70,11 @@ public class CInventory
 
         Debug.Log(_itemKey + "does not exist in inventory");
         return false;
+    }
+
+    private void AddItem2Itembar(CItemSlot _newItem)
+    {
+        m_HotBar.AddItem(_newItem);
     }
 
     public IItem GetItem(string _itemKey)
@@ -115,6 +133,7 @@ public class CInventory
     {
         get { return m_Gems; }
     }
+
 
     /*
      * HELPER FUNCTION
