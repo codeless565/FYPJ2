@@ -13,6 +13,8 @@ public class CPlayer : MonoBehaviour ,IEntity
     private Sprite m_PlayerSprite;
 
     public CInventory m_Inventory;
+    public GameObject InventoryPanel;
+
     CWeapon m_EquippedWeapon;
     
     public Slider HPSlider;
@@ -25,7 +27,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     {
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
         this.name = "Player";
-        m_Inventory = new CInventory();
+        m_Inventory = new CInventory(InventoryPanel.GetComponent<CInventorySlots>());
         m_PlayerStats = new CStats();
         SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
@@ -45,17 +47,45 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         //Test Add
         if (Input.GetKeyDown(KeyCode.Z))
-            m_Inventory.AddItem(new HPPotion());
+        {
+            GameObject newItem = CItemDatabase.Instance.HPRation;
+            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+        }
         if (Input.GetKeyDown(KeyCode.X))
-            m_Inventory.AddItem(new HPPotion(), 10);
-        //Test Remove
+        {
+            GameObject newItem = CItemDatabase.Instance.HPPotion;
+            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+        }
         if (Input.GetKeyDown(KeyCode.C))
-            m_Inventory.RemoveItem("HPPOT");
+        {
+            GameObject newItem = CItemDatabase.Instance.HPElixir;
+            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+        }
         if (Input.GetKeyDown(KeyCode.V))
-            m_Inventory.RemoveItem("HPPOT", 5);
-        //Test Use and using non existant
+        {
+            GameObject newItem = CItemDatabase.Instance.SPPotion;
+            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+        }
         if (Input.GetKeyDown(KeyCode.B))
-            UseItem("HPPOT");
+        {
+            GameObject newItem = CItemDatabase.Instance.SPElixir;
+            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+            m_Inventory.RemoveItem("HPRATION");
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            m_Inventory.RemoveItem("HPPOTION");
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+            m_Inventory.RemoveItem("HPELIXIR");
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+            m_Inventory.RemoveItem("SPPOTION");
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+            m_Inventory.RemoveItem("SPELIXIR");
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+            m_Inventory.DebugLogAll();
+
+
         if (Input.GetKeyDown(KeyCode.N))
             UseItem("HPPO");
 
