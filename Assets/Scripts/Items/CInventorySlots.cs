@@ -6,15 +6,16 @@ using UnityEngine.UI;
 public class CInventorySlots : MonoBehaviour {
 
     public int InventorySlots = 3;
-    GameObject[] itemslots;
-    
-    public void Start()
+
+    GameObject[] m_Itemslots;
+
+    public void Init()
     {
-        itemslots = new GameObject[InventorySlots];
+        m_Itemslots = new GameObject[InventorySlots];
         for (int i = 0; i < InventorySlots; i++)
         {
-            itemslots[i] = gameObject.transform.GetChild(i).transform.GetChild(0).gameObject;
-            Debug.Log(itemslots[i]);
+            m_Itemslots[i] = gameObject.transform.GetChild(i).transform.GetChild(0).gameObject;
+            Debug.Log(m_Itemslots[i]);
         }
     }
 
@@ -24,7 +25,8 @@ public class CInventorySlots : MonoBehaviour {
         int i = 0;
         CSlotInfo emptySlot = null;
 
-        foreach (GameObject slot in itemslots)
+        // Find an empty slot in the inventory/hotbar
+        foreach (GameObject slot in m_Itemslots)
         {
             i++;
             CSlotInfo currSlot = slot.transform.GetComponent<CSlotInfo>();
@@ -34,13 +36,17 @@ public class CInventorySlots : MonoBehaviour {
                 break;
             }
             if (currSlot.isSameItem(_newItem))
+            {
+                Debug.Log("CInventorySlots - Item Exists!");
                 return false;
-            if (i >= itemslots.Length)
+            }
+            if (i >= m_Itemslots.Length)
                 skipSecondCheck = true;
         }
 
+        // Check another time to see if the same item exist after empty slots
         if (!skipSecondCheck)
-            foreach (GameObject slot in itemslots)
+            foreach (GameObject slot in m_Itemslots)
             {
                 CSlotInfo currSlot = slot.GetComponent<CSlotInfo>();
                 if (currSlot.isEmpty())
@@ -52,11 +58,33 @@ public class CInventorySlots : MonoBehaviour {
         if (emptySlot != null)
         {
             emptySlot.SetItemSlot(_newItem);
-            Debug.Log(_newItem.itemInfo.ItemName + " added to Hotbar.");
             return true;
         }
 
-        Debug.Log("Hotbar full");
         return false;
+    }
+
+    public bool isFull()
+    {
+        foreach (GameObject slot in m_Itemslots)
+        {
+            CSlotInfo currSlot = slot.GetComponent<CSlotInfo>();
+            if (currSlot.isEmpty())
+                return false;
+        }
+        return true;
+    }
+
+    public bool isFull(CItemSlot _newItem)
+    {
+        foreach (GameObject slot in m_Itemslots)
+        {
+            CSlotInfo currSlot = slot.GetComponent<CSlotInfo>();
+            if (currSlot.isEmpty())
+                return false;
+            if (currSlot.isSameItem(_newItem))
+                return false;
+        }
+        return true;
     }
 }
