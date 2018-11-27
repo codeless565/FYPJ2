@@ -21,6 +21,9 @@ public class CPlayer : MonoBehaviour ,IEntity
     public Slider SPSlider;
     public Slider EXPSlider;
 
+    float m_FromHealth;
+    float m_TargetedHealth;
+
     public CPlayer()
     {
     }
@@ -39,16 +42,26 @@ public class CPlayer : MonoBehaviour ,IEntity
         
         HPSlider.maxValue = m_PlayerStats.MaxHP;
         SPSlider.maxValue = m_PlayerStats.MaxSP;
-        EXPSlider.maxValue = m_PlayerStats.MaxEXP;   
+        EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+
+        m_TargetedHealth = m_PlayerStats.HP;
+        m_FromHealth = m_PlayerStats.HP;
     }
 
     public void Update()
     {
+        if (m_PlayerStats.HP > m_TargetedHealth)
+            m_PlayerStats.HP -= Mathf.Abs(m_FromHealth-m_TargetedHealth) * Time.deltaTime;
+        else if (m_PlayerStats.HP < m_TargetedHealth)
+            m_PlayerStats.HP = m_TargetedHealth;
+
+
+
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
-            
+
         if (Input.GetKeyDown(KeyCode.L))
-            m_PlayerStats.HP -= 1;
+            RemoveHealth(9);
 
         HPSlider.value = m_PlayerStats.HP;
         SPSlider.value = m_PlayerStats.SP;
@@ -193,5 +206,21 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Spawn(Vector3 _pos)
     {
         transform.position = _pos;
+    }
+
+    public void RemoveHealth(float _health)
+    {
+        m_FromHealth = m_PlayerStats.HP;
+        m_TargetedHealth -= _health;
+    }
+    public void AddHealth(float _health)
+    {
+        m_FromHealth = m_PlayerStats.HP;
+        m_TargetedHealth += _health;
+    }
+
+    public void AddEXP(int _exp)
+    {
+        m_PlayerStats.EXP += _exp;
     }
 }

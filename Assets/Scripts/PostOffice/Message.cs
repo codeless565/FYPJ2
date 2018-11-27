@@ -6,7 +6,7 @@ public class Message {
     public enum MESSAGE_TYPE
     {
         ADDHPPOT,
-        USEHPPOT
-
+        USEHPPOT,
+        ADDEXP
     }
 }

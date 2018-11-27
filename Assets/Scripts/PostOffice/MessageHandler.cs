@@ -26,6 +26,9 @@ public class MessageHandler{
 
         switch (message)
         {
+            case Message.MESSAGE_TYPE.ADDEXP:
+                go.GetComponent<CPlayer>().AddEXP(1);
+                break;
         }
     }
 }
