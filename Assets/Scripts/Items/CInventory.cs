@@ -2,169 +2,89 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CInventory
-{
-    private int m_Notes;    //Regular Currency
-    private int m_Gems;     //Premium Currency
-    private List<CItemSlot> m_Items;
-    private CInventorySlots m_HotBar;
+public class CInventory : MonoBehaviour {
 
-    public CInventory()
-    {
-        m_Notes = 0;
-        m_Gems = 0;
-        m_Items = new List<CItemSlot>();
-        m_HotBar = null;
-    }
+    GameObject m_UseTab;
+    GameObject m_EquipTab;
 
-    public CInventory(CInventorySlots _HotbarScript)
-    {
-        m_Notes = 0;
-        m_Gems = 0;
-        m_Items = new List<CItemSlot>();
-        m_HotBar = _HotbarScript;
-    }
+    GameObject[] m_currency;
 
-    public void AddItem(IItem _newItem, int _quantity = 1)
+	// Use this for initialization
+	public void Init()
     {
-        foreach (CItemSlot slot in m_Items)
+        m_UseTab = transform.GetChild(0).gameObject;
+        m_UseTab.GetComponent<CInventorySlots>().Init();
+        m_EquipTab = transform.GetChild(1).gameObject;
+        m_EquipTab.GetComponent<CInventorySlots>().Init();
+
+        Debug.Log("UseTab: " + m_UseTab.name + "  EqTab: " + m_EquipTab.name);
+
+        int currencyNum = transform.GetChild(2).childCount;
+        m_currency = new GameObject[currencyNum];
+        for (int i = 0; i < currencyNum; i++)
         {
-            if (slot.itemInfo.ItemKey == _newItem.ItemKey)
-            {
-                slot.quantity += _quantity;
-                AddItem2Itembar(slot);
-                Debug.Log(_newItem.ItemKey + "'s quantity is " + slot.quantity);
-                return;
-            }
+            m_currency[i] = transform.GetChild(2).GetChild(i).GetChild(0).gameObject;
         }
 
-        CItemSlot newItem = new CItemSlot(_newItem, _quantity);
-        m_Items.Add(newItem);
-        Debug.Log(_newItem.ItemKey + " has been added to inventory, quantity is " + m_Items[m_Items.Count - 1].quantity);
-
-        AddItem2Itembar(newItem);
+        gameObject.SetActive(false);
+        m_UseTab.SetActive(true);
+        m_EquipTab.SetActive(false);
     }
 
-    public bool RemoveItem(string _itemKey, int _quantity = 1)
+    public bool AddItem(CItemSlot _newItem)
     {
-        foreach (CItemSlot slot in m_Items)
+        switch(_newItem.itemInfo.ItemType)
         {
-            if (slot.itemInfo.ItemKey == _itemKey)
-            {
-                if (slot.quantity - _quantity < 0)
-                {
-                    Debug.Log(_itemKey + "'s quantity is < 0");
-                    return false;
-                }
-
-                slot.quantity -= _quantity;
-                Debug.Log(_itemKey + "'s quantity is now " + slot.quantity);
-                if (slot.quantity <= 0)
-                {
-                    m_Items.Remove(slot);
-                    Debug.Log(_itemKey + "'s quantity is removed from inventory");
-                }
-                return true;
-            }
+            case ItemType.Use:
+                m_UseTab.GetComponent<CInventorySlots>().AddItem(_newItem);
+                break;
+            case ItemType.Equip:
+                m_EquipTab.GetComponent<CInventorySlots>().AddItem(_newItem);
+                break;
         }
 
-        Debug.Log(_itemKey + "does not exist in inventory");
+        //No Matching types to tabs
         return false;
     }
 
-    private void AddItem2Itembar(CItemSlot _newItem)
+    public GameObject NoteText
     {
-        m_HotBar.AddItem(_newItem);
+        get { return m_currency[0]; }
     }
 
-    public IItem GetItem(string _itemKey)
+    public GameObject GemText
     {
-        foreach (CItemSlot slot in m_Items)
-        {
-            if (slot.itemInfo.ItemKey == _itemKey)
-            {
-                return slot.itemInfo;
-            }
-        }
-
-        return null;
+        get { return m_currency[1]; }
     }
 
-    //Set _value to negative if subtracting value
-    public void AddNotes(int _value)
+    public bool UseTabFull(CItemSlot _newItem)
     {
-        if (m_Notes + _value > int.MaxValue)
-        {
-            m_Notes = int.MaxValue;
-            return;
-        }
-        if (m_Notes + _value < 0)
-        {
-            m_Notes = 0;
-            return;
-        }
-
-        m_Notes += _value;
+        return m_UseTab.GetComponent<CInventorySlots>().isFull(_newItem);
     }
 
-    public int Notes
+    public bool EquipTabFull(CItemSlot _newItem)
     {
-        get { return m_Notes; }
+        return m_EquipTab.GetComponent<CInventorySlots>().isFull(_newItem);
     }
 
-    //Set _value to negative if subtracting value
-    public void AddGems(int _value)
-    {
-        if (m_Gems + _value > int.MaxValue)
-        {
-            m_Gems = int.MaxValue;
-            return;
-        }
-        if (m_Gems + _value < 0)
-        {
-            m_Gems = 0;
-            return;
-        }
+    #region TabChanger
+    public void CloseInventoryTab()
+    { gameObject.SetActive(false); }
 
-        m_Gems += _value;
+    public void OpenInventoryTab()
+    { gameObject.SetActive(true); }
+
+    public void SwitchtoUseTab()
+    {
+        m_UseTab.SetActive(true);
+        m_EquipTab.SetActive(false);
     }
 
-    public int Gems
+    public void SwitchtoEquipTab()
     {
-        get { return m_Gems; }
+        m_UseTab.SetActive(false);
+        m_EquipTab.SetActive(true);
     }
 
-
-    /*
-     * HELPER FUNCTION
-     */
-    public void DebugLogAll()
-    {
-        int i = 0;
-        foreach (var items in m_Items)
-        {
-            i++;
-            Debug.Log("Slot " + i + " : Key - " + items.itemInfo.ItemKey + ", ItemName - " + items.itemInfo.ItemName + ", Quantity - " + items.quantity);
-        }
-
-        Debug.Log("Currencies: Notes - " + m_Notes + " Gems - " + m_Gems);
-    }
-}
-
-public class CItemSlot
-{
-    public int quantity;
-    public IItem itemInfo;
-
-    public CItemSlot()
-    {
-        quantity = 0;
-        itemInfo = null;
-    }
-
-    public CItemSlot(IItem _item, int _quantity)
-    {
-        quantity = _quantity;
-        itemInfo = _item;
-    }
+    #endregion
 }
