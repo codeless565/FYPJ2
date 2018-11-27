@@ -1,27 +1,34 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Sprite))]
-public class EnemyNoise : MonoBehaviour, IEntity
+public class EnemyNoise : MonoBehaviour, IEnemy
 {
     private bool m_IsImmortal;
 
     private CStats m_EnemyStats;
     private Sprite m_EnemySprite;
 
+    CStateMachine m_SM;
 
     public void Init()
     {
         m_EnemyStats = new CStats();
-        SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
+        SetStats(1, 5, 10, 10, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
+        
+        m_SM = new CStateMachine();
+        m_SM.AddState(new StateNoisePatrol(this.gameObject));
+        m_SM.SetNextState("StateNoisePatrol");
+        
     }
 
     public void Delete()
     {
-        PostOffice.Instance.Send("Player", Message.MESSAGE_TYPE.ADDEXP);
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP,this.gameObject));
         Destroy(gameObject);
     }
 
@@ -72,6 +79,7 @@ public class EnemyNoise : MonoBehaviour, IEntity
     public void Spawn()
     {
         
+        
     }
 
     // Use this for initialization
@@ -83,6 +91,16 @@ public class EnemyNoise : MonoBehaviour, IEntity
     // Update is called once per frame
     void Update()
     {
+        m_SM.Update();
 
+        if (m_EnemyStats.HP <= 0)
+            Delete();
+
+        Debug.Log(name + " : " + m_EnemyStats.HP);
+    }
+
+    public void IsAttackedByPlayer()
+    {
+        throw new System.NotImplementedException();
     }
 }
