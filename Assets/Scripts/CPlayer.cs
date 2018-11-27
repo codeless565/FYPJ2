@@ -18,6 +18,8 @@ public class CPlayer : MonoBehaviour ,IEntity
     CWeapon m_EquippedWeapon;
     
     public Slider HPSlider;
+    public Slider SPSlider;
+    public Slider EXPSlider;
 
     public CPlayer()
     {
@@ -34,16 +36,23 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
         m_EquippedWeapon = new TestWeapon();
-        Debug.Log("Weapon Created");
+        
+        HPSlider.maxValue = m_PlayerStats.MaxHP;
+        SPSlider.maxValue = m_PlayerStats.MaxSP;
+        EXPSlider.maxValue = m_PlayerStats.MaxEXP;   
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
-
+            
         if (Input.GetKeyDown(KeyCode.L))
             m_PlayerStats.HP -= 1;
+
+        HPSlider.value = m_PlayerStats.HP;
+        SPSlider.value = m_PlayerStats.SP;
+        EXPSlider.maxValue = m_PlayerStats.EXP;
 
         //Test Add
         if (Input.GetKeyDown(KeyCode.Z))
@@ -90,7 +99,7 @@ public class CPlayer : MonoBehaviour ,IEntity
             UseItem("HPPO");
 
         // Controls
-        Move();        
+        Move();
         Attack();
 
         // Weapon System Update
@@ -162,7 +171,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = _sprite;
     }
 
-    public void SetStats(int _level, float _exp, float _maxexp, float _hp, float _maxhp, float _sp, float _maxsp,int _attack, int _defense, float _playrate, float _movespeed)
+    public void SetStats(int _level, float _exp, float _maxexp, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed)
     {
         m_PlayerStats.Level = _level;
         m_PlayerStats.EXP = _exp;
@@ -176,7 +185,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         
         m_PlayerStats.Attack = _attack;
         m_PlayerStats.Defense = _defense;
-        
+      
         m_PlayerStats.PlayRate = _playrate;
         m_PlayerStats.MoveSpeed = _movespeed;
     }
