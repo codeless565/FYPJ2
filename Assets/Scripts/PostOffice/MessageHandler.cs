@@ -19,16 +19,20 @@ public class MessageHandler{
         //Debug.Log("Singleton - MessageHandler created");
     }
 
-    public void Handle(GameObject go, Message.MESSAGE_TYPE message)
+    public void Handle(GameObject _receiver, Message message)
     {
-        if (!go)
+        if (!_receiver)
             return;
 
-        switch (message)
+        switch (message.m_MessageType)
         {
-            case Message.MESSAGE_TYPE.ADDEXP:
-                go.GetComponent<CPlayer>().AddEXP(1);
+            case MESSAGE_TYPE.ADDEXP:
+                {
+                    if (message.m_Sender.GetComponent<IEnemy>() != null)
+                        _receiver.GetComponent<CPlayer>().AddEXP(message.m_Sender.GetComponent<IEnemy>().GetStats().Level * (int)message.m_Sender.GetComponent<IEnemy>().GetStats().EXP);
+                }
                 break;
         }
     }
+    
 }
