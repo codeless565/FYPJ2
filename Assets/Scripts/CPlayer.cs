@@ -12,8 +12,9 @@ public class CPlayer : MonoBehaviour ,IEntity
     private CStats m_PlayerStats;
     private Sprite m_PlayerSprite;
 
-    public CInventory m_Inventory;
+    public CInventorySystem m_InventorySystem;
     public GameObject InventoryPanel;
+    public GameObject InventoryUI;
 
     CWeapon m_EquippedWeapon;
     
@@ -29,7 +30,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     {
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
         this.name = "Player";
-        m_Inventory = new CInventory(InventoryPanel.GetComponent<CInventorySlots>());
+        m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
         m_PlayerStats = new CStats();
         SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
@@ -58,41 +59,41 @@ public class CPlayer : MonoBehaviour ,IEntity
         if (Input.GetKeyDown(KeyCode.Z))
         {
             GameObject newItem = CItemDatabase.Instance.HPRation;
-            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+            m_InventorySystem.AddItem(newItem.GetComponent<IItem>());
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             GameObject newItem = CItemDatabase.Instance.HPPotion;
-            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+            m_InventorySystem.AddItem(newItem.GetComponent<IItem>());
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
             GameObject newItem = CItemDatabase.Instance.HPElixir;
-            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+            m_InventorySystem.AddItem(newItem.GetComponent<IItem>());
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
             GameObject newItem = CItemDatabase.Instance.SPPotion;
-            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+            m_InventorySystem.AddItem(newItem.GetComponent<IItem>());
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
             GameObject newItem = CItemDatabase.Instance.SPElixir;
-            m_Inventory.AddItem(newItem.GetComponent<IItem>());
+            m_InventorySystem.AddItem(newItem.GetComponent<IItem>());
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
-            m_Inventory.RemoveItem("HPRATION");
+            m_InventorySystem.RemoveItem("HPRATION");
         if (Input.GetKeyDown(KeyCode.Keypad2))
-            m_Inventory.RemoveItem("HPPOTION");
+            m_InventorySystem.RemoveItem("HPPOTION");
         if (Input.GetKeyDown(KeyCode.Keypad3))
-            m_Inventory.RemoveItem("HPELIXIR");
+            m_InventorySystem.RemoveItem("HPELIXIR");
         if (Input.GetKeyDown(KeyCode.Keypad4))
-            m_Inventory.RemoveItem("SPPOTION");
+            m_InventorySystem.RemoveItem("SPPOTION");
         if (Input.GetKeyDown(KeyCode.Keypad5))
-            m_Inventory.RemoveItem("SPELIXIR");
+            m_InventorySystem.RemoveItem("SPELIXIR");
         if (Input.GetKeyDown(KeyCode.Keypad0))
-            m_Inventory.DebugLogAll();
+            m_InventorySystem.DebugLogAll();
 
 
         if (Input.GetKeyDown(KeyCode.N))
@@ -129,12 +130,12 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void UseItem(string _itemKey)
     {
-        IItem temp = m_Inventory.GetItem(_itemKey);
+        IItem temp = m_InventorySystem.GetItem(_itemKey);
 
         if (temp != null)
         {
             if (temp.UseItem(ref m_PlayerStats))
-                m_Inventory.RemoveItem(_itemKey);
+                m_InventorySystem.RemoveItem(_itemKey);
             return;
         }
         Debug.Log("Item dont exist");
