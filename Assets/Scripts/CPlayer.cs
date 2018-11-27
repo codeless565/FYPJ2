@@ -15,6 +15,8 @@ public class CPlayer : MonoBehaviour ,IEntity
     CWeapon m_EquippedWeapon;
 
     public Slider HPSlider;
+    public Slider SPSlider;
+    public Slider EXPSlider;
 
     public void init()
     {
@@ -27,6 +29,8 @@ public class CPlayer : MonoBehaviour ,IEntity
             print(m_PlayerStats.HP);
 
         HPSlider.value = m_PlayerStats.HP;
+        SPSlider.value = m_PlayerStats.SP;
+        EXPSlider.maxValue = m_PlayerStats.EXP;
 
 
         if (Input.GetKeyDown(KeyCode.U))
@@ -156,6 +160,8 @@ public class CPlayer : MonoBehaviour ,IEntity
         //m_PrimaryWeapon = new Firebolt();
 
         HPSlider.maxValue = m_PlayerStats.MaxHP;
+        SPSlider.maxValue = m_PlayerStats.MaxSP;
+        EXPSlider.maxValue = m_PlayerStats.MaxEXP;
     }
 
     public void AddItem(string _itemname)
