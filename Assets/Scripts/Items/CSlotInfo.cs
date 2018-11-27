@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     CItemSlot m_itemSlot;
+    public ItemSlotType m_slotType;
 
     public void Start()
     {
@@ -37,6 +38,9 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
     public void SetItemSlot(CItemSlot _newItemInfo)
     {
         m_itemSlot = _newItemInfo;
+        GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
+        GetComponent<Image>().color = Color.white;
+        transform.GetChild(0).GetComponent<Text>().text = m_itemSlot.quantity.ToString();
     }
 
     public bool isEmpty()
@@ -55,11 +59,24 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
         return false;
     }
 
+    private void ResetSlot()
+    {
+        GetComponent<Image>().sprite = null;
+        GetComponent<Image>().color = Color.gray;
+        transform.GetChild(0).GetComponent<Text>().text = "";
+        m_itemSlot = null;
+    }
+
+
+    public ItemSlotType SlotType
+    { get { return m_slotType; } }
+
     /********************
      * Drag Drop Control
      ********************/
     #region DragDrop
     private bool isSwapping;
+    private bool isReplacing;
     private GameObject otherSlot;
 
     public void OnDrag(PointerEventData eventData)
@@ -73,23 +90,32 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
         {
             CItemSlot oldSlot = m_itemSlot;
             m_itemSlot = otherSlot.GetComponent<CSlotInfo>().m_itemSlot;
+            if (m_itemSlot == null)
+                ResetSlot();
             otherSlot.GetComponent<CSlotInfo>().m_itemSlot = oldSlot;
             isSwapping = false;
             Debug.Log("Swapped");
         }
+        else if (isReplacing)
+        {
+            otherSlot.GetComponent<CSlotInfo>().m_itemSlot = m_itemSlot;
+            isReplacing = false;
+            Debug.Log("Replaced");
+        }
         else
         {
-            if ((transform.localPosition - Vector3.zero).magnitude >= 50)
-            {
-                GetComponent<Image>().sprite = null;
-                GetComponent<Image>().color = Color.gray;
-                transform.GetChild(0).GetComponent<Text>().text = "";
-                m_itemSlot = null;
-                Debug.Log("item removed from hotbar");
-            }
+            if (m_slotType == ItemSlotType.ItemBar)
+                if ((transform.localPosition - Vector3.zero).magnitude >= 50)
+                {
+                    GetComponent<Image>().sprite = null;
+                    GetComponent<Image>().color = Color.gray;
+                    transform.GetChild(0).GetComponent<Text>().text = "";
+                    m_itemSlot = null;
+                    Debug.Log("item removed from hotbar");
+                }
         }
-        Debug.Log("moved - " + (transform.localPosition - Vector3.zero).magnitude);
 
+        //Always return back to origin
         transform.localPosition = Vector3.zero;
     }
 
@@ -97,17 +123,53 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         if (_other.gameObject.GetComponent<CSlotInfo>())
         {
-            isSwapping = true;
-            otherSlot = _other.gameObject;
-            Debug.Log("Swap detected");
+            switch (m_slotType)
+            {
+                case ItemSlotType.ItemBar:
+                    if (_other.gameObject.GetComponent<CSlotInfo>().SlotType != ItemSlotType.ItemBar)
+                        return;
+                    isSwapping = true;
+                    otherSlot = _other.gameObject;
+                    Debug.Log("Swap detected");
+                    return;
+                case ItemSlotType.InventoryUse:
+                    switch (_other.gameObject.GetComponent<CSlotInfo>().SlotType)
+                    {
+                        case ItemSlotType.ItemBar:
+                            isReplacing = true;
+                            otherSlot = _other.gameObject;
+                            Debug.Log("Replace detected - InventoryUse to ItemBar");
+                            break;
+                        case ItemSlotType.InventoryUse:
+                            isSwapping = true;
+                            otherSlot = _other.gameObject;
+                            Debug.Log("Swap detected - InventoryUse to InventoryUse");
+                            break;
+                    }
+                    return;
+                case ItemSlotType.InventoryEquip:
+                    if (_other.gameObject.GetComponent<CSlotInfo>().SlotType != ItemSlotType.InventoryEquip)
+                        return;
+                    isSwapping = true;
+                    otherSlot = _other.gameObject;
+                    Debug.Log("Swap detected - InventoryEquip to InventoryEquip");
+                    return;
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         isSwapping = false;
+        isReplacing = false;
         otherSlot = null;
     }
 
     #endregion
+}
+
+[SerializeField]
+public enum ItemSlotType
+{
+    ItemBar, InventoryUse, InventoryEquip, Smith, 
 }
