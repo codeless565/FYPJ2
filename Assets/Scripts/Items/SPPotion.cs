@@ -49,6 +49,11 @@ public class SPPotion : MonoBehaviour, IItem
         }
     }
 
+    public ItemType ItemType
+    {
+        get { return ItemType.Use; }
+    }
+
     public Sprite ItemSprite
     {
         get
