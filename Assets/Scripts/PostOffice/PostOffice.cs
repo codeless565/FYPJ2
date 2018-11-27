@@ -40,7 +40,7 @@ public class PostOffice {
         m_addressBook.Remove(addressname);
     }
 
-    public bool Send(string receiveraddress, Message.MESSAGE_TYPE message)
+    public bool Send(string receiveraddress, Message message)
     {
         if (!m_addressBook.ContainsKey(receiveraddress))
             return false;
