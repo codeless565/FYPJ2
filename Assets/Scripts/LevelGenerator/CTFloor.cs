@@ -98,20 +98,40 @@ public class CTFloor
                 continue;
 
             // ... and for each room go through it's width.
-            for (int j = 0; j < currentRoom.roomWidth; ++j)
+            for (int j = -1; j <= currentRoom.roomWidth; ++j)
             {
                 int xCoord = currentRoom.xPos + j;
 
                 // For each horizontal tile, go up vertically through the room's height.
-                for (int k = 0; k < currentRoom.roomHeight; k++)
+                for (int k = -1; k <= currentRoom.roomHeight; k++)
                 {
                     int yCoord = currentRoom.yPos + k;
 
                     if (yCoord < 0)
                         yCoord = 0;
 
-                    // The coordinates in the jagged array are based on the room's position and it's width and height.
-                    //                    Debug.Log("x " + xCoord + " : " + "  ||  " + " y " + yCoord + " : ");
+                    //Set wall
+                    if (k < 0)
+                    {
+                        tiles[xCoord][yCoord] = TileType.Wall;
+                        continue;
+                    }
+                    if (k >= currentRoom.roomHeight)
+                    {
+                        tiles[xCoord][yCoord] = TileType.Wall;
+                        continue;
+                    }
+                    if (j < 0)
+                    {
+                        tiles[xCoord][yCoord] = TileType.Wall;
+                        continue;
+                    }
+                    if (j >= currentRoom.roomWidth)
+                    {
+                        tiles[xCoord][yCoord] = TileType.Wall;
+                        continue;
+                    }
+
                     tiles[xCoord][yCoord] = TileType.Floor;
                 }
             }
@@ -138,15 +158,23 @@ public class CTFloor
                 {
                     case Direction.NORTH:
                         yCoord += j;
+                        tiles[xCoord + 1][yCoord] = TileType.Wall;
+                        tiles[xCoord - 1][yCoord] = TileType.Wall;
                         break;
                     case Direction.EAST:
                         xCoord += j;
+                        tiles[xCoord][yCoord + 1] = TileType.Wall;
+                        tiles[xCoord][yCoord - 1] = TileType.Wall;
                         break;
                     case Direction.SOUTH:
                         yCoord -= j;
+                        tiles[xCoord + 1][yCoord] = TileType.Wall;
+                        tiles[xCoord - 1][yCoord] = TileType.Wall;
                         break;
                     case Direction.WEST:
                         xCoord -= j;
+                        tiles[xCoord][yCoord + 1] = TileType.Wall;
+                        tiles[xCoord][yCoord - 1] = TileType.Wall;
                         break;
                 }
 
@@ -188,11 +216,4 @@ public class CTFloor
     //    PlayerPrefs.SetString(levelName + "_column", columns.ToString());
     //}
 }
-
-// The type of tile that will be laid in a specific position.
-//public enum TileType
-//{
-//    Wall, Floor
-//}
-
 
