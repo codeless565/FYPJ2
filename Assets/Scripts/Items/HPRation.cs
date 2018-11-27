@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HPPotion : MonoBehaviour, IItem
+public class HPRation : MonoBehaviour, IItem
 {
     Sprite m_ItemSprite;
 
@@ -14,9 +14,9 @@ public class HPPotion : MonoBehaviour, IItem
     public bool UseItem(ref CStats _playerStats)
     {
         if (_playerStats.HP >= _playerStats.MaxHP)
-            return false;
+              return false;
 
-        _playerStats.HP += _playerStats.MaxHP * 0.5f;
+        _playerStats.HP += _playerStats.MaxHP * 0.3f;
 
         if (_playerStats.HP > _playerStats.MaxHP)
             _playerStats.HP = _playerStats.MaxHP;
@@ -29,7 +29,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "HPPOTION";
+            return "HPRATION";
         }
     }
 
@@ -37,7 +37,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Health Potion";
+            return "Health Ration";
         }
     }
 
@@ -45,7 +45,7 @@ public class HPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Recovers 50% of your max health upon use.";
+            return "Recovers 30% of your max health upon use.";
         }
     }
 
