@@ -84,5 +84,10 @@ public class NormalNote : MonoBehaviour, IProjectile
         {
             Destroy(gameObject);
         }
+        else if (_other.tag == "Monster")
+        {
+            _other.GetComponent<IEnemy>().GetStats().HP -= m_damage;
+            Destroy(gameObject);
+        }
     }
 }
