@@ -30,8 +30,9 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void Init()
     {
-        PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
         this.name = "Player";
+        PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
+
         m_Inventory = new CInventory(InventoryPanel.GetComponent<CInventorySlots>());
         m_PlayerStats = new CStats();
         SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
@@ -65,7 +66,9 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         HPSlider.value = m_PlayerStats.HP;
         SPSlider.value = m_PlayerStats.SP;
-        EXPSlider.maxValue = m_PlayerStats.EXP;
+        EXPSlider.value = m_PlayerStats.EXP;
+
+        LevelingSystem();
 
         //Test Add
         if (Input.GetKeyDown(KeyCode.Z))
@@ -117,6 +120,20 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Weapon System Update
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
+        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
+    }
+
+    public void LevelingSystem()
+    {
+        if(m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
+        {
+            m_PlayerStats.Level += 1;
+            m_PlayerStats.EXP -= m_PlayerStats.MaxEXP;
+            m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
+            EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+            // HP/SP update
+            print("Level up");
+        }
     }
 
     public void Move()
@@ -221,6 +238,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void AddEXP(int _exp)
     {
+        
         m_PlayerStats.EXP += _exp;
     }
 }
