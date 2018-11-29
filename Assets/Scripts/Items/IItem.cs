@@ -15,6 +15,14 @@ public interface IItem
     string Description
     { get; }
 
+    ItemType ItemType
+    { get; }
+
     Sprite ItemSprite
     { get;  }
+}
+
+public enum ItemType
+{
+    Use, Equip
 }
