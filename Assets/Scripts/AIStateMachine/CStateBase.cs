@@ -10,4 +10,6 @@ public interface CStateBase
 
     string StateID
     { get; }
+    GameObject GO
+    { get; }
 }

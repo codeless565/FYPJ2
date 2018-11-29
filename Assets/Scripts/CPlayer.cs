@@ -22,15 +22,20 @@ public class CPlayer : MonoBehaviour ,IEntity
     public Slider SPSlider;
     public Slider EXPSlider;
 
+    float m_FromHealth;
+    float m_TargetedHealth;
+
     public CPlayer()
     {
     }
 
     public void Init()
     {
-        PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
         this.name = "Player";
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
+        
+        PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
+
         m_PlayerStats = new CStats();
         SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
@@ -40,20 +45,32 @@ public class CPlayer : MonoBehaviour ,IEntity
         
         HPSlider.maxValue = m_PlayerStats.MaxHP;
         SPSlider.maxValue = m_PlayerStats.MaxSP;
-        EXPSlider.maxValue = m_PlayerStats.MaxEXP;   
+        EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+
+        m_TargetedHealth = m_PlayerStats.HP;
+        m_FromHealth = m_PlayerStats.HP;
     }
 
     public void Update()
     {
+        if (m_PlayerStats.HP > m_TargetedHealth)
+            m_PlayerStats.HP -= Mathf.Abs(m_FromHealth-m_TargetedHealth) * Time.deltaTime;
+        else if (m_PlayerStats.HP < m_TargetedHealth)
+            m_PlayerStats.HP = m_TargetedHealth;
+
+
+
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
-            
+
         if (Input.GetKeyDown(KeyCode.L))
-            m_PlayerStats.HP -= 1;
+            RemoveHealth(9);
 
         HPSlider.value = m_PlayerStats.HP;
         SPSlider.value = m_PlayerStats.SP;
-        EXPSlider.maxValue = m_PlayerStats.EXP;
+        EXPSlider.value = m_PlayerStats.EXP;
+
+        LevelingSystem();
 
         //Test Add
         if (Input.GetKeyDown(KeyCode.Z))
@@ -105,6 +122,20 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Weapon System Update
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
+        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
+    }
+
+    public void LevelingSystem()
+    {
+        if(m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
+        {
+            m_PlayerStats.Level += 1;
+            m_PlayerStats.EXP -= m_PlayerStats.MaxEXP;
+            m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
+            EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+            // HP/SP update
+            print("Level up");
+        }
     }
 
     public void Move()
@@ -194,5 +225,22 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Spawn(Vector3 _pos)
     {
         transform.position = _pos;
+    }
+
+    public void RemoveHealth(float _health)
+    {
+        m_FromHealth = m_PlayerStats.HP;
+        m_TargetedHealth -= _health;
+    }
+    public void AddHealth(float _health)
+    {
+        m_FromHealth = m_PlayerStats.HP;
+        m_TargetedHealth += _health;
+    }
+
+    public void AddEXP(int _exp)
+    {
+        
+        m_PlayerStats.EXP += _exp;
     }
 }
