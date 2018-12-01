@@ -29,7 +29,12 @@ public class CTRoomCoordinate
 // The type of tile that will be laid in a specific position.
 public enum TileType
 {
-    None, Wall, Floor
+    // Q1 - Q4 is based on angle theory, Q1 being the top right, proceeding to anticlockwise to Q4 being the bottom right
+    None,
+    Wall_Up, Wall_Down, Wall_Left, Wall_Right,
+    WallOuterCorner_Q1, WallOuterCorner_Q2, WallOuterCorner_Q3, WallOuterCorner_Q4,
+    WallInnerCorner_Q1, WallInnerCorner_Q2, WallInnerCorner_Q3, WallInnerCorner_Q4, 
+    Floor
 }
 
 public enum Direction
