@@ -131,18 +131,6 @@ public class CTBoardGenerator : MonoBehaviour
         }
     }
 
-    void InstantiateFromArray(GameObject[] _prefabs, float xCoord, float yCoord)
-    {
-        // Create a random index for the array.
-        int randomIndex = Random.Range(0, _prefabs.Length);
-
-        // The position to be instantiated at is based on the coordinates.
-        Vector3 position = new Vector3(xCoord, yCoord, 0f);
-
-        // Create an instance of the prefab from the random index of the array.
-        GameObject tileInstance = Instantiate(_prefabs[randomIndex], position, Quaternion.identity, boardHolder.transform) as GameObject;
-    }
-
     void InstantiateFromArray(GameObject[] _prefabs, float xCoord, float yCoord, float zRot = 0)
     {
         // Create a random index for the array.
