@@ -113,22 +113,66 @@ public class CTFloor
                     //Set wall
                     if (k < 0)
                     {
-                        tiles[xCoord][yCoord] = TileType.Wall;
+                        if (j < 0)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
+                            continue;
+                        }
+                        else if (j == currentRoom.roomWidth)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
+                            continue;
+                        }
+
+                        tiles[xCoord][yCoord] = TileType.Wall_Down;
                         continue;
                     }
                     if (k >= currentRoom.roomHeight)
                     {
-                        tiles[xCoord][yCoord] = TileType.Wall;
+                        if (j < 0)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
+                            continue;
+                        }
+                        else if (j == currentRoom.roomWidth)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
+                            continue;
+                        }
+
+                        tiles[xCoord][yCoord] = TileType.Wall_Up;
                         continue;
                     }
                     if (j < 0)
                     {
-                        tiles[xCoord][yCoord] = TileType.Wall;
+                        if (k < 0)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
+                            continue;
+                        }
+                        else if (k == currentRoom.roomHeight)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
+                            continue;
+                        }
+
+                        tiles[xCoord][yCoord] = TileType.Wall_Left;
                         continue;
                     }
                     if (j >= currentRoom.roomWidth)
                     {
-                        tiles[xCoord][yCoord] = TileType.Wall;
+                        if (k < 0)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
+                            continue;
+                        }
+                        else if (k == currentRoom.roomHeight)
+                        {
+                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
+                            continue;
+                        }
+
+                        tiles[xCoord][yCoord] = TileType.Wall_Right;
                         continue;
                     }
 
@@ -154,35 +198,87 @@ public class CTFloor
 
                 // Depending on the direction, add or subtract from the appropriate
                 // coordinate based on how far through the length the loop is.
-                switch (currentCorridor.direction)
-                {
-                    case Direction.NORTH:
-                        yCoord += j;
-                        tiles[xCoord + 1][yCoord] = TileType.Wall;
-                        tiles[xCoord - 1][yCoord] = TileType.Wall;
-                        break;
-                    case Direction.EAST:
-                        xCoord += j;
-                        tiles[xCoord][yCoord + 1] = TileType.Wall;
-                        tiles[xCoord][yCoord - 1] = TileType.Wall;
-                        break;
-                    case Direction.SOUTH:
-                        yCoord -= j;
-                        tiles[xCoord + 1][yCoord] = TileType.Wall;
-                        tiles[xCoord - 1][yCoord] = TileType.Wall;
-                        break;
-                    case Direction.WEST:
-                        xCoord -= j;
-                        tiles[xCoord][yCoord + 1] = TileType.Wall;
-                        tiles[xCoord][yCoord - 1] = TileType.Wall;
-                        break;
-                }
 
-                // Set the tile at these coordinates to Floor.
+                //Starting Corners
+                if (j == 0) 
+                    switch (currentCorridor.direction)
+                    {
+                        case Direction.NORTH:
+                            yCoord += j;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            break;                                  
+                        case Direction.EAST:                        
+                            xCoord += j;                            
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q2;
+                            break;                                   
+                        case Direction.SOUTH:                        
+                            yCoord -= j;                             
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            break;                                  
+                        case Direction.WEST:                        
+                            xCoord -= j;                            
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q4;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q1;
+                            break;
+                    }
+                //Ending Corner
+                else if (j == currentCorridor.corridorLength - 1)
+                    switch (currentCorridor.direction)
+                    {
+                        case Direction.NORTH:
+                            yCoord += j;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            break;                                  
+                        case Direction.EAST:                        
+                            xCoord += j;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q4;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q1;
+                            break;                                   
+                        case Direction.SOUTH:                        
+                            yCoord -= j;                             
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            break;                                  
+                        case Direction.WEST:                        
+                            xCoord -= j;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q2;
+                            break;
+                    }
+                //Side walls
+                else
+                    switch (currentCorridor.direction)
+                    {
+                        case Direction.NORTH:
+                            yCoord += j;
+                            tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
+                            tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            break;
+                        case Direction.EAST:
+                            xCoord += j;
+                            tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
+                            tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            break;
+                        case Direction.SOUTH:
+                            yCoord -= j;
+                            tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
+                            tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            break;
+                        case Direction.WEST:
+                            xCoord -= j;
+                            tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
+                            tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            break;
+                    }
+                //Floor
                 tiles[xCoord][yCoord] = TileType.Floor;
             }
         }
-    }
+    }    
 
     public List<CTRoom> GetRooms()
     { return rooms; }
