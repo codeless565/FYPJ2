@@ -23,6 +23,8 @@ public class CTBoardGenerator : MonoBehaviour
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
+    CItemGenerator itemGenerator;
+
     public void Init()
     {
         gridSize = rooms / 2;
@@ -41,6 +43,8 @@ public class CTBoardGenerator : MonoBehaviour
 
         CreateNewFloor();
         CreateBoard(currFloor);
+        itemGenerator = new CItemGenerator();
+        itemGenerator.GenerateItemsOnFloor(10);
     }
 
     public void CreateNewFloor()
