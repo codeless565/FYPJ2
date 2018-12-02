@@ -60,4 +60,14 @@ public class SPElixir : MonoBehaviour, IItem
             return m_ItemSprite;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D _other)
+    {
+        CPlayer player = _other.GetComponent<CPlayer>();
+        if (player != null)
+        {
+            player.m_InventorySystem.AddItem(this);
+            Destroy(gameObject);
+        }
+    }
 }
