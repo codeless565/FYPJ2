@@ -81,7 +81,10 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (m_itemSlot == null)
+            return;
         transform.position = Input.mousePosition;
+        //Change rendering layer to forward
     }
 
     public void OnEndDrag(PointerEventData eventData)

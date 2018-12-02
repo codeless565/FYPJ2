@@ -72,7 +72,7 @@ public class CBoardGenerator : MonoBehaviour
             for (int j = 0; j < _tiles[i].Length; j++)
             {
                 // If the tile type is Wall...
-                if (_tiles[i][j] == TileType.Wall)
+                if (_tiles[i][j] == TileType.Wall_Up)
                 {
                     // ... instantiate a wall.
                     InstantiateFromArray(wallTiles, i, j);

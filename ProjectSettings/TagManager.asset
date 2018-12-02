@@ -15,7 +15,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Icons
   - 
   - 
   - 
@@ -60,4 +60,10 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2831492797
+    locked: 0
+  - name: UI
+    uniqueID: 3779519685
+    locked: 0
+  - name: Icons
+    uniqueID: 3038836501
     locked: 0

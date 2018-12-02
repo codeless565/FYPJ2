@@ -18,9 +18,12 @@ public class CTBoardGenerator : MonoBehaviour
 
     public GameObject[] floorTiles;             // An array of floor tile prefabs.
     public GameObject[] wallTiles;              // An array of wall tile prefabs.
-    public GameObject[] outerWallTiles;         // An array of outer wall tile prefabs.
+    public GameObject[] wallInnerCornerTiles;
+    public GameObject[] wallOuterCornerTiles;
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
+
+    CItemGenerator itemGenerator;
 
     public void Init()
     {
@@ -40,6 +43,8 @@ public class CTBoardGenerator : MonoBehaviour
 
         CreateNewFloor();
         CreateBoard(currFloor);
+        itemGenerator = new CItemGenerator();
+        itemGenerator.GenerateItemsOnFloor(10);
     }
 
     public void CreateNewFloor()
@@ -66,7 +71,6 @@ public class CTBoardGenerator : MonoBehaviour
         Debug.Log("CurrLevel not 0");
 
         InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].GetTiles());
-        InstantiateOuterWalls(CTDungeon.Instance.Floors[_currentFloor].columns, CTDungeon.Instance.Floors[_currentFloor].rows);
 
         Debug.Log("Board Created");
     }
@@ -78,16 +82,52 @@ public class CTBoardGenerator : MonoBehaviour
         {
             for (int j = 0; j < _tiles[i].Length; j++)
             {
-                // If the tile type is Wall...
+                /*
+                 * NEEDS TESTING
+                 */
+                // Instantiate tile depending on the tileType
                 switch(_tiles[i][j])
                 {
-                    case TileType.Wall:
-                        // instantiate a wall.
+                    case TileType.Wall_Up:
                         InstantiateFromArray(wallTiles, i, j);
+                        break;
+                    case TileType.Wall_Down:
+                        InstantiateFromArray(wallTiles, i, j, 180);
+                        break;
+                    case TileType.Wall_Left:
+                        InstantiateFromArray(wallTiles, i, j, 90);
+                        break;
+                    case TileType.Wall_Right:
+                        InstantiateFromArray(wallTiles, i, j, -90);
+                        break;
+
+                    case TileType.WallInnerCorner_Q1:
+                        InstantiateFromArray(wallInnerCornerTiles, i, j);
+                        break;
+                    case TileType.WallInnerCorner_Q2:
+                        InstantiateFromArray(wallInnerCornerTiles, i, j, 90);
+                        break;
+                    case TileType.WallInnerCorner_Q3:
+                        InstantiateFromArray(wallInnerCornerTiles, i, j, 180);
+                        break;
+                    case TileType.WallInnerCorner_Q4:
+                        InstantiateFromArray(wallInnerCornerTiles, i, j, -90);
+                        break;
+
+                    case TileType.WallOuterCorner_Q1:
+                        InstantiateFromArray(wallOuterCornerTiles, i, j);
+                        break;
+                    case TileType.WallOuterCorner_Q2:
+                        InstantiateFromArray(wallOuterCornerTiles, i, j, 90);
+                        break;
+                    case TileType.WallOuterCorner_Q3:
+                        InstantiateFromArray(wallOuterCornerTiles, i, j, 180);
+                        break;
+                    case TileType.WallOuterCorner_Q4:
+                        InstantiateFromArray(wallOuterCornerTiles, i, j, -90);
                         break;
 
                     case TileType.Floor:
-                        // instantiate a floor
                         InstantiateFromArray(floorTiles, i, j);
                         break;
                 }
@@ -95,63 +135,28 @@ public class CTBoardGenerator : MonoBehaviour
         }
     }
 
-    void InstantiateOuterWalls(int _levelColumns, int _levelRows)
-    {
-        // The outer walls are one unit left, right, up and down from the board.
-        float leftEdgeX = -1f;
-        float rightEdgeX = _levelColumns + 0f;
-        float bottomEdgeY = -1f;
-        float topEdgeY = _levelRows + 0f;
-
-        // Instantiate both vertical walls (one on each side).
-        InstantiateVerticalOuterWall(leftEdgeX, bottomEdgeY, topEdgeY);
-        InstantiateVerticalOuterWall(rightEdgeX, bottomEdgeY, topEdgeY);
-
-        // Instantiate both horizontal walls, these are one in left and right from the outer walls.
-        InstantiateHorizontalOuterWall(leftEdgeX + 1f, rightEdgeX - 1f, bottomEdgeY);
-        InstantiateHorizontalOuterWall(leftEdgeX + 1f, rightEdgeX - 1f, topEdgeY);
-    }
-
-    void InstantiateVerticalOuterWall(float xCoord, float startingY, float endingY)
-    {
-        // Start the loop at the starting value for Y.
-        float currentY = startingY;
-
-        // While the value for Y is less than the end value...
-        while (currentY <= endingY)
-        {
-            // ... instantiate an outer wall tile at the x coordinate and the current y coordinate.
-            InstantiateFromArray(outerWallTiles, xCoord, currentY);
-
-            currentY++;
-        }
-    }
-
-    void InstantiateHorizontalOuterWall(float startingX, float endingX, float yCoord)
-    {
-        // Start the loop at the starting value for X.
-        float currentX = startingX;
-
-        // While the value for X is less than the end value...
-        while (currentX <= endingX)
-        {
-            // ... instantiate an outer wall tile at the y coordinate and the current x coordinate.
-            InstantiateFromArray(outerWallTiles, currentX, yCoord);
-
-            currentX++;
-        }
-    }
-
-    void InstantiateFromArray(GameObject[] prefabs, float xCoord, float yCoord)
+    void InstantiateFromArray(GameObject[] _prefabs, float xCoord, float yCoord, float zRot = 0)
     {
         // Create a random index for the array.
-        int randomIndex = Random.Range(0, prefabs.Length);
+        int randomIndex = Random.Range(0, _prefabs.Length);
 
         // The position to be instantiated at is based on the coordinates.
         Vector3 position = new Vector3(xCoord, yCoord, 0f);
 
         // Create an instance of the prefab from the random index of the array.
-        GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity, boardHolder.transform) as GameObject;
+        GameObject tileInstance = Instantiate(_prefabs[randomIndex], position, Quaternion.Euler(0, 0, zRot), boardHolder.transform) as GameObject;
     }
+
+    //find out how to rotate with Quaterion
+
+    void InstantiateFromArray(GameObject _prefab, float xCoord, float yCoord, float zRot = 0)
+    {
+        // The position to be instantiated at is based on the coordinates.
+        Vector3 position = new Vector3(xCoord, yCoord, 0f);
+
+        // Create an instance of the prefab from the random index of the array.
+        GameObject tileInstance = Instantiate(_prefab, position, Quaternion.Euler(0, 0, zRot), boardHolder.transform) as GameObject;
+    }
+
 
 }
