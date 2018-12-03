@@ -8,7 +8,9 @@ public class CExplorationMode : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        GetComponent<CTBoardGenerator>().Init();
+        if (GetComponent<CTBoardGenerator>())
+            GetComponent<CTBoardGenerator>().Init();
+
         player.GetComponent<CPlayer>().Init();
         player.transform.position = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms()[0].CenterPoint();
 	}
