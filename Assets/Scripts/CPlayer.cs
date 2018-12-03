@@ -156,7 +156,9 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Attack()
     {
         if (Input.GetMouseButtonDown(0))
-            m_EquippedWeapon.NormalAttack(m_PlayerStats.Attack, transform.position, (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized, m_PlayerStats.PlayRate);
+        {
+            m_EquippedWeapon.NormalAttack(m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
+        }
     }
 
     public void UseItem(string _itemKey)
