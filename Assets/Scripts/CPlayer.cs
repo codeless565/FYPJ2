@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Sprite))]
-public class CPlayer : MonoBehaviour ,IEntity
+public class CPlayer : MonoBehaviour , CPrestige,IEntity
 {
     private bool m_IsImmortal;
     public bool isDead;
 
     private CStats m_PlayerStats;
+    private PRESTIGELEVEL m_PlayerPrestige;
     private Sprite m_PlayerSprite;
 
     public CInventorySystem m_InventorySystem;
@@ -18,13 +19,6 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     CWeapon m_EquippedWeapon;
     
-    public Slider HPSlider;
-    public Slider SPSlider;
-    public Slider EXPSlider;
-
-    float m_FromHealth;
-    float m_TargetedHealth;
-
     public CPlayer()
     {
     }
@@ -34,41 +28,24 @@ public class CPlayer : MonoBehaviour ,IEntity
         this.name = "Player";
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
         
-        PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
+        PostOffice.Instance.Register(name, gameObject);
 
         m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
+        SetStats(1, 0, 10, 1, 10, 10, 10, 10, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
         m_EquippedWeapon = new TestWeapon();
-        
-        HPSlider.maxValue = m_PlayerStats.MaxHP;
-        SPSlider.maxValue = m_PlayerStats.MaxSP;
-        EXPSlider.maxValue = m_PlayerStats.MaxEXP;
-
-        m_TargetedHealth = m_PlayerStats.HP;
-        m_FromHealth = m_PlayerStats.HP;
+        GetComponent<PlayerUI>().Init();
     }
 
     public void Update()
     {
-        if (m_PlayerStats.HP > m_TargetedHealth)
-            m_PlayerStats.HP -= Mathf.Abs(m_FromHealth-m_TargetedHealth) * Time.deltaTime;
-        else if (m_PlayerStats.HP < m_TargetedHealth)
-            m_PlayerStats.HP = m_TargetedHealth;
-
-
-
         if (Input.GetKeyDown(KeyCode.K))
             print(m_PlayerStats.HP);
 
         if (Input.GetKeyDown(KeyCode.L))
-            RemoveHealth(9);
-
-        HPSlider.value = m_PlayerStats.HP;
-        SPSlider.value = m_PlayerStats.SP;
-        EXPSlider.value = m_PlayerStats.EXP;
+            RemoveHealth(2);
 
         LevelingSystem();
 
@@ -122,7 +99,44 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Weapon System Update
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
-        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
+    }
+
+    public void AddPrestigeDescription(PRESTIGELEVEL _prestige)
+    {
+        switch (_prestige)
+        {
+            case PRESTIGELEVEL.MAINTENANCE:
+                m_PlayerStats.HP *= 1.1f;
+                break;
+            case PRESTIGELEVEL.METRONOME:
+                m_PlayerStats.PlayRate *= 1.1f;
+                break;
+            case PRESTIGELEVEL.AMPLIFIER:
+                m_PlayerStats.Attack = m_PlayerStats.Attack / 100 * 110;
+                break;
+            case PRESTIGELEVEL.NOICECANCELLER:
+                m_PlayerStats.Defense = m_PlayerStats.Defense / 100 * 110;
+                break;
+            case PRESTIGELEVEL.POPULARITY:
+                m_PlayerStats.BonusEXP = 2;
+                break;
+            case PRESTIGELEVEL.PERFECTION:
+                throw new System.NotImplementedException();
+            case PRESTIGELEVEL.ENCORE:
+                throw new System.NotImplementedException();
+            case PRESTIGELEVEL.GUARDIANANGEL:
+                throw new System.NotImplementedException();
+            case PRESTIGELEVEL.EUPHORIA:
+                throw new System.NotImplementedException();
+        }
+    }
+
+    public void PrestigeSystem()
+    {
+        for (int i = 0; i < (int)m_PlayerPrestige; i++)
+        {
+            AddPrestigeDescription((PRESTIGELEVEL)i);
+        }
     }
 
     public void LevelingSystem()
@@ -132,8 +146,9 @@ public class CPlayer : MonoBehaviour ,IEntity
             m_PlayerStats.Level += 1;
             m_PlayerStats.EXP -= m_PlayerStats.MaxEXP;
             m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
-            EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+            GetComponent<PlayerUI>().EXPSlider.maxValue = m_PlayerStats.MaxEXP;
             // HP/SP update
+            PrestigeSystem();
             print("Level up");
         }
     }
@@ -203,11 +218,12 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = _sprite;
     }
 
-    public void SetStats(int _level, float _exp, float _maxexp, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed)
+    public void SetStats(int _level, float _exp, float _maxexp, float _bonusexp, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed)
     {
         m_PlayerStats.Level = _level;
         m_PlayerStats.EXP = _exp;
         m_PlayerStats.MaxEXP = _maxexp;
+        m_PlayerStats.BonusEXP = _bonusexp;
         
         m_PlayerStats.HP = _hp;
         m_PlayerStats.MaxHP = _maxhp;
@@ -229,18 +245,36 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void RemoveHealth(float _health)
     {
-        m_FromHealth = m_PlayerStats.HP;
-        m_TargetedHealth -= _health;
+        GetComponent<PlayerUI>().m_FromHealth = m_PlayerStats.HP;
+        GetComponent<PlayerUI>().m_TargetedHealth -= _health;
     }
     public void AddHealth(float _health)
     {
-        m_FromHealth = m_PlayerStats.HP;
-        m_TargetedHealth += _health;
+        GetComponent<PlayerUI>().m_FromHealth = m_PlayerStats.HP;
+        GetComponent<PlayerUI>().m_TargetedHealth += _health;
     }
 
-    public void AddEXP(int _exp)
+    public void AddEXP(float _exp)
     {
         
-        m_PlayerStats.EXP += _exp;
+        m_PlayerStats.EXP += (_exp * m_PlayerStats.BonusEXP);
+    }
+
+    public PRESTIGELEVEL GetPretige()
+    {
+        return m_PlayerPrestige;
+    }
+
+    public void SetPrestige(PRESTIGELEVEL _prestige)
+    {
+        m_PlayerPrestige = _prestige;
+    }
+
+    public void IncreasePrestige()
+    {
+        if (m_PlayerPrestige == PRESTIGELEVEL.EUPHORIA)
+            return;
+
+        m_PlayerPrestige++;
     }
 }

@@ -3,6 +3,7 @@
     int m_Level;
     float m_EXP;
     float m_MaxEXP;
+    float m_BonusEXP;
 
     float m_HP;
     float m_MaxHP;
@@ -21,6 +22,7 @@
         m_Level = 0;
         m_EXP = 0;
         m_MaxEXP = 0;
+        m_BonusEXP = 0;
 
         m_HP = 0;
         m_MaxHP = 0;
@@ -68,6 +70,18 @@
         set
         {
             m_MaxEXP = value;
+        }
+    }
+
+    public float BonusEXP
+    {
+        get
+        {
+            return m_BonusEXP;
+        }
+        set
+        {
+            m_BonusEXP = value;
         }
     }
 
