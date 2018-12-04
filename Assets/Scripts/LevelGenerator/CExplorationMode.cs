@@ -12,6 +12,8 @@ public class CExplorationMode : MonoBehaviour {
             GetComponent<CTBoardGenerator>().Init();
 
         player.GetComponent<CPlayer>().Init();
-        player.transform.position = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms()[0].CenterPoint();
+
+        if (CTDungeon.Instance.currentFloor > 0)
+            player.transform.position = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms()[0].CenterPoint();
 	}
 }
