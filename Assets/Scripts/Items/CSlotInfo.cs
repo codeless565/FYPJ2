@@ -4,17 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
+public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
     CItemSlot m_itemSlot;
     public ItemSlotType m_slotType;
 
-    public void Start()
+    float m_OriginalWidth;
+    float m_OriginalHeight;
+    GameObject m_OriginalParent;
+    GameObject m_MovingParent;
+
+    public void Init(GameObject _movingParent = null )
     {
         GetComponent<Image>().sprite = null;
         GetComponent<Image>().color = Color.gray;
         transform.GetChild(0).GetComponent<Text>().text = "";
         m_itemSlot = null;
+
+        m_OriginalParent = transform.parent.gameObject;
+        m_OriginalWidth = GetComponent<RectTransform>().rect.width;
+        m_OriginalHeight = GetComponent<RectTransform>().rect.height;
+
+        m_MovingParent = _movingParent;
     }
 
     public void Update()
@@ -66,8 +77,7 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
         transform.GetChild(0).GetComponent<Text>().text = "";
         m_itemSlot = null;
     }
-
-
+    
     public ItemSlotType SlotType
     { get { return m_slotType; } }
 
@@ -79,12 +89,18 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
     private bool isReplacing;
     private GameObject otherSlot;
 
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        //Change rendering layer to forward
+        transform.SetParent(m_MovingParent.transform);
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         if (m_itemSlot == null)
             return;
-        transform.position = Input.mousePosition;
-        //Change rendering layer to forward
+
+        transform.position = Input.mousePosition; 
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -119,7 +135,9 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
         }
 
         //Always return back to origin
+        transform.SetParent(m_OriginalParent.transform);
         transform.localPosition = Vector3.zero;
+        GetComponent<RectTransform>().rect.Set(0, 0, m_OriginalWidth, m_OriginalHeight);
     }
 
     private void OnTriggerEnter2D(Collider2D _other)
@@ -174,5 +192,5 @@ public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
 [SerializeField]
 public enum ItemSlotType
 {
-    ItemBar, InventoryUse, InventoryEquip, Smith, 
+    ItemBar, InventoryUse, InventoryEquip, PlayerEquip, Smith, 
 }
