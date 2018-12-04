@@ -4,27 +4,17 @@ using UnityEngine;
 
 public class CInventory : MonoBehaviour {
 
-    GameObject m_UseTab;
-    GameObject m_EquipTab;
-
-    GameObject[] m_currency;
+    [SerializeField] private GameObject m_UseTab;
+    [SerializeField] private GameObject m_EquipTab;
+    [SerializeField] private GameObject[] m_currency;
 
 	// Use this for initialization
 	public void Init()
     {
-        m_UseTab = transform.GetChild(0).gameObject;
         m_UseTab.GetComponent<CInventorySlots>().Init();
-        m_EquipTab = transform.GetChild(1).gameObject;
         m_EquipTab.GetComponent<CInventorySlots>().Init();
 
         Debug.Log("UseTab: " + m_UseTab.name + "  EqTab: " + m_EquipTab.name);
-
-        int currencyNum = transform.GetChild(2).childCount;
-        m_currency = new GameObject[currencyNum];
-        for (int i = 0; i < currencyNum; i++)
-        {
-            m_currency[i] = transform.GetChild(2).GetChild(i).GetChild(0).gameObject;
-        }
 
         gameObject.SetActive(false);
         m_UseTab.SetActive(true);
