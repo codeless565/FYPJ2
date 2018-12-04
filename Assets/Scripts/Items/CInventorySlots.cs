@@ -7,6 +7,9 @@ public class CInventorySlots : MonoBehaviour {
 
     public int InventorySlots = 3;
 
+    [SerializeField]
+    GameObject MovingParent;
+
     GameObject[] m_Itemslots;
 
     public void Init()
@@ -15,6 +18,7 @@ public class CInventorySlots : MonoBehaviour {
         for (int i = 0; i < InventorySlots; i++)
         {
             m_Itemslots[i] = gameObject.transform.GetChild(i).transform.GetChild(0).gameObject;
+            m_Itemslots[i].GetComponent<CSlotInfo>().Init(MovingParent);
             Debug.Log(m_Itemslots[i]);
         }
     }
