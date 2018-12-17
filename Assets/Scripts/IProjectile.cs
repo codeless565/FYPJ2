@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface IProjectile
 {
-    void Init(int _damage, int _speed, int _travelDist, Vector2 _direction, ProjectileType _projectileType = ProjectileType.Normal, AttackType _attackType = AttackType.Basic);
+    void Init(float _damage, float _speed, float _travelDist, Vector2 _direction, ProjectileType _projectileType = ProjectileType.Normal, AttackType _attackType = AttackType.Basic);
     void CheckTravelDist();
-    int GetDamage();
-    int GetSpeed();
+    float GetDamage();
+    float GetSpeed();
     Vector2 GetDirection();
     Sprite GetSprite();
     ProjectileType GetProjectileType();

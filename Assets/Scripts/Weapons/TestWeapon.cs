@@ -33,7 +33,7 @@ public class TestWeapon : CWeapon
         //Create NormalAttack prefab or smthing with projectile script
         Debug.Log("TestWeapon.NormalAttack Called - Fired");
         GameObject newBullet = Object.Instantiate(NormalBullet, _position, Quaternion.identity);
-        newBullet.GetComponent<NormalNote>().Init((int)(_damage * m_WeaponStats.AttackMultiplier), 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
+        newBullet.GetComponent<NormalNote>().Init(_damage * m_WeaponStats.AttackMultiplier, 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
         firingDelay = _firingDelay;
     }
 
