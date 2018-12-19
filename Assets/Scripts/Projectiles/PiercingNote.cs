@@ -86,7 +86,7 @@ public class PiercingNote : MonoBehaviour, IProjectile
         Debug.Log("collided name: " + _other.tag);
         if (_other.tag == "Wall")
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         else if (_other.tag == "Monster")
         {

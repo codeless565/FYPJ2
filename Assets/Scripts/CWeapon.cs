@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class CWeapon
 {
-    protected float firingDelay;
+    protected bool m_isCharging;
+    protected float C_chargeTime;
+    protected float m_firingDelay;
     protected CWeaponStats m_WeaponStats;
     protected Sprite m_WeaponSprite;
 
@@ -21,26 +23,38 @@ public class CWeapon
     public virtual void UpdateWeapon(float _dt)
     {
         Debug.Log("Using base function: CWeapon.UpdateWeapon");
-        if (firingDelay > 0)
-            firingDelay -= _dt;
+        if (m_firingDelay > 0)
+            m_firingDelay -= _dt;
     }
 
-    public virtual void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public virtual void IsCharging()
+    {
+        Debug.Log("Using base function: CWeapon.IsCharging");
+        m_isCharging = true;
+    }
+
+    public virtual void IsAttacking(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    {
+        Debug.Log("Using base function: CWeapon.IsAttacking");
+    }
+
+    protected virtual void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.NormalAttack");
     }
 
-    public virtual void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    protected virtual void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create normal attack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.ChargeAttack");
     }
 
-    public virtual void SpecialAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public virtual float SpecialAttack(float userSP, int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
     {
         //Create SpecialAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.SpecialAttack");
+        return 0.0f;
     }
 
     public Sprite WeaponSprite
