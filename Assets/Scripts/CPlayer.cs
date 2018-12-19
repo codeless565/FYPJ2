@@ -37,7 +37,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
 
         m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 10, 10, 10, 10, 10, 10, 1, 5);
+        SetStats(1, 0, 10, 10, 10, 100, 100, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
@@ -156,9 +156,13 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Attack()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            m_EquippedWeapon.NormalAttack(m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
-        }
+            m_EquippedWeapon.IsCharging();
+
+        if (Input.GetMouseButtonUp(0))
+            m_EquippedWeapon.IsAttacking(m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
+
+        if (Input.GetMouseButtonDown(1))
+            m_PlayerStats.SP -= m_EquippedWeapon.SpecialAttack(m_PlayerStats.SP, m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
     }
 
     public void UseItem(string _itemKey)
