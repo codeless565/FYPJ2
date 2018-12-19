@@ -89,42 +89,42 @@ public class CTBoardGenerator : MonoBehaviour
                 switch(_tiles[i][j])
                 {
                     case TileType.Wall_Up:
-                        InstantiateFromArray(wallTiles, i, j);
-                        break;
-                    case TileType.Wall_Down:
-                        InstantiateFromArray(wallTiles, i, j, 180);
+                        InstantiateFromArray(wallTiles[0], i, j);
                         break;
                     case TileType.Wall_Left:
-                        InstantiateFromArray(wallTiles, i, j, 90);
+                        InstantiateFromArray(wallTiles[1], i, j);
+                        break;
+                    case TileType.Wall_Down:
+                        InstantiateFromArray(wallTiles[2], i, j);
                         break;
                     case TileType.Wall_Right:
-                        InstantiateFromArray(wallTiles, i, j, -90);
+                        InstantiateFromArray(wallTiles[3], i, j);
                         break;
 
                     case TileType.WallInnerCorner_Q1:
-                        InstantiateFromArray(wallInnerCornerTiles, i, j);
+                        InstantiateFromArray(wallInnerCornerTiles[0], i, j);
                         break;
                     case TileType.WallInnerCorner_Q2:
-                        InstantiateFromArray(wallInnerCornerTiles, i, j, 90);
+                        InstantiateFromArray(wallInnerCornerTiles[1], i, j);
                         break;
                     case TileType.WallInnerCorner_Q3:
-                        InstantiateFromArray(wallInnerCornerTiles, i, j, 180);
+                        InstantiateFromArray(wallInnerCornerTiles[2], i, j);
                         break;
                     case TileType.WallInnerCorner_Q4:
-                        InstantiateFromArray(wallInnerCornerTiles, i, j, -90);
+                        InstantiateFromArray(wallInnerCornerTiles[3], i, j);
                         break;
 
                     case TileType.WallOuterCorner_Q1:
-                        InstantiateFromArray(wallOuterCornerTiles, i, j);
+                        InstantiateFromArray(wallOuterCornerTiles[0], i, j);
                         break;
                     case TileType.WallOuterCorner_Q2:
-                        InstantiateFromArray(wallOuterCornerTiles, i, j, 90);
+                        InstantiateFromArray(wallOuterCornerTiles[1], i, j);
                         break;
                     case TileType.WallOuterCorner_Q3:
-                        InstantiateFromArray(wallOuterCornerTiles, i, j, 180);
+                        InstantiateFromArray(wallOuterCornerTiles[2], i, j);
                         break;
                     case TileType.WallOuterCorner_Q4:
-                        InstantiateFromArray(wallOuterCornerTiles, i, j, -90);
+                        InstantiateFromArray(wallOuterCornerTiles[3], i, j);
                         break;
 
                     case TileType.Floor:
