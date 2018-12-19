@@ -205,23 +205,23 @@ public class CTFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q4;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
                             break;                                  
                         case Direction.EAST:                        
                             xCoord += j;                            
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q3;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
                             break;                                   
                         case Direction.SOUTH:                        
                             yCoord -= j;                             
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q1;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
                             break;                                  
                         case Direction.WEST:                        
                             xCoord -= j;                            
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q4;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
                             break;
                     }
                 //Ending Corner
@@ -230,23 +230,23 @@ public class CTFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q1;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
                             break;                                  
                         case Direction.EAST:                        
                             xCoord += j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q4;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
                             break;                                   
                         case Direction.SOUTH:                        
                             yCoord -= j;                             
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q4;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
                             break;                                  
                         case Direction.WEST:                        
                             xCoord -= j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q3;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q2;
+                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
+                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
                             break;
                     }
                 //Side walls
