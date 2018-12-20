@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalNote : MonoBehaviour, IProjectile
+public class ExplosiveNote : MonoBehaviour, IProjectile
 {
     bool m_initialized;
     float m_damage;
@@ -13,6 +13,9 @@ public class NormalNote : MonoBehaviour, IProjectile
 
     ProjectileType m_projectileType;
     AttackType m_attackType;
+
+    //Unique members
+    GameObject m_NormalNote;
 
     public void Init(float _damage, float _speed, float _travelDist, Vector2 _direction, ProjectileType _projectileType = ProjectileType.Normal, AttackType _attackType = AttackType.Basic)
     {
@@ -25,6 +28,8 @@ public class NormalNote : MonoBehaviour, IProjectile
 
         m_projectileType = _projectileType;
         m_attackType = _attackType;
+
+        m_NormalNote = (GameObject)Resources.Load("Projectiles/NormalNote");
     }
 
     public void CheckTravelDist()
@@ -66,13 +71,13 @@ public class NormalNote : MonoBehaviour, IProjectile
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         CheckTravelDist();
 
         //transform.rotation = Quaternion.LookRotation(m_direction, Vector2.up);
         transform.Translate(m_direction * m_speed * Time.deltaTime);
-	}
+    }
 
     private void OnTriggerEnter2D(Collider2D _other)
     {
@@ -80,12 +85,13 @@ public class NormalNote : MonoBehaviour, IProjectile
             return;
 
         Debug.Log("collided name: " + _other.tag);
-        if(_other.tag == "Wall")
+        if (_other.tag == "Wall")
         {
             Destroy(gameObject);
         }
         else if (_other.tag == "Monster")
         {
+            //Hit monster, deal damage and spawn 
             _other.GetComponent<IEnemy>().GetStats().HP -= m_damage;
             Destroy(gameObject);
         }
