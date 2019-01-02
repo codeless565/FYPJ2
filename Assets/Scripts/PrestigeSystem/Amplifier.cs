@@ -2,20 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Amplifer : PrestigeBase
+public class Amplifier : PrestigeBase
 {
-    public Amplifer()
-    { }
-
-
-    public void AddPrestigeStats(ref CStats _playerStats)
+    public static string prestigename;
+    private CPlayer playerInfo;
+    public Amplifier(CPlayer _playerinfo)
     {
-        _playerStats.Attack = _playerStats.Attack * 110 / 100;
+        playerInfo = _playerinfo;
+        prestigename = "Amplfier";
     }
 
-    public void RemovePrestigeStats(ref CStats _playerStats)
+    public string PrestigeName
     {
-        _playerStats.Attack = _playerStats.Attack * 100 / 110;
+        get
+        {
+            return prestigename;
+        }
+    }
 
+    //public CPlayer PlayerInfo
+    //{
+    //    get
+    //    {
+    //        return playerInfo;
+    //    }
+
+    //    set
+    //    {
+    //        playerInfo = value;
+    //    }
+    //}
+
+    public void AddPrestigeStats()
+    {
+        playerInfo.GetStats().Attack = playerInfo.GetStats().Attack * 110 / 100;
+    }
+
+    public void RemovePrestigeStats()
+    {
+        playerInfo.GetStats().Attack = playerInfo.GetStats().Attack * 100 / 110;
+
+    }
+
+    public void Update()
+    {
     }
 }

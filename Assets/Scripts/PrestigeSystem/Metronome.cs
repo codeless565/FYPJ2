@@ -4,18 +4,47 @@ using UnityEngine;
 
 public class Metronome : PrestigeBase
 {
-    public Metronome()
-    { }
+    public static string prestigename;
+    private CPlayer playerInfo;
 
-
-    public void AddPrestigeStats(ref CStats _playerStats)
+    public Metronome(CPlayer _playerinfo)
     {
-        _playerStats.PlayRate = _playerStats.PlayRate * 110 / 100;
+        playerInfo = _playerinfo;
+        prestigename = "Metronome";
     }
 
-    public void RemovePrestigeStats(ref CStats _playerStats)
+    public string PrestigeName
     {
-        _playerStats.PlayRate = _playerStats.PlayRate * 100 / 110;
+        get
+        {
+            return prestigename;
+        }
+    }
 
+    //public CPlayer PlayerInfo
+    //{
+    //    get
+    //    {
+    //        return playerInfo;
+    //    }
+
+    //    set
+    //    {
+    //        playerInfo = value;
+    //    }
+    //}
+
+    public void AddPrestigeStats()
+    {
+        playerInfo.GetStats().PlayRate = playerInfo.GetStats().PlayRate * 110 / 100;
+    }
+
+    public void RemovePrestigeStats()
+    {
+        playerInfo.GetStats().PlayRate = playerInfo.GetStats().PlayRate * 100 / 110;
+    }
+
+    public void Update()
+    {
     }
 }

@@ -4,7 +4,13 @@ using UnityEngine;
 
 public interface PrestigeBase {
     //string GetName();
+    string PrestigeName
+    { get; }
+    //CPlayer PlayerInfo
+    //{ get; set; }
 
-    void AddPrestigeStats(ref CStats _playerStats);
-    void RemovePrestigeStats(ref CStats _playerStats);
+    void AddPrestigeStats();
+    void RemovePrestigeStats();
+
+    void Update();
 }

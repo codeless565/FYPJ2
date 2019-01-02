@@ -4,17 +4,37 @@ using UnityEngine;
 
 public class Perfection : PrestigeBase
 {
-    public Perfection()
-    { }
-
-    public void AddPrestigeStats(ref CStats _playerStats)
+    private CPlayer playerInfo;
+    public float timer;
+    public static string prestigename;
+    public string PrestigeName
     {
-        throw new System.NotImplementedException();
+        get
+        {
+            return prestigename;
+        }
     }
 
-    public void RemovePrestigeStats(ref CStats _playerStats)
+    public Perfection(CPlayer _playerinfo)
     {
-        throw new System.NotImplementedException();
+        playerInfo = _playerinfo;
+        prestigename = "Perfection";
+        timer = 0.0f;
+    }
+
+    public void AddPrestigeStats()
+    {
+    }
+
+    public void RemovePrestigeStats()
+    {
+    }
+
+    public void Update()
+    {
+        // reset if player is damaged
+        timer += Time.deltaTime ;
+        Debug.Log("timer: " + timer);
 
     }
 }

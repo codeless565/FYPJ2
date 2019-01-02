@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class PopularityBoost : PrestigeBase
 {
-    public PopularityBoost()
-    { }
-
-    public void AddPrestigeStats(ref CStats _playerStats)
+    private CPlayer playerInfo;
+    public static string prestigename;
+    public PopularityBoost(CPlayer _playerinfo)
     {
-        throw new System.NotImplementedException();
+        playerInfo = _playerinfo;
+        prestigename = "PopularityBoost";
     }
 
-    public void RemovePrestigeStats(ref CStats _playerStats)
+    public string PrestigeName
     {
-        throw new System.NotImplementedException();
+        get
+        {
+            return prestigename;
+        }
+    }
 
+    public void AddPrestigeStats()
+    {
+        playerInfo.GetStats().EXPBoost *= 2;
+    }
+
+    public void RemovePrestigeStats()
+    {
+        playerInfo.GetStats().EXPBoost /= 2;
+    }
+
+    public void Update()
+    {
+        
     }
 }
