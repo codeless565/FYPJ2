@@ -13,6 +13,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     private Sprite m_PlayerSprite;
 
     public CInventorySystem m_InventorySystem;
+    public PrestigeSystem m_PrestigeSystem;
     public GameObject InventoryPanel;
     public GameObject InventoryUI;
 
@@ -49,6 +50,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         m_TargetedHealth = m_PlayerStats.HP;
         m_FromHealth = m_PlayerStats.HP;
+        m_PrestigeSystem = new PrestigeSystem();
     }
 
     public void Update()
@@ -64,7 +66,13 @@ public class CPlayer : MonoBehaviour ,IEntity
             print(m_PlayerStats.HP);
 
         if (Input.GetKeyDown(KeyCode.L))
-            RemoveHealth(9);
+        //RemoveHealth(9);
+        {
+            if (m_PlayerStats.Level == 1)
+            m_PlayerStats.EXP += 10;
+            if (m_PlayerStats.Level == 2)
+                m_PlayerStats.EXP += 20;
+        }
 
         HPSlider.value = m_PlayerStats.HP;
         SPSlider.value = m_PlayerStats.SP;
@@ -122,20 +130,57 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Weapon System Update
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
-        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
+        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.HP + "/" + m_PlayerStats.MaxEXP);
+    }
+
+    public void RemoveAllPrestigeStats()
+    {
+        foreach (PrestigeBase pb in m_PrestigeSystem.GetList())
+            pb.RemovePrestigeStats(ref m_PlayerStats);
+    }
+
+    public void AddAllPrestigeStats()
+    {
+        foreach (PrestigeBase pb in m_PrestigeSystem.GetList())
+            pb.AddPrestigeStats(ref m_PlayerStats);
     }
 
     public void LevelingSystem()
     {
+        // remove all prestige settings
+        RemoveAllPrestigeStats();
         if(m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
         {
             m_PlayerStats.Level += 1;
             m_PlayerStats.EXP -= m_PlayerStats.MaxEXP;
             m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
             EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+
+            //m_PlayerStats.MaxHP = m_PlayerStats.Level * 10;
+            //m_PlayerStats.HP = m_PlayerStats.MaxHP;
             // HP/SP update
             print("Level up");
+            if (m_PlayerStats.Level == 10)
+                m_PrestigeSystem.GetList().Add(new Maintenance());
+            else if (m_PlayerStats.Level == 20)
+                m_PrestigeSystem.GetList().Add(new Metronome());
+            else if (m_PlayerStats.Level == 30)
+                m_PrestigeSystem.GetList().Add(new Amplifer());
+            else if (m_PlayerStats.Level == 40)
+                m_PrestigeSystem.GetList().Add(new NoiseCanceller());
+            else if (m_PlayerStats.Level == 50)
+                m_PrestigeSystem.GetList().Add(new PopularityBoost());
+            else if (m_PlayerStats.Level == 60)
+                m_PrestigeSystem.GetList().Add(new Perfection());
+            else if (m_PlayerStats.Level == 70)
+                m_PrestigeSystem.GetList().Add(new Encore());
+            else if (m_PlayerStats.Level == 80)
+                m_PrestigeSystem.GetList().Add(new GuardianAngel());
+            //else if (m_PlayerStats.Level == 90)
+            //    m_PrestigeSystem.GetList().Add(new Euphoria());
         }
+        AddAllPrestigeStats();
+        //add all prestige settings
     }
 
     public void Move()
@@ -249,4 +294,6 @@ public class CPlayer : MonoBehaviour ,IEntity
         
         m_PlayerStats.EXP += _exp;
     }
+
+
 }
