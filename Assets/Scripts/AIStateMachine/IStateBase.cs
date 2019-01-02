@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface CStateBase
+public interface IStateBase
 {
     void EnterState();
     void UpdateState();
