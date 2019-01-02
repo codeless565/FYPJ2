@@ -25,7 +25,8 @@ public class CStateMachine
             m_currState = m_nextState;
             m_currState.EnterState();
         }
-        m_currState.UpdateState();
+        if (m_currState != null)
+            m_currState.UpdateState();
     }
 
     public void AddState(IStateBase _newState)
