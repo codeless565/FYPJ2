@@ -25,15 +25,33 @@ public class CPlayer : MonoBehaviour ,IEntity
     float m_FromHealth;
     float m_TargetedHealth;
 
+    CTRoomCoordinate m_RoomCoord;
+    public CTRoomCoordinate roomCoordinate
+    {
+        get { return m_RoomCoord; }
+
+        set
+        {
+            if (m_RoomCoord == null)
+            {
+                m_RoomCoord = new CTRoomCoordinate(value);
+                return;
+            }
+            m_RoomCoord = value;
+        }
+    }
+
     public CPlayer()
     {
+        m_RoomCoord = new CTRoomCoordinate(0,0);
     }
 
     public void Init()
     {
         this.name = "Player";
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
-        
+        m_RoomCoord = new CTRoomCoordinate(0, 0);
+
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
 
         m_PlayerStats = new CStats();
