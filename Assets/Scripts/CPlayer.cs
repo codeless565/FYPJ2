@@ -14,6 +14,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public CInventorySystem m_InventorySystem;
     public PrestigeSystem m_PrestigeSystem;
+    public QuestSystem m_QuestSystem;
     public GameObject InventoryPanel;
     public GameObject InventoryUI;
 
@@ -38,6 +39,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_EquippedWeapon = new TestWeapon();
         GetComponent<PlayerUIScript>().Init();
         m_PrestigeSystem = new PrestigeSystem();
+        m_QuestSystem = new QuestSystem();
     }
 
     public void Update()
@@ -55,6 +57,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         LevelingSystem();
         m_PrestigeSystem.Update();
+        m_QuestSystem.Update();
 
         #region
         //Test Add
