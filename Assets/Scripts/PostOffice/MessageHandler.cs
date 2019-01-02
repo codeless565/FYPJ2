@@ -32,6 +32,11 @@ public class MessageHandler{
                         _receiver.GetComponent<PlayerUIScript>().AddEXP(_receiver.GetComponent<CPlayer>().GetStats().EXP,message.m_Sender.GetComponent<IEnemy>().GetStats().Level * (int)message.m_Sender.GetComponent<IEnemy>().GetStats().EXP);
                 }
                 break;
+            case MESSAGE_TYPE.ADDPROP:
+                {
+                    _receiver.GetComponent<CPlayer>().m_QuestSystem.UpdateQuestProperty(NoiseSlayer.m_questName, KillNoiseProp.m_propertyname, 1);
+                }
+                break;
         }
     }
     

@@ -21,7 +21,6 @@ public class Message {
 public enum MESSAGE_TYPE
 {
     NONE,
-    ADDHPPOT,
-    USEHPPOT,
-    ADDEXP
+    ADDEXP,
+    ADDPROP,
 }
