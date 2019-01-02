@@ -50,6 +50,9 @@ public class CTFloor
 
         SetTilesValuesForRooms();
         SetTilesValuesForCorridors();
+
+        SetUpPathNodes();
+        SetUpRoomDetector();
     }
 
     //public void InitLevelFromSave()
@@ -86,7 +89,6 @@ public class CTFloor
         int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, StartingRoom,
             _numRooms, ref gameBoard, ref rooms, ref corridors);
 
-        SetUpPathNodes();
         Debug.Log("Total Rooms: " + rooms.Count + " GeneratedRooms: " + totalRooms);
     }
 
@@ -229,6 +231,19 @@ public class CTFloor
                 }
 
             }
+        }
+    }
+
+    void SetUpRoomDetector()
+    {
+        GameObject detector;
+
+        foreach (var currRoom in rooms)
+        {
+            detector = Object.Instantiate(Resources.Load("RoomDetector"), new Vector3(currRoom.CenterPoint.x, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
+            detector.transform.localScale = new Vector3(currRoom.roomWidth, currRoom.roomHeight, 1);
+            if (detector.GetComponent<RoomCoordinateSetter>())
+                detector.GetComponent<RoomCoordinateSetter>().Init(currRoom.coordinate);
         }
     }
 
@@ -424,7 +439,7 @@ public class CTFloor
         }
     }
 
-    private CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
+    public CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
     {
         foreach (CTRoom currRm in rooms)
         {
