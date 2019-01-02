@@ -44,9 +44,6 @@ public class QuestSystem {
                 qb.Value.QuestActive = false;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.F))
-            PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDPROP));
 	}
 
     public void AddQuestProperty(string _questname, QPropertiesBase _property)
