@@ -594,6 +594,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1528520425641184, guid: 15ca25e35842d854ca02c84dca99ba08,
     type: 2}
   m_PrefabInternal: {fileID: 319128168}
+--- !u!114 &319128176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 319128169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 515484e99a6853345a4e21d6977d3027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HPSlider: {fileID: 1057370302}
+  SPSlider: {fileID: 351354845}
+  EXPSlider: {fileID: 64286167}
+  m_FromHealth: 0
+  m_TargetedHealth: 0
+  m_FromEXP: 0
+  m_TargetedEXP: 0
+  m_FromSP: 0
+  m_TargetedSP: 0
 --- !u!114 &351354845 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114016943799193356, guid: d7b6e567905dc724caf7c1cba13825f7,
@@ -1116,6 +1136,10 @@ Prefab:
         type: 2}
       propertyPath: m_Color.b
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561665026866714, guid: d7b6e567905dc724caf7c1cba13825f7, type: 2}
+      propertyPath: m_Name
+      value: EXPSlider
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7b6e567905dc724caf7c1cba13825f7, type: 2}

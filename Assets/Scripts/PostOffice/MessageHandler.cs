@@ -29,7 +29,7 @@ public class MessageHandler{
             case MESSAGE_TYPE.ADDEXP:
                 {
                     if (message.m_Sender.GetComponent<IEnemy>() != null)
-                        _receiver.GetComponent<CPlayer>().AddEXP(message.m_Sender.GetComponent<IEnemy>().GetStats().Level * (int)message.m_Sender.GetComponent<IEnemy>().GetStats().EXP);
+                        _receiver.GetComponent<PlayerUIScript>().AddEXP(_receiver.GetComponent<CPlayer>().GetStats().EXP,message.m_Sender.GetComponent<IEnemy>().GetStats().Level * (int)message.m_Sender.GetComponent<IEnemy>().GetStats().EXP);
                 }
                 break;
         }
