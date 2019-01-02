@@ -21,7 +21,7 @@ public class CTFloor
         rows = _rows;
 
         // Set up Gameboard and Starting Room Coordinates
-        StartingRoom = new CTRoomCoordinate(0,0);
+        StartingRoom = new CTRoomCoordinate(0, 0);
 
         int gameboardColum;
         gameboardColum = _gridSize;
@@ -31,9 +31,9 @@ public class CTFloor
         gameboardRow = _gridSize;
         StartingRoom.y = gameboardRow / 2;
 
-        Debug.Log("ColumsSqrt: " + gameboardColum);
-        Debug.Log("RowsSqrt: " + gameboardRow);
-        Debug.Log("StartingRm: " + StartingRoom.x + ", " + StartingRoom.y);
+        //Debug.Log("ColumsSqrt: " + gameboardColum);
+        //Debug.Log("RowsSqrt: " + gameboardRow);
+        //Debug.Log("StartingRm: " + StartingRoom.x + ", " + StartingRoom.y);
 
 
         // Initialize GameBoard
@@ -85,7 +85,151 @@ public class CTFloor
         // Setup the first room, RMCount will start from 0
         int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, StartingRoom,
             _numRooms, ref gameBoard, ref rooms, ref corridors);
+
+        SetUpPathNodes();
         Debug.Log("Total Rooms: " + rooms.Count + " GeneratedRooms: " + totalRooms);
+    }
+
+    void SetUpPathNodes()
+    {
+        if (rooms.Count <= 0)
+            return;
+
+        GameObject node;
+
+        foreach (CTRoom currRoom in rooms)
+        {
+            foreach (Direction dir in currRoom.nextCorridors.Keys)
+            {
+                switch (dir)
+                {
+                    case Direction.NORTH:
+                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, dir, currRoom);
+                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                        }
+                        break;
+                    case Direction.SOUTH:
+                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, dir, currRoom);
+                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                        }
+                        break;
+                    case Direction.EAST:
+                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, dir, currRoom);
+                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                        }
+                        break;
+                    case Direction.WEST:
+                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, dir, currRoom);
+                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                        }
+                        break;
+                }
+            }
+
+            // Check surrounding rooms to add pathnode for
+            for (int i = 0; i < (int)Direction.Size; ++i)
+            {
+                Direction nextDir = (Direction)(i % (int)Direction.Size);
+                // Safety Check  if not, create a corridor for the room
+                switch (nextDir)
+                {
+                    case Direction.NORTH:
+                        //if the next room will be out of board
+                        if (currRoom.coordinate.y + 1 < gameBoard[0].Length)
+                            if (gameBoard[currRoom.coordinate.x][currRoom.coordinate.y + 1])
+                            {
+                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x, currRoom.coordinate.y + 1));
+                                if (otherRm == null)
+                                {
+                                    Debug.Log("Room " + currRoom.coordinate.x + " " + (currRoom.coordinate.y + 1) + " is null");
+                                    continue;
+                                }
+                                if (otherRm.nextCorridors.ContainsKey(Direction.SOUTH))
+                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, nextDir, currRoom);
+                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                        break;
+                                    }
+                            }
+                        continue;
+                    case Direction.SOUTH:
+                        if (currRoom.coordinate.y - 1 >= 0)
+                            if (gameBoard[currRoom.coordinate.x][currRoom.coordinate.y - 1])
+                            {
+                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x, currRoom.coordinate.y - 1));
+                                if (otherRm == null)
+                                {
+                                    Debug.Log("Room " + currRoom.coordinate.x + " " + (currRoom.coordinate.y - 1) + " is null");
+                                    continue;
+                                }
+                                if (otherRm.nextCorridors.ContainsKey(Direction.NORTH))
+                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, nextDir, currRoom);
+                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                        break;
+                                    }
+                            }
+                        continue;
+                    case Direction.EAST:
+                        if (currRoom.coordinate.x + 1 < gameBoard.Length)
+                            if (gameBoard[currRoom.coordinate.x + 1][currRoom.coordinate.y])
+                            {
+                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x + 1, currRoom.coordinate.y));
+                                if (otherRm == null)
+                                {
+                                    Debug.Log("Room " + (currRoom.coordinate.x + 1) + " " + currRoom.coordinate.y + " is null");
+                                    continue;
+                                }
+                                if (otherRm.nextCorridors.ContainsKey(Direction.WEST))
+                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, nextDir, currRoom);
+                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                        break;
+                                    }
+                            }
+                        continue;
+                    case Direction.WEST:
+                        if (currRoom.coordinate.x - 1 >= 0)
+                            if (gameBoard[currRoom.coordinate.x - 1][currRoom.coordinate.y])
+                            {
+                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x - 1, currRoom.coordinate.y));
+                                if (otherRm == null)
+                                {
+                                    Debug.Log("Room " + (currRoom.coordinate.x - 1) + " " + currRoom.coordinate.y + " is null");
+                                    continue;
+                                }
+                                if (otherRm.nextCorridors.ContainsKey(Direction.EAST))
+                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, nextDir, currRoom);
+                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                        break;
+                                    }
+                            }
+                        continue;
+                }
+
+            }
+        }
     }
 
     void SetTilesValuesForRooms()
@@ -200,26 +344,26 @@ public class CTFloor
                 // coordinate based on how far through the length the loop is.
 
                 //Starting Corners
-                if (j == 0) 
+                if (j == 0)
                     switch (currentCorridor.direction)
                     {
                         case Direction.NORTH:
                             yCoord += j;
                             tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
                             tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
-                            break;                                  
-                        case Direction.EAST:                        
-                            xCoord += j;                            
+                            break;
+                        case Direction.EAST:
+                            xCoord += j;
                             tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
                             tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
-                            break;                                   
-                        case Direction.SOUTH:                        
-                            yCoord -= j;                             
+                            break;
+                        case Direction.SOUTH:
+                            yCoord -= j;
                             tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
                             tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
-                            break;                                  
-                        case Direction.WEST:                        
-                            xCoord -= j;                            
+                            break;
+                        case Direction.WEST:
+                            xCoord -= j;
                             tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
                             tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
                             break;
@@ -232,18 +376,18 @@ public class CTFloor
                             yCoord += j;
                             tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
                             tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
-                            break;                                  
-                        case Direction.EAST:                        
+                            break;
+                        case Direction.EAST:
                             xCoord += j;
                             tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
                             tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
-                            break;                                   
-                        case Direction.SOUTH:                        
-                            yCoord -= j;                             
+                            break;
+                        case Direction.SOUTH:
+                            yCoord -= j;
                             tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
                             tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
-                            break;                                  
-                        case Direction.WEST:                        
+                            break;
+                        case Direction.WEST:
                             xCoord -= j;
                             tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
                             tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
@@ -278,7 +422,17 @@ public class CTFloor
                 tiles[xCoord][yCoord] = TileType.Floor;
             }
         }
-    }    
+    }
+
+    private CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
+    {
+        foreach (CTRoom currRm in rooms)
+        {
+            if (currRm.coordinate.sameAs(_coord))
+                return currRm;
+        }
+        return null;
+    }
 
     public List<CTRoom> GetRooms()
     { return rooms; }

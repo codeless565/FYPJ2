@@ -14,9 +14,17 @@ public class CTRoom
     public int roomHeight;              // How many tiles high the room is.
 
     public Direction prevCorridor;         // The direction of the corridor that is entering this room.
-    public List<CTCorridor> nextCorridors;   // The dir of the other corridors
+    public Dictionary<Direction, CTCorridor> nextCorridors;   // The dir of the other corridors
     public CTRoomCoordinate coordinate;
+    public Dictionary<Direction, CPathNode> pathnodes;
 
+    public Vector2 CenterPoint
+    {
+        get
+        {
+            return new Vector2(xPos + (roomWidth - 1) * 0.5f, yPos + (roomHeight - 1) * 0.5f);
+        }
+    }
 
     public int SetupAllRoom(int _boardWidth, int _boardHeight, int _roomWidth, int _roomHeight, int _corridorLength, CTRoomCoordinate _startingCoord,
         int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors)
@@ -37,13 +45,20 @@ public class CTRoom
         coordinate = new CTRoomCoordinate(_startingCoord);
         _gameBoard[coordinate.x][coordinate.y] = true;
 
+        //set up pathnodes
+        pathnodes = new Dictionary<Direction, CPathNode>();
+        //pathnodes.Add(new CPathNode(CenterPoint.x, yPos + roomHeight, Direction.NORTH, this));
+        //pathnodes.Add(new CPathNode(xPos, CenterPoint.y, Direction.WEST, this));
+        //pathnodes.Add(new CPathNode(CenterPoint.x, yPos, Direction.SOUTH, this));
+        //pathnodes.Add(new CPathNode(xPos + roomWidth, CenterPoint.y + roomWidth, Direction.EAST, this));
+
         generated = true;
         int currNumRooms = 1;   // 1st room
-        Debug.Log("CR_Count " + _rooms.Count + "  _numRooms: " + currNumRooms);
-        Debug.Log("Coord: " + coordinate.x + ", " + coordinate.y );
+        //Debug.Log("CR_Count " + _rooms.Count + "  _numRooms: " + currNumRooms);
+        //Debug.Log("Coord: " + coordinate.x + ", " + coordinate.y );
 
-        // Create Next Corridors
-        nextCorridors = new List<CTCorridor>();
+        // Create Next Corridors and pathnodes
+        nextCorridors = new Dictionary<Direction, CTCorridor>();
         for (int i = 0; i < (int)Direction.Size; ++i)
         {
             //Create Corridors
@@ -58,7 +73,7 @@ public class CTRoom
                     continue;
                 case Direction.SOUTH:
                     if (coordinate.y - 1 >= 0)
-                        if (_gameBoard[coordinate.x][coordinate.y - 1])
+                        if (!_gameBoard[coordinate.x][coordinate.y - 1])
                             break;
                     continue;
                 case Direction.EAST:
@@ -76,7 +91,7 @@ public class CTRoom
             CTCorridor newCor = new CTCorridor();
             newCor.SetupCorridor(this, _corridorLength, (Direction)i);
             _corridors.Add(newCor);
-            nextCorridors.Add(newCor);
+            nextCorridors.Add((Direction)i, newCor);
         }
 
         int availableRooms = nextCorridors.Count;
@@ -84,12 +99,12 @@ public class CTRoom
         // Create Next Room
         CTRoomCoordinate nextRoomCoord = new CTRoomCoordinate(0, 0);
 
-        for (int i = 0; i < nextCorridors.Count; ++i)
+        foreach(Direction nextdir in nextCorridors.Keys)
         {
             //if direction have a room alrdy base on the _gameboard, skip
             //if direction is same as previous corridor / corridors in list, skip
             //random a corridor except for north side and check if they got slot on gameboard
-            switch (nextCorridors[i].direction)
+            switch (nextdir)
             {
                 case Direction.NORTH:
                     if (!_gameBoard[coordinate.x][coordinate.y + 1])
@@ -98,7 +113,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y + 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[i], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
+                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[nextdir], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
                     }
                     break;
 
@@ -109,7 +124,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x + 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[i], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
+                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[nextdir], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
                     }
                     break;
 
@@ -120,7 +135,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x - 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[i], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
+                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[nextdir], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
                     }
                     break;
 
@@ -131,7 +146,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y - 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[i], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
+                        newRoom.SetupRoom(_roomWidth, _roomHeight, nextRoomCoord, nextCorridors[nextdir], ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, 0);
                     }
                     break;
             }
@@ -140,7 +155,6 @@ public class CTRoom
         //Check if its enough rooms
         while (currNumRooms < _maxRooms)
         {
-            Debug.Log("Force Create Rooms Calling");
             CreateEndRooms(_roomWidth, _roomHeight, _corridorLength - 2, GetEndRooms(_rooms, _maxRooms / 4), ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors);
         }
 
@@ -163,7 +177,7 @@ public class CTRoom
 
         // Init Values
         // Set the entering corridor direction.
-        nextCorridors = new List<CTCorridor>();
+        nextCorridors = new Dictionary<Direction, CTCorridor>();
         prevCorridor = _prevCorridor.direction;
 
         roomWidth = _width;
@@ -171,6 +185,9 @@ public class CTRoom
         roomDepth = _depth + 1;
 
         coordinate = new CTRoomCoordinate(_roomCoordinate);
+
+        //set up pathnodes
+        pathnodes = new Dictionary<Direction, CPathNode>();
 
         //Create Room
         switch (_prevCorridor.direction)
@@ -203,10 +220,15 @@ public class CTRoom
         generated = true;
         _gameBoard[_roomCoordinate.x][_roomCoordinate.y] = true;
 
+        //pathnodes.Add(new CPathNode(CenterPoint.x, yPos + roomHeight, Direction.NORTH, this));
+        //pathnodes.Add(new CPathNode(xPos, CenterPoint.y, Direction.WEST, this));
+        //pathnodes.Add(new CPathNode(CenterPoint.x, yPos, Direction.SOUTH, this));
+        //pathnodes.Add(new CPathNode(xPos + roomWidth, CenterPoint.y + roomWidth, Direction.EAST, this));
+
         _availableRooms--;
         _numRooms++;
-        Debug.Log("CR_Count " + _rooms.Count + "  _numRooms: " + _numRooms);
-        Debug.Log("Coord: " + coordinate.x + ", " + coordinate.y);
+        //Debug.Log("CR_Count " + _rooms.Count + "  _numRooms: " + _numRooms);
+        //Debug.Log("Coord: " + coordinate.x + ", " + coordinate.y);
 
         if (_numRooms >= _maxRooms)
             return;
@@ -218,47 +240,44 @@ public class CTRoom
             return;
         }
 
-        // Create Next Corridors
+        // Create Next Corridors and Pathnode
         int startDir = Random.Range(0,(int)Direction.Size);
         for (int i = 0; i < (int)Direction.Size; ++i, ++startDir)
         {
             Direction nextDir = (Direction)(startDir % (int)Direction.Size);
-            //if ((startDir % (int)Direction.Size) != (int)prevCorridor)
+            //Create Corridors
+            if (Random.Range(0.0f, 1.0f) <= 1.0f - (_numRooms + _availableRooms) / _maxRooms - i * 0.1f)
             {
-                //Create Corridors
-                if (Random.Range(0.0f, 1.0f) <= 1.0f - (_numRooms + _availableRooms)/_maxRooms - i * 0.1f)
+                // Safety Check  if not, create a corridor for the room
+                switch (nextDir)
                 {
-                    // Safety Check  if not, create a corridor for the room
-                    switch (nextDir)
-                    {
-                        case Direction.NORTH:
-                            //if the next room will be out of board
-                            if (coordinate.y + 1 < _gameBoard[0].Length)
-                                if (!_gameBoard[coordinate.x][coordinate.y + 1])
-                                    break;
-                            continue;
-                        case Direction.SOUTH:
-                            if (coordinate.y - 1 >= 0)
-                                if (!_gameBoard[coordinate.x][coordinate.y - 1])
-                                    break;
-                            continue;
-                        case Direction.EAST:
-                            if (coordinate.x + 1 < _gameBoard.Length)
-                                if (!_gameBoard[coordinate.x + 1][coordinate.y])
-                                    break;
-                            continue;
-                        case Direction.WEST:
-                            if (coordinate.x - 1 >= 0)
-                                if (!_gameBoard[coordinate.x - 1][coordinate.y])
-                                    break;
-                            continue;
-                    }
-
-                    CTCorridor newCor = new CTCorridor();
-                    newCor.SetupCorridor(this, _prevCorridor.corridorLength, nextDir);
-                    _corridors.Add(newCor);
-                    nextCorridors.Add(newCor);
+                    case Direction.NORTH:
+                        //if the next room will be out of board
+                        if (coordinate.y + 1 < _gameBoard[0].Length)
+                            if (!_gameBoard[coordinate.x][coordinate.y + 1])
+                                break;
+                        continue;
+                    case Direction.SOUTH:
+                        if (coordinate.y - 1 >= 0)
+                            if (!_gameBoard[coordinate.x][coordinate.y - 1])
+                                break;
+                        continue;
+                    case Direction.EAST:
+                        if (coordinate.x + 1 < _gameBoard.Length)
+                            if (!_gameBoard[coordinate.x + 1][coordinate.y])
+                                break;
+                        continue;
+                    case Direction.WEST:
+                        if (coordinate.x - 1 >= 0)
+                            if (!_gameBoard[coordinate.x - 1][coordinate.y])
+                                break;
+                        continue;
                 }
+
+                CTCorridor newCor = new CTCorridor();
+                newCor.SetupCorridor(this, _prevCorridor.corridorLength, nextDir);
+                _corridors.Add(newCor);
+                nextCorridors.Add(nextDir, newCor);
             }
         }
 
@@ -271,10 +290,10 @@ public class CTRoom
         // Create Next Room
         CTRoomCoordinate nextRoomCoord = new CTRoomCoordinate(0, 0);
 
-        for (int i = 0; i < nextCorridors.Count; ++i)
+        foreach (Direction nextdir in nextCorridors.Keys)
         {
             //if direction have a room alrdy base on the _gameboard, skip
-            switch (nextCorridors[i].direction)
+            switch (nextdir)
             {
                 case Direction.NORTH:
                     if (!_gameBoard[coordinate.x][coordinate.y + 1])
@@ -283,7 +302,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y + 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
                     }
                     break;
 
@@ -294,7 +313,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x + 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
                     }
                     break;
 
@@ -305,7 +324,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x - 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
                     }
                     break;
 
@@ -316,11 +335,12 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y - 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth);
                     }
                     break;
             }
         }
+
     }
 
     /*****************************
@@ -346,7 +366,6 @@ public class CTRoom
     private void CreateEndRooms(int _width, int _height, int _corridorLength, List<CTRoom> _endRooms,
         ref int _numRooms, ref int _availableRooms, ref int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors)
     {
-        Debug.Log("CreateEndRooms Called");
         for (int i = 0; i < _endRooms.Count; ++i)
         {
             if (_endRooms[i].nextCorridors.Count > 0)
@@ -367,8 +386,7 @@ public class CTRoom
             return;
 
         //Create Corridors
-        Debug.Log("Setup EndRooms Called");
-        Debug.Log("EndRm Coord: " + coordinate.x + ", " + coordinate.y);
+        GameObject node;
         int startDir = Random.Range(0, (int)Direction.Size);
         for (int i = 0; i < (int)Direction.Size; ++i, ++startDir)
         {
@@ -383,91 +401,54 @@ public class CTRoom
                     {
                         case Direction.NORTH:
                             //if the next room will be out of board
-                            if (coordinate.y + 1 >= _gameBoard[0].Length)
-                                continue;
-                            //if corridor has a room already?
-                            if (_gameBoard[coordinate.x][coordinate.y + 1])
-                                continue;
-                            break;
+                            if (coordinate.y + 1 < _gameBoard[0].Length)
+                                if (!_gameBoard[coordinate.x][coordinate.y + 1])
+                                {
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(CenterPoint.x, yPos + roomHeight - 1, 0), Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x, yPos + roomHeight, nextDir, this);
+                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    break;
+                                }
+                            continue;
                         case Direction.SOUTH:
-                            if (coordinate.y - 1 < 0)
-                                continue;
-                            if (_gameBoard[coordinate.x][coordinate.y - 1])
-                                continue;
-                            break;
+                            if (coordinate.y - 1 >= 0)
+                                if (!_gameBoard[coordinate.x][coordinate.y - 1])
+                                {
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(CenterPoint.x, yPos, 0), Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x, yPos, nextDir, this);
+                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    break;
+                                }
+                            continue;
                         case Direction.EAST:
-                            if (coordinate.x + 1 >= _gameBoard.Length)
-                                continue;
-                            if (_gameBoard[coordinate.x + 1][coordinate.y])
-                                continue;
-                            break;
+                            if (coordinate.x + 1 < _gameBoard.Length)
+                                if (!_gameBoard[coordinate.x + 1][coordinate.y])
+                                {
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(xPos + roomWidth - 1, CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos + roomWidth, CenterPoint.y, nextDir, this);
+                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    break;
+                                }
+                            continue;
                         case Direction.WEST:
-                            if (coordinate.x - 1 < 0)
-                                continue;
-                            if (_gameBoard[coordinate.x - 1][coordinate.y])
-                                continue;
-                            break;
+                            if (coordinate.x - 1 >= 0)
+                                if (!_gameBoard[coordinate.x - 1][coordinate.y])
+                                {
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(xPos, CenterPoint.y, 0), Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos, CenterPoint.y, nextDir, this);
+                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    break;
+                                }
+                            continue;
                     }
 
-                    Debug.Log("prev: " + prevCorridor + " next: " + nextDir);
                     CTCorridor newCor = new CTCorridor();
                     newCor.SetupCorridor(this, _corridorLength, nextDir);
                     _corridors.Add(newCor);
-                    nextCorridors.Add(newCor);
+                    nextCorridors.Add(nextDir, newCor);
                 }
             }
         }
-
-        //Create the same direction 
-        //if (Random.Range(0.0f, 1.0f) <= 0.5f)
-        //{
-        //    // Safety Check  if not, create a corridor for the room
-        //    switch (prevCorridor)
-        //    {
-        //        case Direction.NORTH:
-        //            //if the next room will be out of board
-        //            if (coordinate.y + 1 < _gameBoard[0].Length)
-        //                if (!_gameBoard[coordinate.x][coordinate.y + 1])
-        //                {
-        //                    CTCorridor newCor = new CTCorridor();
-        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-        //                    _corridors.Add(newCor);
-        //                    nextCorridors.Add(newCor);
-        //                }
-        //            break;
-        //        case Direction.SOUTH:
-        //            if (coordinate.y - 1 >= 0)
-        //                if (!_gameBoard[coordinate.x][coordinate.y - 1])
-        //                {
-        //                    CTCorridor newCor = new CTCorridor();
-        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-        //                    _corridors.Add(newCor);
-        //                    nextCorridors.Add(newCor);
-        //                }
-        //            break;
-        //        case Direction.EAST:
-        //            if (coordinate.x + 1 < _gameBoard.Length)
-        //                if (!_gameBoard[coordinate.x + 1][coordinate.y])
-        //                {
-        //                    CTCorridor newCor = new CTCorridor();
-        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-        //                    _corridors.Add(newCor);
-        //                    nextCorridors.Add(newCor);
-        //                }
-        //            break;
-        //        case Direction.WEST:
-        //            if (coordinate.x - 1 >= 0)
-        //                if (!_gameBoard[coordinate.x - 1][coordinate.y])
-        //                {
-        //                    CTCorridor newCor = new CTCorridor();
-        //                    newCor.SetupCorridor(this, _corridorLength, prevCorridor);
-        //                    _corridors.Add(newCor);
-        //                    nextCorridors.Add(newCor);
-        //                }
-        //            break;
-        //    }
-        //}
-
 
         // Create 1 End Room
         if (nextCorridors.Count <= 0)
@@ -478,10 +459,10 @@ public class CTRoom
         // Create Next Room
         CTRoomCoordinate nextRoomCoord = new CTRoomCoordinate(0, 0);
 
-        for (int i = 0; i < nextCorridors.Count; ++i)
+        foreach (Direction nextdir in nextCorridors.Keys)
         {
             //if direction have a room alrdy base on the _gameboard, skip
-            switch (nextCorridors[i].direction)
+            switch (nextdir)
             {
                 case Direction.NORTH:
                     if (!_gameBoard[coordinate.x][coordinate.y + 1])
@@ -490,7 +471,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y + 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
                     }
                     break;
 
@@ -501,7 +482,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x + 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
                     }
                     break;
 
@@ -512,7 +493,7 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x - 1, coordinate.y);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
                     }
                     break;
 
@@ -523,16 +504,13 @@ public class CTRoom
                         CTRoom newRoom = new CTRoom();
                         nextRoomCoord.setCoordinate(coordinate.x, coordinate.y - 1);
                         _rooms.Add(newRoom);
-                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[i], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
+                        newRoom.SetupRoom(_width, _height, nextRoomCoord, nextCorridors[nextdir], ref _numRooms, ref _availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors, roomDepth, true);
                     }
                     break;
             }
         }
-
     }
 
-    public Vector2 CenterPoint()
-    {
-        return new Vector2(xPos + roomWidth * 0.5f, yPos + roomHeight * 0.5f);
-    }
+
+
 }
