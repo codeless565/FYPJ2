@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateNoisePatrol : CStateBase
+public class StateNoisePatrol : IStateBase
 {
     public GameObject NoiseGO;
     int counter = 0;
