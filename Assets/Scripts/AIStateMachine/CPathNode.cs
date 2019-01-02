@@ -21,4 +21,13 @@ public class CPathNode : MonoBehaviour
         m_pathDir = _dir;
         m_room = _room;
     }
+
+    public Vector2 position
+    { get { return m_position; } }
+
+    public Direction direction
+    { get { return m_pathDir; } }
+
+    public CTRoom room
+    { get { return m_room; } }
 }
