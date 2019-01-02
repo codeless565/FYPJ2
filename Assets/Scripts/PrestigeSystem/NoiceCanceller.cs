@@ -4,18 +4,47 @@ using UnityEngine;
 
 public class NoiseCanceller : PrestigeBase
 {
-    public NoiseCanceller()
-    { }
-
-
-    public void AddPrestigeStats(ref CStats _playerStats)
+    private CPlayer playerInfo;
+    public static string prestigename;
+    public NoiseCanceller(CPlayer _playerinfo)
     {
-        _playerStats.Defense = _playerStats.Defense * 110 / 100;
+        playerInfo = _playerinfo;
+        prestigename = "NoiseCanceller";
     }
 
-    public void RemovePrestigeStats(ref CStats _playerStats)
+    public string PrestigeName
     {
-        _playerStats.Defense = _playerStats.Defense * 100 / 110;
+        get
+        {
+            return prestigename;
+        }
+    }
 
+    //public CPlayer PlayerInfo
+    //{
+    //    get
+    //    {
+    //        return playerInfo;
+    //    }
+
+    //    set
+    //    {
+    //        playerInfo = value;
+    //    }
+    //}
+
+    public void AddPrestigeStats()
+    {
+        playerInfo.GetStats().Defense = playerInfo.GetStats().Defense * 110 / 100;
+    }
+
+    public void RemovePrestigeStats()
+    {
+        playerInfo.GetStats().Defense = playerInfo.GetStats().Defense * 100 / 110;
+
+    }
+
+    public void Update()
+    {
     }
 }
