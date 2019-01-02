@@ -26,6 +26,14 @@ public class CTRoom
         }
     }
 
+    public CPathNode GetPathnode(Direction _direction)
+    {
+        if (pathnodes.ContainsKey(_direction))
+            return pathnodes[_direction];
+
+        return null;
+    }
+
     public int SetupAllRoom(int _boardWidth, int _boardHeight, int _roomWidth, int _roomHeight, int _corridorLength, CTRoomCoordinate _startingCoord,
         int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors)
     {
