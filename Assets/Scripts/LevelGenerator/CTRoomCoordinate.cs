@@ -21,6 +21,48 @@ public class CTRoomCoordinate
         x = _x;
         y = _y;
     }
+
+    public bool sameAs(CTRoomCoordinate _otherCoord)
+    {
+        return _otherCoord.x == this.x && _otherCoord.y == this.y;
+    }
+
+    public Direction directionTo(CTRoomCoordinate _otherCoord)
+    {
+        Direction newDir = Direction.Size;
+        int diffX = _otherCoord.x - x;
+        int diffY = _otherCoord.y - y;
+
+        if (diffY > 0)
+        {
+            if (newDir != Direction.Size)
+                return Direction.Size;
+            newDir = Direction.NORTH;
+        }
+
+        if (diffY < 0)
+        {
+            if (newDir != Direction.Size)
+                return Direction.Size;
+            newDir = Direction.SOUTH;
+        }
+
+        if (diffX > 0)
+        {
+            if (newDir != Direction.Size)
+                return Direction.Size;
+            newDir = Direction.EAST;
+        }
+
+        if (diffX < 0)
+        {
+            if (newDir != Direction.Size)
+                return Direction.Size;
+            newDir = Direction.WEST;
+        }
+
+        return newDir;
+    }
 }
 
 /******************
