@@ -33,7 +33,7 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_RoomCoord = new CTRoomCoordinate(0,0);
 
         m_EnemyStats = new CStats();
-        SetStats(1, 5, 10, 10, 10, 10, 10, 10, 10, 1, 2);
+        SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
 
@@ -91,11 +91,12 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_EnemySprite = _sprite;
     }
 
-    public void SetStats(int _level, float _exp, float _maxexp, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed)
+    public void SetStats(int _level, float _exp, float _maxexp, float _expboost, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed)
     {
         m_EnemyStats.Level = _level;
         m_EnemyStats.EXP = _exp;
         m_EnemyStats.MaxEXP = _maxexp;
+        m_EnemyStats.EXPBoost = _expboost;
 
         m_EnemyStats.HP = _hp;
         m_EnemyStats.MaxHP = _maxhp;
