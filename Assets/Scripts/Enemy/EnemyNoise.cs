@@ -13,17 +13,51 @@ public class EnemyNoise : MonoBehaviour, IEnemy
 
     CStateMachine m_SM;
 
+    CTRoomCoordinate m_RoomCoord;
+    public CTRoomCoordinate roomCoordinate
+    {
+        get { return m_RoomCoord; }
+
+        set {
+            if (m_RoomCoord == null)
+            {
+                m_RoomCoord = new CTRoomCoordinate(value);
+                return;
+            }
+            m_RoomCoord = value;
+        }
+    }
+
     public void Init()
     {
+        m_RoomCoord = new CTRoomCoordinate(0,0);
+
         m_EnemyStats = new CStats();
         SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
+
+        m_SM = new CStateMachine();
+        //m_SM.AddState(new StateNoisePatrol(this.gameObject));
+        //m_SM.SetNextState("StateNoisePatrol");
+        m_SM.AddState(new CStatePathTest(this.gameObject));
+        m_SM.SetNextState("StatePathTest");
+    }
+
+    public void Init(CTRoomCoordinate _spawnCoord)
+    {
+        m_RoomCoord = new CTRoomCoordinate(_spawnCoord);
+
+        m_EnemyStats = new CStats();
+        SetStats(1, 5, 10, 10, 10, 10, 10, 10, 10, 1, 2);
+        m_IsImmortal = false;
+        m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
         
         m_SM = new CStateMachine();
-        m_SM.AddState(new StateNoisePatrol(this.gameObject));
-        m_SM.SetNextState("StateNoisePatrol");
-        
+        //m_SM.AddState(new StateNoisePatrol(this.gameObject));
+        //m_SM.SetNextState("StateNoisePatrol");
+        m_SM.AddState(new CStatePathTest(this.gameObject));
+        m_SM.SetNextState("StatePathTest");
     }
 
     public void Delete()
@@ -92,10 +126,11 @@ public class EnemyNoise : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
-        m_SM.Update();
-
         if (m_EnemyStats.HP <= 0)
             Delete();
+
+        if (m_SM != null)
+            m_SM.Update();
 
         Debug.Log(name + " : " + m_EnemyStats.HP);
     }

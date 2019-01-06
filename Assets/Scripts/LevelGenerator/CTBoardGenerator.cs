@@ -44,7 +44,7 @@ public class CTBoardGenerator : MonoBehaviour
         CreateNewFloor();
         CreateBoard(currFloor);
         itemGenerator = new CItemGenerator();
-        itemGenerator.GenerateItemsOnFloor(10);
+        //itemGenerator.GenerateItemsOnFloor(10);
     }
 
     public void CreateNewFloor()

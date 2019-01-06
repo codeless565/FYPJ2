@@ -19,7 +19,7 @@ public class CInventorySlots : MonoBehaviour {
         {
             m_Itemslots[i] = gameObject.transform.GetChild(i).transform.GetChild(0).gameObject;
             m_Itemslots[i].GetComponent<CSlotInfo>().Init(MovingParent);
-            Debug.Log(m_Itemslots[i]);
+            ////Debug.Log(m_Itemslots[i]);
         }
     }
 
@@ -41,7 +41,7 @@ public class CInventorySlots : MonoBehaviour {
             }
             if (currSlot.isSameItem(_newItem))
             {
-                Debug.Log("CInventorySlots - Item Exists!");
+                //Debug.Log("CInventorySlots - Item Exists!");
                 return false;
             }
             if (i >= m_Itemslots.Length)

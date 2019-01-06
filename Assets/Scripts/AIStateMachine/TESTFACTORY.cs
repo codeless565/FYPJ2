@@ -11,11 +11,13 @@ public class TESTFACTORY : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         if (Input.GetKeyDown(KeyCode.R))
         {
-            GameObject newNoise = Instantiate(NoisePrefab, new Vector3(70, 70, 0), Quaternion.identity);
-            newNoise.GetComponent<EnemyNoise>().Init();
-
+            List<CTRoom> rooms = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms();
+            CTRoom selectedRoom = rooms[Random.Range(0, rooms.Count)];
+            GameObject newNoise = Instantiate(NoisePrefab, selectedRoom.CenterPoint, Quaternion.identity);
+            newNoise.GetComponent<EnemyNoise>().Init(selectedRoom.coordinate);
         }
 
     }

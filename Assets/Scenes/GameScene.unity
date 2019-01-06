@@ -1181,6 +1181,7 @@ GameObject:
   - component: {fileID: 1931853795}
   - component: {fileID: 1931853794}
   - component: {fileID: 1931853796}
+  - component: {fileID: 1931853797}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -1199,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007ad4e54054f764086d6b9c4b5dbd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rooms: 10
+  rooms: 20
   roomWidth: 11
   roomHeight: 11
   corridorLength: 8

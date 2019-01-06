@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CStateMachine
 {
-    Dictionary<string, CStateBase> m_stateMap;
-    CStateBase m_currState;
-    CStateBase m_nextState;
+    Dictionary<string, IStateBase> m_stateMap;
+    IStateBase m_currState;
+    IStateBase m_nextState;
 
     // Use this for initialization
     public CStateMachine()
     {
-        m_stateMap = new Dictionary<string, CStateBase>();
+        m_stateMap = new Dictionary<string, IStateBase>();
         m_currState = null;
         m_nextState = null;
     }
@@ -25,10 +25,11 @@ public class CStateMachine
             m_currState = m_nextState;
             m_currState.EnterState();
         }
-        m_currState.UpdateState();
+        if (m_currState != null)
+            m_currState.UpdateState();
     }
 
-    public void AddState(CStateBase _newState)
+    public void AddState(IStateBase _newState)
     {
         if (_newState == null)
             return;
