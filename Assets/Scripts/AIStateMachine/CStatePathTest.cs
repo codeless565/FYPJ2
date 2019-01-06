@@ -48,6 +48,9 @@ public class CStatePathTest : IStateBase
             newPathing();
             nextDest = m_Pathing.Dequeue();
         }
+
+        m_GO.transform.Translate((nextDest.position - (Vector2)m_GO.transform.position).normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
+
         if ((nextDest.position - (Vector2)m_GO.transform.position).magnitude <= m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime)
         {
             if (m_Pathing.Count <= 0)
@@ -56,8 +59,6 @@ public class CStatePathTest : IStateBase
             }
             nextDest = m_Pathing.Dequeue();
         }
-
-        m_GO.transform.Translate((nextDest.position - (Vector2)m_GO.transform.position).normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
     }
 
     public void ExitState()
