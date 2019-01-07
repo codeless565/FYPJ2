@@ -184,7 +184,6 @@ public class CPlayer : MonoBehaviour ,IEntity
             GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP, excessEXP);
             
         
-        AchievementSystem.Instance.CheckAchievementRequirement();
         AddAllPrestigeStats();
     }
 

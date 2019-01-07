@@ -10,7 +10,6 @@ public interface AchievementBase {
     int CompletedProperties { get; set; }
 
     void Init(CStats _playerstats);
-    void CheckRequirement();
     void UpdateAchievement();
     void AchievementReward();
     void AddProperty(QPropertiesBase _property);

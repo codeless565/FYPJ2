@@ -68,21 +68,6 @@ public class AchievementSystem {
         AchievementList[_Achievementname].AddProperty(_property);
     }
 
-
-
-
-    public void CheckAchievementRequirement()
-    {
-        foreach (KeyValuePair<string, AchievementBase> qb in AchievementList)
-        {
-            if (qb.Value.AchievementCompleted || qb.Value.AchievementActive)
-                continue;
-            
-                qb.Value.CheckRequirement();
-            Debug.Log(qb.Key + " is now " + qb.Value.AchievementActive + "(AchievementActive)");
-        }
-    }
-
     public void UpdateAchievementProperty(string _Achievementname, string _propname, float _amount)
     {
         if (!AchievementList.ContainsKey(_Achievementname))

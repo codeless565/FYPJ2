@@ -19,7 +19,7 @@ public class TestAchievement : AchievementBase
     public void Init(CStats _playerstats)
     {
         m_AchievementCompleted = false;
-        m_AchievementActive = false;
+        m_AchievementActive = true;
         m_propList = new Dictionary<string, QPropertiesBase>();
         m_completedProps = 0;
         m_playerstats = _playerstats;
@@ -69,11 +69,5 @@ public class TestAchievement : AchievementBase
         }
         if (m_completedProps == m_propList.Count)
             m_AchievementCompleted = true;
-    }
-
-    public void CheckRequirement()
-    {
-        if (m_playerstats.Level == 5)
-            AchievementActive = true;
     }
 }
