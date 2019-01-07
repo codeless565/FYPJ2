@@ -9,15 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 5ac4fb875319c3f4eb5ba39bdff69e22
   - enabled: 1
-    path: Assets/Scenes/GameScene.unity
-    guid: 33de8f2b9a50dc143be842adc73c19ad
-  - enabled: 1
-    path: Assets/Scenes/BossLevel_Red.unity
-    guid: a6bf327ea0974a8498a06593b2161c9f
-  - enabled: 1
     path: Assets/Scenes/TownScene.unity
     guid: 6ccd21a8515897b41be83bdcdffd56fb
   - enabled: 1
     path: Assets/Scenes/DungeonLevel_Red.unity
     guid: 74f055da1c9566f4598984c952d3bdb0
+  - enabled: 1
+    path: Assets/Scenes/BossLevel_Red.unity
+    guid: a6bf327ea0974a8498a06593b2161c9f
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: 33de8f2b9a50dc143be842adc73c19ad
   m_configObjects: {}

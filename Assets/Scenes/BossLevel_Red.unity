@@ -1178,6 +1178,8 @@ MonoBehaviour:
   - {fileID: 1251100361465790, guid: 7dd15a4b7ece51e45a35859098382b3c, type: 2}
   stairsDown: {fileID: 1251100361465790, guid: cf8881f39ad0c9d469e885ec38f038db, type: 2}
   stairsUp: {fileID: 0}
+  checkpoint: {fileID: 1961422556953600, guid: dba6a81a9af519e4c8c4714419b1dc35, type: 2}
+  exitPortal: {fileID: 1961422556953600, guid: c0a1642175422444bbaf2525362ae3d6, type: 2}
   boardHolder: {fileID: 412376741}
 --- !u!4 &1931853795
 Transform:
