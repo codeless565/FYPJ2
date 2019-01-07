@@ -57,8 +57,6 @@ public class AchievementSystem {
 
         _Achievement.Init(m_playerstats);
         AchievementList.Add(_Achievement.AchievementName, _Achievement);
-
-        AchievementUI.Instance.AddNewButton(_Achievement.AchievementName);
     }
     public void AddAchievementProperty(string _Achievementname, QPropertiesBase _property)
     {

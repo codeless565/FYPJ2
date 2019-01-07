@@ -53,7 +53,7 @@ public class MessageHandler{
             float.TryParse(GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.AMOUNT.ToString()), out amount);
             
 
-            AchievementSystem.Instance.UpdateAchievementProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.AchievementNAME.ToString()),
+            AchievementSystem.Instance.UpdateAchievementProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.ACHIEVEMENTNAME.ToString()),
                 GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.PROPERTYNAME.ToString()),
                 amount);
 
