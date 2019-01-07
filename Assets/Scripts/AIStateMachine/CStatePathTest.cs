@@ -49,6 +49,9 @@ public class CStatePathTest : IStateBase
             nextDest = m_Pathing.Dequeue();
         }
 
+        if (nextDest == null)
+            return;
+
         m_GO.transform.Translate((nextDest.position - (Vector2)m_GO.transform.position).normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
 
         if ((nextDest.position - (Vector2)m_GO.transform.position).magnitude <= m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime)
