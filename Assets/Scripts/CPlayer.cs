@@ -14,18 +14,10 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public CInventorySystem m_InventorySystem;
     public PrestigeSystem m_PrestigeSystem;
-    public QuestSystem m_QuestSystem;
     public GameObject InventoryPanel;
     public GameObject InventoryUI;
 
     CWeapon m_EquippedWeapon;
-
-    public Slider HPSlider;
-    public Slider SPSlider;
-    public Slider EXPSlider;
-
-    float m_FromHealth;
-    float m_TargetedHealth;
 
     CTRoomCoordinate m_RoomCoord;
     public CTRoomCoordinate roomCoordinate
@@ -64,7 +56,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_EquippedWeapon = new TestWeapon();
         GetComponent<PlayerUIScript>().Init();
         m_PrestigeSystem = new PrestigeSystem();
-        m_QuestSystem = new QuestSystem();
+        AchievementSystem.Instance.Init(this.GetStats());
     }
 
     public void Update()
@@ -79,10 +71,10 @@ public class CPlayer : MonoBehaviour ,IEntity
             //GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP,7);
             //GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 2);
         }
+        if (m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
+            LevelingSystem();
 
-        LevelingSystem();
         m_PrestigeSystem.Update();
-        m_QuestSystem.Update();
 
         #region
         //Test Add
@@ -135,7 +127,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Weapon System Update
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
-        Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
+        //Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
 
     }
 
@@ -154,8 +146,7 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void LevelingSystem()
     {
         RemoveAllPrestigeStats();
-        if(m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
-        {
+
             m_PlayerStats.Level += 1;
             float excessEXP = GetComponent<PlayerUIScript>().m_TargetedEXP - m_PlayerStats.MaxEXP;
             m_PlayerStats.EXP = 0f;
@@ -192,7 +183,8 @@ public class CPlayer : MonoBehaviour ,IEntity
             // Add Excess EXP
             GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP, excessEXP);
             
-        }
+        
+        AchievementSystem.Instance.CheckAchievementRequirement();
         AddAllPrestigeStats();
     }
 

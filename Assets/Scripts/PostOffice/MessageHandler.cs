@@ -33,7 +33,7 @@ public class MessageHandler{
         //        break;
         //    case MESSAGE_TYPE.ADDPROP:
         //        {
-        //            _receiver.GetComponent<CPlayer>().m_QuestSystem.UpdateQuestProperty(NoiseSlayer.m_questName, KillNoiseProp.m_propertyname, 1);
+        //            _receiver.GetComponent<CPlayer>().m_AchievementSystem.UpdateAchievementProperty(NoiseSlayer.m_AchievementName, KillNoiseProp.m_propertyname, 1);
         //        }
         //        break;
         //}
@@ -53,7 +53,7 @@ public class MessageHandler{
             float.TryParse(GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.AMOUNT.ToString()), out amount);
             
 
-            _receiver.GetComponent<CPlayer>().m_QuestSystem.UpdateQuestProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.QUESTNAME.ToString()),
+            AchievementSystem.Instance.UpdateAchievementProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.AchievementNAME.ToString()),
                 GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.PROPERTYNAME.ToString()),
                 amount);
 

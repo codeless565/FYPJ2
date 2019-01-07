@@ -2,32 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoiseSlayer : QuestBase {
-    public static string m_questName;
-    private bool m_questCompleted;
-    private bool m_questActive;
+public class NoiseSlayer : AchievementBase {
+    public static string m_AchievementName = "NoiseSlayer";
+    private bool m_AchievementCompleted;
+    private bool m_AchievementActive;
     private Dictionary<string, QPropertiesBase> m_propList;
     private int m_completedProps;
+    private CStats m_playerstats;
 
     public NoiseSlayer()
     {
-        m_questName = "NoiseSlayer";
-        m_questCompleted = false;
-        m_questActive = false;
-        m_propList = new Dictionary<string, QPropertiesBase>();
-        m_completedProps = 0;
+        
     }
 
-    public string QuestName
+    public void Init(CStats _playerstats)
+    {
+        m_AchievementCompleted = false;
+        m_AchievementActive = false;
+        m_propList = new Dictionary<string, QPropertiesBase>();
+        m_completedProps = 0;
+        m_playerstats = _playerstats;
+    }
+
+    public string AchievementName
     {
         get
         {
-            return m_questName;
+            return m_AchievementName;
         }
     }
 
-    public bool QuestCompleted { get { return m_questCompleted; } set { m_questCompleted = value; } }
-    public bool QuestActive { get { return m_questActive; } set { m_questActive = value; } }
+    public bool AchievementCompleted { get { return m_AchievementCompleted; } set { m_AchievementCompleted = value; } }
+    public bool AchievementActive { get { return m_AchievementActive; } set { m_AchievementActive = value; } }
     public Dictionary<string, QPropertiesBase> PropertiesList { get { return m_propList; } set { m_propList = value; } }
     public int CompletedProperties { get { return m_completedProps; } set { m_completedProps = value; } }
 
@@ -41,26 +47,32 @@ public class NoiseSlayer : QuestBase {
         m_propList.Add(_property.PropertyName,_property);
     }
 
-    public void QuestReward()
+    public void AchievementReward()
     {
-        throw new System.NotImplementedException();
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, 100f));
     }
 
-    public void Update()
+    public void UpdateAchievement()
     {
         m_completedProps = 0;
         foreach (KeyValuePair<string,QPropertiesBase >pb in m_propList)
         {
             if (!pb.Value.IsActive)
                 continue;
-            if (pb.Value.IsCompleted)
-                m_completedProps++;
             pb.Value.Update();
+            if (pb.Value.IsCompleted)
+            {
+                m_completedProps++;
+                pb.Value.IsActive = false;
+            }
         }
         if (m_completedProps == m_propList.Count)
-        {
-            m_questCompleted = true;
-            // Reward
-        }
+            m_AchievementCompleted = true;
+    }
+
+    public void CheckRequirement()
+    {
+        if (m_playerstats.Level == 2)
+            AchievementActive = true;
     }
 }
