@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CTFloor
+public class CTFloor : IFloor
 {
+    private bool m_isGenerated;
     public int columns;                                 // The number of columns on the board (how wide it will be).
     public int rows;                                    // The number of rows on the board (how tall it will be).
     private int m_FloorNum;
@@ -17,6 +18,13 @@ public class CTFloor
     private CTRoomCoordinate m_StartingRoom;
     private Vector2 m_StairsForward;
     private Vector2 m_StairsBack;
+
+    public CTFloor()
+    {
+        m_isGenerated = false;
+        m_FloorNum = 0;
+        levelName = "NotGenerated";
+    }
 
     public void InitNewLevel(int _floorNum, int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
     {
@@ -58,6 +66,8 @@ public class CTFloor
         SetUpPathNodes();
         SetUpRoomDetector();
         SetUpStairs();
+
+        m_isGenerated = true;
     }
 
     //public void InitLevelFromSave()
@@ -467,20 +477,9 @@ public class CTFloor
         return null;
     }
 
-    public List<CTRoom> GetRooms()
-    { return m_Rooms; }
-
-    public TileType[][] GetTiles()
-    { return m_Tiles; }
-
-    public Vector2 StairsForward
+    public bool Generated
     {
-        get { return m_StairsForward; }
-    }
-
-    public Vector2 StairsBack
-    {
-        get { return m_StairsBack; }
+        get { return m_isGenerated; }
     }
 
     public string Name
@@ -492,6 +491,26 @@ public class CTFloor
         { levelName = value; }
     }
 
+    public Vector2 StairsForward
+    {
+        get { return m_StairsForward; }
+    }
+
+    public Vector2 StairsBack
+    {
+        get { return m_StairsBack; }
+    }
+
+    public List<CTRoom> Rooms
+    {
+        get { return m_Rooms; }
+    }
+
+    public TileType[][] Tiles
+    {
+        get { return m_Tiles; }
+    }
+       
     //public void SaveLevel()
     //{
     //    string temp = "";
