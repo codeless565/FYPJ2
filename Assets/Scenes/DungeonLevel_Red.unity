@@ -1178,6 +1178,7 @@ GameObject:
   - component: {fileID: 1931853795}
   - component: {fileID: 1931853794}
   - component: {fileID: 1931853796}
+  - component: {fileID: 1931853797}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -1197,11 +1198,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBossLevel: 0
-  rooms: 20
+  rooms: 6
   roomWidth: 11
   roomHeight: 11
   corridorLength: 8
-  currFloor: 0
+  currFloor: 20
   floorTiles:
   - {fileID: 1251100361465790, guid: 6b37fbc4329c72a49a36298ef3714251, type: 2}
   - {fileID: 1251100361465790, guid: 2016e6dd0612cc44ab2aba7e38a37ed7, type: 2}
@@ -1250,6 +1251,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 319128169}
+--- !u!114 &1931853797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1931853793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a259bc8d3dedf8c4ba679900ba0abc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoisePrefab: {fileID: 1280511927308638, guid: 75db5ebfa93174a4cac9c8adfd687570,
+    type: 2}
 --- !u!1 &1991448951 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1947051285208268, guid: 0350c8f63a8950e4ba70181f92c78c98,
