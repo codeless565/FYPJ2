@@ -42,6 +42,19 @@ public class CTRoom
         return null;
     }
 
+    public CTRoom()
+    {
+        generated = false;
+        firstRoom = false;
+        roomDepth = 0;
+        xPos = yPos = 0;
+        roomWidth = roomHeight = 0;
+        prevCorridor = Direction.Size;
+        coordinate = new CTRoomCoordinate(0, 0);
+        nextCorridors = new Dictionary<Direction, CTCorridor>();
+        pathnodes = new Dictionary<Direction, CPathNode>();
+    }
+
     public int SetupAllRoom(int _boardWidth, int _boardHeight, int _roomWidth, int _roomHeight, int _corridorLength, CTRoomCoordinate _startingCoord,
         int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors)
     {
@@ -62,7 +75,6 @@ public class CTRoom
         _gameBoard[coordinate.x][coordinate.y] = true;
 
         //set up pathnodes
-        pathnodes = new Dictionary<Direction, CPathNode>();
         //pathnodes.Add(new CPathNode(CenterPoint.x, yPos + roomHeight, Direction.NORTH, this));
         //pathnodes.Add(new CPathNode(xPos, CenterPoint.y, Direction.WEST, this));
         //pathnodes.Add(new CPathNode(CenterPoint.x, yPos, Direction.SOUTH, this));
@@ -74,7 +86,6 @@ public class CTRoom
         //Debug.Log("Coord: " + coordinate.x + ", " + coordinate.y );
 
         // Create Next Corridors and pathnodes
-        nextCorridors = new Dictionary<Direction, CTCorridor>();
         for (int i = 0; i < (int)Direction.Size; ++i)
         {
             //Create Corridors
@@ -115,7 +126,7 @@ public class CTRoom
         // Create Next Room
         CTRoomCoordinate nextRoomCoord = new CTRoomCoordinate(0, 0);
 
-        foreach(Direction nextdir in nextCorridors.Keys)
+        foreach (Direction nextdir in nextCorridors.Keys)
         {
             //if direction have a room alrdy base on the _gameboard, skip
             //if direction is same as previous corridor / corridors in list, skip
@@ -177,8 +188,8 @@ public class CTRoom
         return currNumRooms;
     }
 
-    private void SetupRoom(int _width, int _height, CTRoomCoordinate _roomCoordinate, CTCorridor _prevCorridor, 
-        ref int _numRooms, ref int _availableRooms, ref int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors, 
+    private void SetupRoom(int _width, int _height, CTRoomCoordinate _roomCoordinate, CTCorridor _prevCorridor,
+        ref int _numRooms, ref int _availableRooms, ref int _maxRooms, ref bool[][] _gameBoard, ref List<CTRoom> _rooms, ref List<CTCorridor> _corridors,
         int _depth, bool _ignoreDepth = false)
     {
         //Return Mechanic / Safety
@@ -257,7 +268,7 @@ public class CTRoom
         }
 
         // Create Next Corridors and Pathnode
-        int startDir = Random.Range(0,(int)Direction.Size);
+        int startDir = Random.Range(0, (int)Direction.Size);
         for (int i = 0; i < (int)Direction.Size; ++i, ++startDir)
         {
             Direction nextDir = (Direction)(startDir % (int)Direction.Size);
@@ -471,7 +482,7 @@ public class CTRoom
             return;
 
         _availableRooms += nextCorridors.Count;
-        
+
         // Create Next Room
         CTRoomCoordinate nextRoomCoord = new CTRoomCoordinate(0, 0);
 
@@ -528,5 +539,100 @@ public class CTRoom
     }
 
 
+    /******************
+     * BOSS FLOOR ONLY
+     ******************/
+    public void SetupRoom(int _column, int _row, int _width, int _height, CTRoomCoordinate _coordinate, CTCorridor _prevCorridor = null)
+    {
+        //For 1st room custom creation
+        roomWidth = _width;
+        roomHeight = _height;
+        coordinate = new CTRoomCoordinate(_coordinate);
 
+        if (_prevCorridor == null)
+        {
+            firstRoom = true;
+            xPos = (int)(_column * 0.5f);
+            yPos = yPos = (int)(_height * 0.5f);
+
+            prevCorridor = Direction.Size;
+        }
+        else
+        {
+            firstRoom = false;
+
+            switch (_prevCorridor.direction)
+            {
+                case Direction.NORTH:
+                    xPos = _prevCorridor.EndPositionX - (roomWidth / 2);
+                    yPos = _prevCorridor.EndPositionY + 1;
+                    break;
+
+                case Direction.EAST:
+                    xPos = _prevCorridor.EndPositionX + 1;
+                    yPos = _prevCorridor.EndPositionY - (roomHeight / 2);
+                    break;
+
+                case Direction.SOUTH:
+                    xPos = _prevCorridor.EndPositionX - (roomWidth / 2);
+                    yPos = _prevCorridor.EndPositionY - roomHeight;
+                    break;
+
+                case Direction.WEST:
+                    xPos = _prevCorridor.EndPositionX - roomWidth;
+                    yPos = _prevCorridor.EndPositionY - (roomHeight / 2);
+                    break;
+            }
+            _prevCorridor.connectedTo = true;
+        }
+
+        // room created successfully!
+        generated = true;
+    }
+
+    public void SetupRoom(int _width, int _height, CTRoomCoordinate _coordinate, CTCorridor _prevCorridor = null)
+    {
+        roomWidth = _width;
+        roomHeight = _height;
+        coordinate = new CTRoomCoordinate(_coordinate);
+
+        if (_prevCorridor == null)
+        {
+            firstRoom = true;
+            xPos = (int)(_width * 0.5f);
+            yPos = (int)(_height * 0.5f);
+            prevCorridor = Direction.Size;
+        }
+        else
+        {
+            firstRoom = false;
+
+            switch (_prevCorridor.direction)
+            {
+                case Direction.NORTH:
+                    xPos = _prevCorridor.EndPositionX - (roomWidth / 2);
+                    yPos = _prevCorridor.EndPositionY + 1;
+                    break;
+
+                case Direction.EAST:
+                    xPos = _prevCorridor.EndPositionX + 1;
+                    yPos = _prevCorridor.EndPositionY - (roomHeight / 2);
+                    break;
+
+                case Direction.SOUTH:
+                    xPos = _prevCorridor.EndPositionX - (roomWidth / 2);
+                    yPos = _prevCorridor.EndPositionY - roomHeight;
+                    break;
+
+                case Direction.WEST:
+                    xPos = _prevCorridor.EndPositionX - roomWidth;
+                    yPos = _prevCorridor.EndPositionY - (roomHeight / 2);
+                    break;
+            }
+            _prevCorridor.connectedTo = true;
+        }
+
+        // room created successfully!
+        generated = true;
+    }
 }
