@@ -15,8 +15,10 @@ public class StairsForward : MonoBehaviour {
             {
                 //All here are boss or change in floor type
                 case 25:
+                    SceneManager.LoadScene("BossLevel_Red");
                     break;
                 case 26:
+                    SceneManager.LoadScene("GameScene");
                     break;
                 case 50:
                     break;
