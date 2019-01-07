@@ -22,6 +22,8 @@ public class CTBoardGenerator : MonoBehaviour
     public GameObject[] wallOuterCornerTiles;
     public GameObject stairsDown;
     public GameObject stairsUp;
+    public GameObject checkpoint;
+    public GameObject exitPortal;
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
@@ -50,7 +52,7 @@ public class CTBoardGenerator : MonoBehaviour
 
         if (currFloor < 0)
         {
-            currFloor = 20;
+            currFloor = 24;
             CTDungeon.Instance.currentFloor = currFloor;
         }
 
@@ -79,8 +81,9 @@ public class CTBoardGenerator : MonoBehaviour
 
         Debug.Log("CurrLevel is " + _currentFloor + " act " + CTDungeon.Instance.currentFloor);
 
-        InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].Tiles);
-        InstantiateStairs(CTDungeon.Instance.Floors[_currentFloor].StairsForward, CTDungeon.Instance.Floors[_currentFloor].StairsBack);
+        InstantiateTiles(temp.Tiles);
+        InstantiateStairs(temp.StairsForward, temp.StairsBack);
+        InstantiateCPExit(temp.Checkpoint, temp.ExitPortal);
 
         Debug.Log("Board Created");
     }
@@ -95,6 +98,19 @@ public class CTBoardGenerator : MonoBehaviour
         if (_StairsBack != Vector2.zero)
         {
             Instantiate(stairsUp, _StairsBack, Quaternion.identity, boardHolder.transform);
+        }
+    }
+
+    void InstantiateCPExit(Vector2 _checkpoint, Vector2 _exitPortal)
+    {
+        if (_checkpoint != Vector2.zero)
+        {
+            Instantiate(checkpoint, _checkpoint, Quaternion.identity, boardHolder.transform);
+        }
+
+        if (_exitPortal != Vector2.zero)
+        {
+            Instantiate(exitPortal, _exitPortal, Quaternion.identity, boardHolder.transform);
         }
     }
 

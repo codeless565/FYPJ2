@@ -16,6 +16,8 @@ public class CBossFloor : IFloor
     private CTRoomCoordinate m_StartingRoom;
     private Vector2 m_StairsForward;
     private Vector2 m_StairsBack;
+    private Vector2 m_Checkpoint;
+    private Vector2 m_ExitPortal;
 
     public CBossFloor()
     {
@@ -42,6 +44,7 @@ public class CBossFloor : IFloor
 
         SetUpRoomDetector();
         SetUpStairs();
+        SetUpCheckpoint();
 
         m_isGenerated = true;
     }
@@ -66,6 +69,7 @@ public class CBossFloor : IFloor
 
     void CreateRoomsAndCorridors(int _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
     {
+        Debug.Log("CreateRoomsAndCorridors 1");
         // Create the rooms array with a random size.
         m_Rooms = new List<CTRoom>();
 
@@ -85,15 +89,25 @@ public class CBossFloor : IFloor
         CTRoom mainRoom = new CTRoom();
         m_Rooms.Add(mainRoom);
         mainRoom.SetupRoom(_roomWidth * 3, _roomHeight * 3, new CTRoomCoordinate(0, 1), start2mainCor);
-        CTCorridor main2endCor = new CTCorridor();
-        main2endCor.SetupCorridor(mainRoom, _corridorLength, Direction.NORTH);
-        m_Corridors.Add(main2endCor);
-        mainRoom.nextCorridors.Add(main2endCor.direction, main2endCor);
+        CTCorridor main2CPCor = new CTCorridor();
+        main2CPCor.SetupCorridor(mainRoom, _corridorLength, Direction.NORTH);
+        m_Corridors.Add(main2CPCor);
+        mainRoom.nextCorridors.Add(main2CPCor.direction, main2CPCor);
 
         //2
+        CTRoom checkPtRoom = new CTRoom();
+        m_Rooms.Add(checkPtRoom);
+        checkPtRoom.SetupRoom(_roomWidth, _roomHeight, new CTRoomCoordinate(0, 2), main2CPCor);
+        CTCorridor CP2endCor = new CTCorridor();
+        CP2endCor.SetupCorridor(checkPtRoom, _corridorLength, Direction.NORTH);
+        m_Corridors.Add(CP2endCor);
+        checkPtRoom.nextCorridors.Add(CP2endCor.direction, CP2endCor);
+
+        //3
         CTRoom endRoom = new CTRoom();
         m_Rooms.Add(endRoom);
-        endRoom.SetupRoom(_roomWidth, _roomHeight, new CTRoomCoordinate(0, 2), main2endCor);
+        endRoom.SetupRoom(_roomWidth, _roomHeight, new CTRoomCoordinate(0, 3), CP2endCor);
+        Debug.Log("CreateRoomsAndCorridors 2");
     }
 
     void SetUpRoomDetector()
@@ -124,7 +138,9 @@ public class CBossFloor : IFloor
 
     void SetUpCheckpoint()
     {
-        //spawn a checkpoint 
+        //Spawn a checkpoint and exit
+        m_Checkpoint = m_Rooms[m_Rooms.Count - 2].CenterPoint;
+        m_ExitPortal = new Vector2(m_Rooms[m_Rooms.Count - 2].xPos, m_Checkpoint.y);
     }
 
     void SetTilesValuesForRooms()
@@ -341,6 +357,16 @@ public class CBossFloor : IFloor
     public Vector2 StairsBack
     {
         get { return m_StairsBack; }
+    }
+
+    public Vector2 Checkpoint
+    {
+        get { return m_Checkpoint; }
+    }
+
+    public Vector2 ExitPortal
+    {
+        get { return m_ExitPortal; }
     }
 
     public List<CTRoom> Rooms

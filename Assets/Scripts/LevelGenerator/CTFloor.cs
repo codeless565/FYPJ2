@@ -18,12 +18,16 @@ public class CTFloor : IFloor
     private CTRoomCoordinate m_StartingRoom;
     private Vector2 m_StairsForward;
     private Vector2 m_StairsBack;
+    private Vector2 m_Checkpoint;
+    private Vector2 m_ExitPortal;
 
     public CTFloor()
     {
         m_isGenerated = false;
         m_FloorNum = 0;
         levelName = "NotGenerated";
+        m_Checkpoint = new Vector2(0, 0);
+        m_ExitPortal = new Vector2(0, 0);
     }
 
     public void InitNewLevel(int _floorNum, int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
@@ -499,6 +503,16 @@ public class CTFloor : IFloor
     public Vector2 StairsBack
     {
         get { return m_StairsBack; }
+    }
+
+    public Vector2 Checkpoint
+    {
+        get { return m_Checkpoint; }
+    }
+
+    public Vector2 ExitPortal
+    {
+        get { return m_ExitPortal; }
     }
 
     public List<CTRoom> Rooms

@@ -16,6 +16,12 @@ public interface IFloor
     Vector2 StairsBack
     { get; }
 
+    Vector2 Checkpoint
+    { get; }
+
+    Vector2 ExitPortal
+    { get; }
+
     List<CTRoom> Rooms
     { get; }
 
