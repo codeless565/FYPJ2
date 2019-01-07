@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class CTDungeon
 {
+    public bool CheckpointRed;
+    public bool CheckpointPink;
+
     public int currentFloor;
+
+    public int BossFloorRed
+    {
+        get { return 25; }
+    }
+
+    public int BossFloorPink
+    {
+        get { return 50; }
+    }
 
     private static CTDungeon instance;
     private Dictionary<int, IFloor> floors;
@@ -23,6 +36,8 @@ public class CTDungeon
     {
         floors = new Dictionary<int, IFloor>();
         currentFloor = -1;
+        CheckpointRed = false;
+        CheckpointPink = false;
     }
 
     public IFloor GetFloorData(int _floorNumber, bool _isBossLevel = false)

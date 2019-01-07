@@ -3,31 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StairsForward : MonoBehaviour {
-
+public class StairsForward : MonoBehaviour
+{
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (_other.tag == "Player")
         {
             CTDungeon.Instance.currentFloor += 1;
 
-            switch (CTDungeon.Instance.currentFloor)
+            int CurrFloor = CTDungeon.Instance.currentFloor;
+
+            //All here are boss or change in floor type
+            if (CurrFloor == CTDungeon.Instance.BossFloorRed)
             {
-                //All here are boss or change in floor type
-                case 25:
-                    SceneManager.LoadScene("BossLevel_Red");
-                    break;
-                case 26:
-                    SceneManager.LoadScene("GameScene");
-                    break;
-                case 50:
-                    break;
-                case 51:
-                    break;
-                default:
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                    break;
-            }        
+                SceneManager.LoadScene("BossLevel_Red");
+                return;
+            }
+
+            if (CurrFloor == CTDungeon.Instance.BossFloorRed + 1)
+            {
+                SceneManager.LoadScene("GameScene");
+                return;
+            }
+
+            if (CurrFloor == CTDungeon.Instance.BossFloorPink)
+            {
+                Debug.Log("BossPinkStage Not Implemented owo");
+                return;
+            }
+
+            if (CurrFloor == CTDungeon.Instance.BossFloorPink + 1)
+            {
+                //Victory stage? 
+                Debug.Log("VictoryStage Not Implemented uwu");
+                return;
+            }
+            else
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
