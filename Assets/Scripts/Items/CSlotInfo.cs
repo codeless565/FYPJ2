@@ -17,7 +17,7 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
     public void Init(GameObject _movingParent = null )
     {
         GetComponent<Image>().sprite = null;
-        GetComponent<Image>().color = Color.gray;
+        //GetComponent<Image>().color = Color.gray;
         transform.GetChild(0).GetComponent<Text>().text = "";
         m_itemSlot = null;
 
@@ -35,13 +35,13 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
             if (m_itemSlot.quantity <= 0)
             {
                 GetComponent<Image>().sprite = null;
-                GetComponent<Image>().color = Color.gray;
+                //GetComponent<Image>().color = Color.gray;
                 transform.GetChild(0).GetComponent<Text>().text = "";
                 m_itemSlot = null;
                 return;
             }
             GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
-            GetComponent<Image>().color = Color.white;
+            //GetComponent<Image>().color = Color.white;
             transform.GetChild(0).GetComponent<Text>().text = m_itemSlot.quantity.ToString();
         }
     }
@@ -50,7 +50,7 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
     {
         m_itemSlot = _newItemInfo;
         GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
-        GetComponent<Image>().color = Color.white;
+        //GetComponent<Image>().color = Color.white;
         transform.GetChild(0).GetComponent<Text>().text = m_itemSlot.quantity.ToString();
     }
 
@@ -73,7 +73,7 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
     private void ResetSlot()
     {
         GetComponent<Image>().sprite = null;
-        GetComponent<Image>().color = Color.gray;
+        //GetComponent<Image>().color = Color.gray;
         transform.GetChild(0).GetComponent<Text>().text = "";
         m_itemSlot = null;
     }
@@ -127,7 +127,7 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
                 if ((transform.localPosition - Vector3.zero).magnitude >= 50)
                 {
                     GetComponent<Image>().sprite = null;
-                    GetComponent<Image>().color = Color.gray;
+                    //GetComponent<Image>().color = Color.gray;
                     transform.GetChild(0).GetComponent<Text>().text = "";
                     m_itemSlot = null;
                     Debug.Log("item removed from hotbar");

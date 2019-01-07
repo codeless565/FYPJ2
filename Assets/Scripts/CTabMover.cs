@@ -4,50 +4,60 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CTabMover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IEndDragHandler
+public class CTabMover : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler
 {
-    GameObject parentTab;
+    float m_TabWidth;
+    float m_TabHeight;
+
+    GameObject m_parentTab;
     Vector2 m_displacementVec;
 
     // Use this for initialization
     void Start () {
-        GetComponent<Image>().color = Color.grey;
-        parentTab = transform.parent.gameObject;
+        m_parentTab = transform.parent.gameObject;
+        m_TabWidth = m_parentTab.GetComponent<RectTransform>().rect.width * Screen.width/1920;
+        m_TabHeight = m_parentTab.GetComponent<RectTransform>().rect.height * Screen.height/1080;
+
         m_displacementVec = new Vector2();
+
+        Debug.Log("TAB SCREEN: " + Screen.width + ", " + Screen.height);
+        Debug.Log("TAB RECT: " + m_TabWidth + ", " + m_TabHeight);
+
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         if (EventSystem.current.IsPointerOverGameObject())
             if (Input.GetMouseButtonDown(0))
-                m_displacementVec = (Vector2)Input.mousePosition - (Vector2)parentTab.transform.position;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        GetComponent<Image>().color = Color.green;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GetComponent<Image>().color = Color.grey;
+                m_displacementVec = (Vector2)Input.mousePosition - (Vector2)m_parentTab.transform.position;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        m_displacementVec = (Vector2)Input.mousePosition - (Vector2)parentTab.transform.position;
+        m_displacementVec = (Vector2)Input.mousePosition - (Vector2)m_parentTab.transform.position;
         Debug.Log("clicked Tab: displaceVec = " + m_displacementVec);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        parentTab.transform.position = (Vector2)Input.mousePosition - m_displacementVec;
+        m_parentTab.transform.position = (Vector2)Input.mousePosition - m_displacementVec;
         Debug.Log("dragging");
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //throw new System.NotImplementedException();
+        m_TabWidth = m_parentTab.GetComponent<RectTransform>().rect.width * Screen.width / 1920;
+        m_TabHeight = m_parentTab.GetComponent<RectTransform>().rect.height * Screen.height / 1080;
+
+        if (m_parentTab.transform.position.x < m_TabWidth * 0.5f)
+            m_parentTab.transform.position = new Vector3(m_TabWidth * 0.5f, m_parentTab.transform.position.y, 0);
+        if (m_parentTab.transform.position.x > Screen.width - m_TabWidth * 0.5f)
+            m_parentTab.transform.position = new Vector3(Screen.width - m_TabWidth * 0.5f, m_parentTab.transform.position.y, 0);
+
+        if (m_parentTab.transform.position.y < m_TabHeight * 0.5f)
+            m_parentTab.transform.position = new Vector3(m_parentTab.transform.position.x, m_TabHeight * 0.5f, 0);
+        if (m_parentTab.transform.position.y > Screen.height - m_TabHeight * 0.5f)
+            m_parentTab.transform.position = new Vector3(m_parentTab.transform.position.x, Screen.height - m_TabHeight * 0.5f, 0);
     }
 }
