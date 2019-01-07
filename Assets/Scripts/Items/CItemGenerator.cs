@@ -10,7 +10,7 @@ public class CItemGenerator
 
     public void GenerateItemsOnFloor(int _numItems = 1)
     {
-        List<CTRoom> roomList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms();
+        List<CTRoom> roomList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
 
         int amtOfItems = _numItems;
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CTBoardGenerator : MonoBehaviour
 {
+    public bool isBossLevel = false;
     private int gridSize;
     private int columns;        // The number of columns on the board (how wide it will be).
     private int rows;           // The number of rows on the board (how tall it will be).
@@ -13,7 +14,6 @@ public class CTBoardGenerator : MonoBehaviour
     public int roomHeight = 11;
     public int corridorLength = 8;
 
-    public int numFloors = 100;
     public int currFloor;
 
     public GameObject[] floorTiles;             // An array of floor tile prefabs.
@@ -29,35 +29,34 @@ public class CTBoardGenerator : MonoBehaviour
 
     public void Init()
     {
-        gridSize = rooms / 2;
-        if (gridSize * gridSize <= rooms)
-            gridSize += gridSize;
-        columns = gridSize * (roomWidth + corridorLength) + 2 * (roomWidth + corridorLength);
-        rows = gridSize * (roomHeight + corridorLength) + 2 * (roomHeight + corridorLength);
+        if (!isBossLevel)
+        {
+            gridSize = rooms / 2;
+            if (gridSize * gridSize <= rooms)
+                gridSize += gridSize;
+            columns = gridSize * (roomWidth + corridorLength) + 2 * (roomWidth + corridorLength);
+            rows = gridSize * (roomHeight + corridorLength) + 2 * (roomHeight + corridorLength);
+        }
+        else
+        {
+            gridSize = rooms;
+            if (gridSize < 5)
+                gridSize = 5;
+            columns = gridSize * (roomWidth + corridorLength) + 2 * (roomWidth + corridorLength);
+            rows = gridSize * (roomHeight + corridorLength) + 2 * (roomHeight + corridorLength);
+        }
 
         currFloor = CTDungeon.Instance.currentFloor;
 
         if (currFloor < 0)
         {
-            currFloor = 1;
+            currFloor = 20;
             CTDungeon.Instance.currentFloor = currFloor;
         }
 
-        CreateNewFloor();
         CreateBoard(currFloor);
         itemGenerator = new CItemGenerator();
         //itemGenerator.GenerateItemsOnFloor(10);
-    }
-
-    public void CreateNewFloor()
-    {
-        CTFloor temp = new CTFloor();
-        temp.Name = "Floor_" + currFloor;
-        temp.InitNewLevel(currFloor, columns, rows, rooms, gridSize, roomWidth, roomHeight, corridorLength);
-
-        Debug.Log("CT: Floor Created");
-
-        CTDungeon.Instance.AddNewFloor(currFloor, temp);
     }
 
     public void CreateBoard(int _currentFloor)
@@ -70,9 +69,17 @@ public class CTBoardGenerator : MonoBehaviour
         if (_currentFloor <= 0) // Floor must be > 0
             return;
 
+        IFloor temp = CTDungeon.Instance.GetFloorData(_currentFloor, isBossLevel);
+
+        if (!temp.Generated)
+        {
+            temp.Name = "Floor_" + currFloor;
+            temp.InitNewLevel(currFloor, columns, rows, rooms, gridSize, roomWidth, roomHeight, corridorLength);
+        }
+
         Debug.Log("CurrLevel is " + _currentFloor + " act " + CTDungeon.Instance.currentFloor);
 
-        InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].GetTiles());
+        InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].Tiles);
         InstantiateStairs(CTDungeon.Instance.Floors[_currentFloor].StairsForward, CTDungeon.Instance.Floors[_currentFloor].StairsBack);
 
         Debug.Log("Board Created");
