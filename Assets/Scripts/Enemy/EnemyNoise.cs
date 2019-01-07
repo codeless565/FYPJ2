@@ -49,7 +49,7 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_RoomCoord = new CTRoomCoordinate(_spawnCoord);
 
         m_EnemyStats = new CStats();
-        SetStats(1, 5, 10, 10, 10, 10, 10, 10, 10, 1, 2);
+        SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
         
@@ -62,7 +62,8 @@ public class EnemyNoise : MonoBehaviour, IEnemy
 
     public void Delete()
     {
-        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP,this.gameObject));
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, m_EnemyStats.Level * m_EnemyStats.EXP));
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDPROP, NoiseSlayer.m_questName, KillNoiseProp.m_propertyname, 1f));
         Destroy(gameObject);
     }
 
