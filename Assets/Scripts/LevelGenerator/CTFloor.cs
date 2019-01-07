@@ -6,34 +6,38 @@ public class CTFloor
 {
     public int columns;                                 // The number of columns on the board (how wide it will be).
     public int rows;                                    // The number of rows on the board (how tall it will be).
+    private int m_FloorNum;
     string levelName;
 
     public bool[][] gameBoard;
 
-    private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
-    private List<CTRoom> rooms;                                     // All the rooms that are created for this board.
-    private List<CTCorridor> corridors;                             // All the corridors that connect the rooms.
-    private CTRoomCoordinate StartingRoom;
+    private TileType[][] m_Tiles;                               // A jagged array of tile types representing the board, like a grid.
+    private List<CTRoom> m_Rooms;                                     // All the rooms that are created for this board.
+    private List<CTCorridor> m_Corridors;                             // All the corridors that connect the rooms.
+    private CTRoomCoordinate m_StartingRoom;
+    private Vector2 m_StairsForward;
+    private Vector2 m_StairsBack;
 
-    public void InitNewLevel(int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
+    public void InitNewLevel(int _floorNum, int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
     {
         columns = _columns;
         rows = _rows;
+        m_FloorNum = _floorNum;
 
         // Set up Gameboard and Starting Room Coordinates
-        StartingRoom = new CTRoomCoordinate(0, 0);
+        m_StartingRoom = new CTRoomCoordinate(0, 0);
 
         int gameboardColum;
         gameboardColum = _gridSize;
-        StartingRoom.x = gameboardColum / 2;
+        m_StartingRoom.x = gameboardColum / 2;
 
         int gameboardRow;
         gameboardRow = _gridSize;
-        StartingRoom.y = gameboardRow / 2;
+        m_StartingRoom.y = gameboardRow / 2;
 
         //Debug.Log("ColumsSqrt: " + gameboardColum);
         //Debug.Log("RowsSqrt: " + gameboardRow);
-        //Debug.Log("StartingRm: " + StartingRoom.x + ", " + StartingRoom.y);
+        //Debug.Log("StartingRm: " + m_StartingRoom.x + ", " + m_StartingRoom.y);
 
 
         // Initialize GameBoard
@@ -53,6 +57,7 @@ public class CTFloor
 
         SetUpPathNodes();
         SetUpRoomDetector();
+        SetUpStairs();
     }
 
     //public void InitLevelFromSave()
@@ -63,43 +68,43 @@ public class CTFloor
     void SetupTilesArray()
     {
         // Set the tiles jagged array to the correct width.
-        tiles = new TileType[columns][];
+        m_Tiles = new TileType[columns][];
 
         // Go through all the tile arrays...
-        for (int i = 0; i < tiles.Length; i++)
+        for (int i = 0; i < m_Tiles.Length; i++)
         {
             // ... and set each tile array is the correct height.
-            tiles[i] = new TileType[rows];
+            m_Tiles[i] = new TileType[rows];
         }
     }
 
     void CreateRoomsAndCorridors(int _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
     {
         // Create the rooms array with a random size.
-        rooms = new List<CTRoom>();
+        m_Rooms = new List<CTRoom>();
 
         // There should be one less corridor than there is rooms.
-        corridors = new List<CTCorridor>();
-        Debug.Log("Creating Room and Corridors" + corridors.Count);
+        m_Corridors = new List<CTCorridor>();
+        Debug.Log("Creating Room and Corridors" + m_Corridors.Count);
 
         // Create the first room and corridor.
         CTRoom firstRoom = new CTRoom();
-        rooms.Add(firstRoom);
+        m_Rooms.Add(firstRoom);
         // Setup the first room, RMCount will start from 0
-        int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, StartingRoom,
-            _numRooms, ref gameBoard, ref rooms, ref corridors);
+        int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, m_StartingRoom,
+            _numRooms, ref gameBoard, ref m_Rooms, ref m_Corridors);
 
-        Debug.Log("Total Rooms: " + rooms.Count + " GeneratedRooms: " + totalRooms);
+        Debug.Log("Total Rooms: " + m_Rooms.Count + " GeneratedRooms: " + totalRooms);
     }
 
     void SetUpPathNodes()
     {
-        if (rooms.Count <= 0)
+        if (m_Rooms.Count <= 0)
             return;
 
         GameObject node;
 
-        foreach (CTRoom currRoom in rooms)
+        foreach (CTRoom currRoom in m_Rooms)
         {
             foreach (Direction dir in currRoom.nextCorridors.Keys)
             {
@@ -238,7 +243,7 @@ public class CTFloor
     {
         GameObject detector;
 
-        foreach (var currRoom in rooms)
+        foreach (var currRoom in m_Rooms)
         {
             detector = Object.Instantiate(Resources.Load("RoomDetector"), new Vector3(currRoom.CenterPoint.x, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
             detector.transform.localScale = new Vector3(currRoom.roomWidth, currRoom.roomHeight, 1);
@@ -247,12 +252,25 @@ public class CTFloor
         }
     }
 
+    void SetUpStairs(bool _goForward = true, bool _goBack = false)
+    {
+        if (_goBack)
+            m_StairsBack = m_Rooms[0].RandomPoint;
+        else
+            m_StairsBack = new Vector2(0, 0);
+
+        if (_goForward)
+            m_StairsForward = m_Rooms[m_Rooms.Count - 1].RandomPoint;
+        else
+            m_StairsForward = new Vector2(0, 0);
+    }
+
     void SetTilesValuesForRooms()
     {
         // Go through all the rooms...
-        for (int i = 0; i < rooms.Count; ++i)
+        for (int i = 0; i < m_Rooms.Count; ++i)
         {
-            CTRoom currentRoom = rooms[i];
+            CTRoom currentRoom = m_Rooms[i];
             if (!currentRoom.generated)
                 continue;
 
@@ -274,68 +292,68 @@ public class CTFloor
                     {
                         if (j < 0)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
                             continue;
                         }
                         else if (j == currentRoom.roomWidth)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
                             continue;
                         }
 
-                        tiles[xCoord][yCoord] = TileType.Wall_Down;
+                        m_Tiles[xCoord][yCoord] = TileType.Wall_Down;
                         continue;
                     }
                     if (k >= currentRoom.roomHeight)
                     {
                         if (j < 0)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
                             continue;
                         }
                         else if (j == currentRoom.roomWidth)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
                             continue;
                         }
 
-                        tiles[xCoord][yCoord] = TileType.Wall_Up;
+                        m_Tiles[xCoord][yCoord] = TileType.Wall_Up;
                         continue;
                     }
                     if (j < 0)
                     {
                         if (k < 0)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q3;
                             continue;
                         }
                         else if (k == currentRoom.roomHeight)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q2;
                             continue;
                         }
 
-                        tiles[xCoord][yCoord] = TileType.Wall_Left;
+                        m_Tiles[xCoord][yCoord] = TileType.Wall_Left;
                         continue;
                     }
                     if (j >= currentRoom.roomWidth)
                     {
                         if (k < 0)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q4;
                             continue;
                         }
                         else if (k == currentRoom.roomHeight)
                         {
-                            tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
+                            m_Tiles[xCoord][yCoord] = TileType.WallInnerCorner_Q1;
                             continue;
                         }
 
-                        tiles[xCoord][yCoord] = TileType.Wall_Right;
+                        m_Tiles[xCoord][yCoord] = TileType.Wall_Right;
                         continue;
                     }
 
-                    tiles[xCoord][yCoord] = TileType.Floor;
+                    m_Tiles[xCoord][yCoord] = TileType.Floor;
                 }
             }
         }
@@ -344,9 +362,9 @@ public class CTFloor
     void SetTilesValuesForCorridors()
     {
         // Go through every corridor...
-        for (int i = 0; i < corridors.Count; ++i)
+        for (int i = 0; i < m_Corridors.Count; ++i)
         {
-            CTCorridor currentCorridor = corridors[i];
+            CTCorridor currentCorridor = m_Corridors[i];
 
             // and go through it's length.
             for (int j = 0; j < currentCorridor.corridorLength; ++j)
@@ -364,23 +382,23 @@ public class CTFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
                             break;
                     }
                 //Ending Corner
@@ -389,23 +407,23 @@ public class CTFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
                             break;
                     }
                 //Side walls
@@ -414,34 +432,34 @@ public class CTFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
                             break;
                     }
                 //Floor
-                tiles[xCoord][yCoord] = TileType.Floor;
+                m_Tiles[xCoord][yCoord] = TileType.Floor;
             }
         }
     }
 
     public CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
     {
-        foreach (CTRoom currRm in rooms)
+        foreach (CTRoom currRm in m_Rooms)
         {
             if (currRm.coordinate.sameAs(_coord))
                 return currRm;
@@ -450,10 +468,20 @@ public class CTFloor
     }
 
     public List<CTRoom> GetRooms()
-    { return rooms; }
+    { return m_Rooms; }
 
     public TileType[][] GetTiles()
-    { return tiles; }
+    { return m_Tiles; }
+
+    public Vector2 StairsForward
+    {
+        get { return m_StairsForward; }
+    }
+
+    public Vector2 StairsBack
+    {
+        get { return m_StairsBack; }
+    }
 
     public string Name
     {

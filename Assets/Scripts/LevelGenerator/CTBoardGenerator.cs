@@ -20,6 +20,8 @@ public class CTBoardGenerator : MonoBehaviour
     public GameObject[] wallTiles;              // An array of wall tile prefabs.
     public GameObject[] wallInnerCornerTiles;
     public GameObject[] wallOuterCornerTiles;
+    public GameObject stairsDown;
+    public GameObject stairsUp;
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
@@ -51,7 +53,7 @@ public class CTBoardGenerator : MonoBehaviour
     {
         CTFloor temp = new CTFloor();
         temp.Name = "Floor_" + currFloor;
-        temp.InitNewLevel(columns, rows, rooms, gridSize, roomWidth, roomHeight, corridorLength);
+        temp.InitNewLevel(currFloor, columns, rows, rooms, gridSize, roomWidth, roomHeight, corridorLength);
 
         Debug.Log("CT: Floor Created");
 
@@ -62,17 +64,31 @@ public class CTBoardGenerator : MonoBehaviour
     {
         if (boardHolder == null)
         {
-            boardHolder = new GameObject("Level");
+            boardHolder = new GameObject("GameFloor");
         }
 
         if (_currentFloor <= 0) // Floor must be > 0
             return;
 
-        Debug.Log("CurrLevel not 0");
+        Debug.Log("CurrLevel is " + _currentFloor + " act " + CTDungeon.Instance.currentFloor);
 
         InstantiateTiles(CTDungeon.Instance.Floors[_currentFloor].GetTiles());
+        InstantiateStairs(CTDungeon.Instance.Floors[_currentFloor].StairsForward, CTDungeon.Instance.Floors[_currentFloor].StairsBack);
 
         Debug.Log("Board Created");
+    }
+    
+    void InstantiateStairs(Vector2 _StairsFoward, Vector2 _StairsBack)
+    {
+        if (_StairsFoward != Vector2.zero)
+        {
+            Instantiate(stairsDown, _StairsFoward, Quaternion.identity, boardHolder.transform);
+        }
+
+        if (_StairsBack != Vector2.zero)
+        {
+            Instantiate(stairsUp, _StairsBack, Quaternion.identity, boardHolder.transform);
+        }
     }
 
     void InstantiateTiles(TileType[][] _tiles)
