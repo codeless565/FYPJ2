@@ -26,6 +26,14 @@ public class CTRoom
         }
     }
 
+    public Vector2 RandomPoint
+    {
+        get
+        {
+            return new Vector2(Random.Range(xPos, xPos + roomWidth - 1), Random.Range(yPos, yPos + roomHeight - 1));
+        }
+    }
+
     public CPathNode GetPathnode(Direction _direction)
     {
         if (pathnodes.ContainsKey(_direction))
