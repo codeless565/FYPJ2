@@ -14,7 +14,7 @@ public class TESTFACTORY : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            List<CTRoom> rooms = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms();
+            List<CTRoom> rooms = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
             CTRoom selectedRoom = rooms[Random.Range(0, rooms.Count)];
             GameObject newNoise = Instantiate(NoisePrefab, selectedRoom.CenterPoint, Quaternion.identity);
             newNoise.GetComponent<EnemyNoise>().Init(selectedRoom.coordinate);

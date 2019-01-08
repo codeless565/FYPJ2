@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CTFloor : IFloor
+public class CBossFloor : IFloor
 {
     private bool m_isGenerated;
     public int columns;                                 // The number of columns on the board (how wide it will be).
     public int rows;                                    // The number of rows on the board (how tall it will be).
     private int m_FloorNum;
     string levelName;
-
-    public bool[][] gameBoard;
 
     private TileType[][] m_Tiles;                               // A jagged array of tile types representing the board, like a grid.
     private List<CTRoom> m_Rooms;                                     // All the rooms that are created for this board.
@@ -21,13 +19,11 @@ public class CTFloor : IFloor
     private Vector2 m_Checkpoint;
     private Vector2 m_ExitPortal;
 
-    public CTFloor()
+    public CBossFloor()
     {
         m_isGenerated = false;
         m_FloorNum = 0;
         levelName = "NotGenerated";
-        m_Checkpoint = new Vector2(0, 0);
-        m_ExitPortal = new Vector2(0, 0);
     }
 
     public void InitNewLevel(int _floorNum, int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength)
@@ -39,27 +35,6 @@ public class CTFloor : IFloor
         // Set up Gameboard and Starting Room Coordinates
         m_StartingRoom = new CTRoomCoordinate(0, 0);
 
-        int gameboardColum;
-        gameboardColum = _gridSize;
-        m_StartingRoom.x = gameboardColum / 2;
-
-        int gameboardRow;
-        gameboardRow = _gridSize;
-        m_StartingRoom.y = gameboardRow / 2;
-
-        //Debug.Log("ColumsSqrt: " + gameboardColum);
-        //Debug.Log("RowsSqrt: " + gameboardRow);
-        //Debug.Log("StartingRm: " + m_StartingRoom.x + ", " + m_StartingRoom.y);
-
-
-        // Initialize GameBoard
-        gameBoard = new bool[gameboardColum][];
-        for (int i = 0; i < gameBoard.Length; ++i)
-        {
-            gameBoard[i] = new bool[gameboardRow];
-        }
-
-
         SetupTilesArray();
 
         CreateRoomsAndCorridors(_numRooms, _roomWidth, _roomHeight, _corridorLength);
@@ -67,9 +42,9 @@ public class CTFloor : IFloor
         SetTilesValuesForRooms();
         SetTilesValuesForCorridors();
 
-        SetUpPathNodes();
         SetUpRoomDetector();
         SetUpStairs();
+        SetUpCheckpoint();
 
         m_isGenerated = true;
     }
@@ -94,163 +69,45 @@ public class CTFloor : IFloor
 
     void CreateRoomsAndCorridors(int _numRooms, int _roomWidth, int _roomHeight, int _corridorLength)
     {
+        Debug.Log("CreateRoomsAndCorridors 1");
         // Create the rooms array with a random size.
         m_Rooms = new List<CTRoom>();
 
         // There should be one less corridor than there is rooms.
         m_Corridors = new List<CTCorridor>();
-        Debug.Log("Creating Room and Corridors" + m_Corridors.Count);
 
-        // Create the first room and corridor.
-        CTRoom firstRoom = new CTRoom();
-        m_Rooms.Add(firstRoom);
-        // Setup the first room, RMCount will start from 0
-        int totalRooms = firstRoom.SetupAllRoom(columns, rows, _roomWidth, _roomHeight, _corridorLength, m_StartingRoom,
-            _numRooms, ref gameBoard, ref m_Rooms, ref m_Corridors);
+        //0
+        CTRoom startRoom = new CTRoom();
+        m_Rooms.Add(startRoom);
+        startRoom.SetupRoom(columns, rows, _roomWidth, _roomHeight, new CTRoomCoordinate(0, 0));
+        CTCorridor start2mainCor = new CTCorridor();
+        start2mainCor.SetupCorridor(startRoom, _corridorLength, Direction.NORTH);
+        m_Corridors.Add(start2mainCor);
+        startRoom.nextCorridors.Add(start2mainCor.direction, start2mainCor);
 
-        Debug.Log("Total Rooms: " + m_Rooms.Count + " GeneratedRooms: " + totalRooms);
-    }
+        //1
+        CTRoom mainRoom = new CTRoom();
+        m_Rooms.Add(mainRoom);
+        mainRoom.SetupRoom(_roomWidth * 3, _roomHeight * 3, new CTRoomCoordinate(0, 1), start2mainCor);
+        CTCorridor main2CPCor = new CTCorridor();
+        main2CPCor.SetupCorridor(mainRoom, _corridorLength, Direction.NORTH);
+        m_Corridors.Add(main2CPCor);
+        mainRoom.nextCorridors.Add(main2CPCor.direction, main2CPCor);
 
-    void SetUpPathNodes()
-    {
-        if (m_Rooms.Count <= 0)
-            return;
+        //2
+        CTRoom checkPtRoom = new CTRoom();
+        m_Rooms.Add(checkPtRoom);
+        checkPtRoom.SetupRoom(_roomWidth, _roomHeight, new CTRoomCoordinate(0, 2), main2CPCor);
+        CTCorridor CP2endCor = new CTCorridor();
+        CP2endCor.SetupCorridor(checkPtRoom, _corridorLength, Direction.NORTH);
+        m_Corridors.Add(CP2endCor);
+        checkPtRoom.nextCorridors.Add(CP2endCor.direction, CP2endCor);
 
-        GameObject node;
-
-        foreach (CTRoom currRoom in m_Rooms)
-        {
-            foreach (Direction dir in currRoom.nextCorridors.Keys)
-            {
-                switch (dir)
-                {
-                    case Direction.NORTH:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
-                        {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
-                        }
-                        break;
-                    case Direction.SOUTH:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
-                        {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
-                        }
-                        break;
-                    case Direction.EAST:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
-                        {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
-                        }
-                        break;
-                    case Direction.WEST:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
-                        {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
-                        }
-                        break;
-                }
-            }
-
-            // Check surrounding rooms to add pathnode for
-            for (int i = 0; i < (int)Direction.Size; ++i)
-            {
-                Direction nextDir = (Direction)(i % (int)Direction.Size);
-                // Safety Check  if not, create a corridor for the room
-                switch (nextDir)
-                {
-                    case Direction.NORTH:
-                        //if the next room will be out of board
-                        if (currRoom.coordinate.y + 1 < gameBoard[0].Length)
-                            if (gameBoard[currRoom.coordinate.x][currRoom.coordinate.y + 1])
-                            {
-                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x, currRoom.coordinate.y + 1));
-                                if (otherRm == null)
-                                {
-                                    Debug.Log("Room " + currRoom.coordinate.x + " " + (currRoom.coordinate.y + 1) + " is null");
-                                    continue;
-                                }
-                                if (otherRm.nextCorridors.ContainsKey(Direction.SOUTH))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
-                                    {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
-                                    }
-                            }
-                        continue;
-                    case Direction.SOUTH:
-                        if (currRoom.coordinate.y - 1 >= 0)
-                            if (gameBoard[currRoom.coordinate.x][currRoom.coordinate.y - 1])
-                            {
-                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x, currRoom.coordinate.y - 1));
-                                if (otherRm == null)
-                                {
-                                    Debug.Log("Room " + currRoom.coordinate.x + " " + (currRoom.coordinate.y - 1) + " is null");
-                                    continue;
-                                }
-                                if (otherRm.nextCorridors.ContainsKey(Direction.NORTH))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
-                                    {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
-                                    }
-                            }
-                        continue;
-                    case Direction.EAST:
-                        if (currRoom.coordinate.x + 1 < gameBoard.Length)
-                            if (gameBoard[currRoom.coordinate.x + 1][currRoom.coordinate.y])
-                            {
-                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x + 1, currRoom.coordinate.y));
-                                if (otherRm == null)
-                                {
-                                    Debug.Log("Room " + (currRoom.coordinate.x + 1) + " " + currRoom.coordinate.y + " is null");
-                                    continue;
-                                }
-                                if (otherRm.nextCorridors.ContainsKey(Direction.WEST))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
-                                    {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
-                                    }
-                            }
-                        continue;
-                    case Direction.WEST:
-                        if (currRoom.coordinate.x - 1 >= 0)
-                            if (gameBoard[currRoom.coordinate.x - 1][currRoom.coordinate.y])
-                            {
-                                CTRoom otherRm = GetRoomFromCoord(new CTRoomCoordinate(currRoom.coordinate.x - 1, currRoom.coordinate.y));
-                                if (otherRm == null)
-                                {
-                                    Debug.Log("Room " + (currRoom.coordinate.x - 1) + " " + currRoom.coordinate.y + " is null");
-                                    continue;
-                                }
-                                if (otherRm.nextCorridors.ContainsKey(Direction.EAST))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
-                                    {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
-                                    }
-                            }
-                        continue;
-                }
-
-            }
-        }
+        //3
+        CTRoom endRoom = new CTRoom();
+        m_Rooms.Add(endRoom);
+        endRoom.SetupRoom(_roomWidth, _roomHeight, new CTRoomCoordinate(0, 3), CP2endCor);
+        Debug.Log("CreateRoomsAndCorridors 2");
     }
 
     void SetUpRoomDetector()
@@ -269,14 +126,21 @@ public class CTFloor : IFloor
     void SetUpStairs(bool _goForward = true, bool _goBack = false)
     {
         if (_goBack)
-            m_StairsBack = m_Rooms[0].RandomPoint;
+            m_StairsBack = m_Rooms[0].CenterPoint;
         else
             m_StairsBack = new Vector2(0, 0);
 
         if (_goForward)
-            m_StairsForward = m_Rooms[m_Rooms.Count - 1].RandomPoint;
+            m_StairsForward = m_Rooms[m_Rooms.Count - 1].CenterPoint;
         else
             m_StairsForward = new Vector2(0, 0);
+    }
+
+    void SetUpCheckpoint()
+    {
+        //Spawn a checkpoint and exit
+        m_Checkpoint = m_Rooms[m_Rooms.Count - 2].CenterPoint;
+        m_ExitPortal = new Vector2(m_Rooms[m_Rooms.Count - 2].xPos, m_Checkpoint.y);
     }
 
     void SetTilesValuesForRooms()
@@ -471,16 +335,6 @@ public class CTFloor : IFloor
         }
     }
 
-    public CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
-    {
-        foreach (CTRoom currRm in m_Rooms)
-        {
-            if (currRm.coordinate.sameAs(_coord))
-                return currRm;
-        }
-        return null;
-    }
-
     public bool Generated
     {
         get { return m_isGenerated; }
@@ -524,7 +378,7 @@ public class CTFloor : IFloor
     {
         get { return m_Tiles; }
     }
-       
+
     //public void SaveLevel()
     //{
     //    string temp = "";
@@ -542,4 +396,3 @@ public class CTFloor : IFloor
     //    PlayerPrefs.SetString(levelName + "_column", columns.ToString());
     //}
 }
-

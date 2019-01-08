@@ -46,6 +46,9 @@ TagManager:
   - name: Dungeon
     uniqueID: 3801947203
     locked: 0
+  - name: Entrances
+    uniqueID: 2733577007
+    locked: 0
   - name: Traps
     uniqueID: 507947417
     locked: 0

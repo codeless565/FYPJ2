@@ -32,7 +32,7 @@ public class CStatePathTest : IStateBase
     {
         Debug.Log("CStatePath::EnterState() called");
 
-        List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms();
+        List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
         m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().roomCoordinate, rmList[randomDestIndex].coordinate);
@@ -71,7 +71,7 @@ public class CStatePathTest : IStateBase
 
     private void newPathing()
     {
-        List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRooms();
+        List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
         m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().roomCoordinate, rmList[randomDestIndex].coordinate);

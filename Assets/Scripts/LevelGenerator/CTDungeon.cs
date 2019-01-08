@@ -4,10 +4,23 @@ using UnityEngine;
 
 public class CTDungeon
 {
+    public bool CheckpointRed;
+    public bool CheckpointPink;
+
     public int currentFloor;
 
+    public int BossFloorRed
+    {
+        get { return 25; }
+    }
+
+    public int BossFloorPink
+    {
+        get { return 50; }
+    }
+
     private static CTDungeon instance;
-    private Dictionary<int, CTFloor> floors;
+    private Dictionary<int, IFloor> floors;
 
     public static CTDungeon Instance
     {
@@ -21,16 +34,35 @@ public class CTDungeon
 
     private CTDungeon()
     {
-        floors = new Dictionary<int, CTFloor>();
+        floors = new Dictionary<int, IFloor>();
         currentFloor = -1;
+        CheckpointRed = false;
+        CheckpointPink = false;
     }
 
-    public void AddNewFloor(int _floorNum, CTFloor _newFloor)
+    public IFloor GetFloorData(int _floorNumber, bool _isBossLevel = false)
     {
-        floors.Add(_floorNum, _newFloor);
+        if (floors.ContainsKey(_floorNumber))
+            return floors[_floorNumber];
+
+        IFloor temp;
+
+        //No such floor for this level exists
+        if (_isBossLevel)
+        {
+            temp = new CBossFloor();
+            floors.Add(_floorNumber, temp);
+        }
+        else
+        {
+            temp = new CTFloor();
+            floors.Add(_floorNumber, temp);
+        }
+
+        return temp;
     }
 
-    public Dictionary<int, CTFloor> Floors
+    public Dictionary<int, IFloor> Floors
     {
         get
         {
@@ -43,7 +75,15 @@ public class CTDungeon
         if (_startRoom.sameAs(_destRoom))
             return null;
 
-        CTFloor currFloor = Floors[currentFloor];
+        CTFloor currFloor;
+
+        if (floors[currentFloor] is CTFloor)
+        {
+            currFloor = floors[currentFloor] as CTFloor;
+        }
+        else
+            return null;
+
         bool[][] m_gameBoard = currFloor.gameBoard;
         int boardColumn = m_gameBoard.Length;
         int boardRow = m_gameBoard[0].Length;

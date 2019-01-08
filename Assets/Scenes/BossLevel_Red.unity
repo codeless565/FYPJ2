@@ -424,54 +424,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1340001162401630, guid: 15ca25e35842d854ca02c84dca99ba08, type: 2}
-      propertyPath: m_TagString
-      value: MainCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 1528520425641184, guid: 15ca25e35842d854ca02c84dca99ba08, type: 2}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 61633481481744530, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61633481481744530, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: HPSlider
-      value: 
-      objectReference: {fileID: 1057370302}
-    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: m_Depth
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: SPSlider
-      value: 
-      objectReference: {fileID: 351354845}
-    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
-        type: 2}
-      propertyPath: EXPSlider
-      value: 
-      objectReference: {fileID: 64286167}
     - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
         type: 2}
       propertyPath: InventoryPanel
@@ -482,8 +434,37 @@ Prefab:
       propertyPath: InventoryUI
       value: 
       objectReference: {fileID: 713559862}
-    m_RemovedComponents:
-    - {fileID: 114989469168300038, guid: 15ca25e35842d854ca02c84dca99ba08, type: 2}
+    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: HPSlider
+      value: 
+      objectReference: {fileID: 1057370302}
+    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: SPSlider
+      value: 
+      objectReference: {fileID: 351354845}
+    - target: {fileID: 114313467315244940, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: EXPSlider
+      value: 
+      objectReference: {fileID: 64286167}
+    - target: {fileID: 114989469168300038, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: HPSlider
+      value: 
+      objectReference: {fileID: 1057370302}
+    - target: {fileID: 114989469168300038, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: SPSlider
+      value: 
+      objectReference: {fileID: 351354845}
+    - target: {fileID: 114989469168300038, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: EXPSlider
+      value: 
+      objectReference: {fileID: 64286167}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15ca25e35842d854ca02c84dca99ba08, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &319128169 stripped
@@ -491,26 +472,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1528520425641184, guid: 15ca25e35842d854ca02c84dca99ba08,
     type: 2}
   m_PrefabInternal: {fileID: 319128168}
---- !u!114 &319128176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 319128169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 515484e99a6853345a4e21d6977d3027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HPSlider: {fileID: 1057370302}
-  SPSlider: {fileID: 351354845}
-  EXPSlider: {fileID: 64286167}
-  m_FromHealth: 0
-  m_TargetedHealth: 0
-  m_FromEXP: 0
-  m_TargetedEXP: 0
-  m_FromSP: 0
-  m_TargetedSP: 0
 --- !u!114 &351354845 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114016943799193356, guid: d7b6e567905dc724caf7c1cba13825f7,
@@ -1148,26 +1109,19 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 210655074653374252, guid: 0350c8f63a8950e4ba70181f92c78c98,
+        type: 2}
+      propertyPath: m_SortingLayer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0350c8f63a8950e4ba70181f92c78c98, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1723062600 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1340001162401630, guid: 15ca25e35842d854ca02c84dca99ba08,
-    type: 2}
-  m_PrefabInternal: {fileID: 319128168}
 --- !u!20 &1723062603 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
     type: 2}
   m_PrefabInternal: {fileID: 319128168}
---- !u!92 &1723062604
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1723062600}
-  m_Enabled: 1
 --- !u!1 &1931853793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,11 +1150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 007ad4e54054f764086d6b9c4b5dbd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBossLevel: 0
-  rooms: 20
-  roomWidth: 11
-  roomHeight: 11
-  corridorLength: 8
+  isBossLevel: 1
+  rooms: 0
+  roomWidth: 5
+  roomHeight: 5
+  corridorLength: 10
   currFloor: 0
   floorTiles:
   - {fileID: 1251100361465790, guid: 6b37fbc4329c72a49a36298ef3714251, type: 2}
@@ -1224,6 +1178,8 @@ MonoBehaviour:
   - {fileID: 1251100361465790, guid: 7dd15a4b7ece51e45a35859098382b3c, type: 2}
   stairsDown: {fileID: 1251100361465790, guid: cf8881f39ad0c9d469e885ec38f038db, type: 2}
   stairsUp: {fileID: 0}
+  checkpoint: {fileID: 1961422556953600, guid: dba6a81a9af519e4c8c4714419b1dc35, type: 2}
+  exitPortal: {fileID: 1961422556953600, guid: c0a1642175422444bbaf2525362ae3d6, type: 2}
   boardHolder: {fileID: 412376741}
 --- !u!4 &1931853795
 Transform:
