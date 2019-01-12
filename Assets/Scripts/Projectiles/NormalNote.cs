@@ -86,7 +86,7 @@ public class NormalNote : MonoBehaviour, IProjectile
         }
         else if (_other.tag == "Monster")
         {
-            _other.GetComponent<IEnemy>().GetStats().HP -= m_damage;
+            CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
             Destroy(gameObject);
         }
     }
