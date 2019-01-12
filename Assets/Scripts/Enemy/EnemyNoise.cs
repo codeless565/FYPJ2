@@ -11,10 +11,22 @@ public class EnemyNoise : MonoBehaviour, IEnemy
     private CStats m_EnemyStats;
     private Sprite m_EnemySprite;
 
+    bool m_IsInRoom;
+    public bool IsInRoom
+    {
+        get { return m_IsInRoom; }
+
+        set { m_IsInRoom = value; }
+    }
+
     CStateMachine m_SM;
+    CStateMachine IEnemy.StateMachine
+    {
+        get { return m_SM; }
+    }
 
     CTRoomCoordinate m_RoomCoord;
-    public CTRoomCoordinate roomCoordinate
+    CTRoomCoordinate IEntity.RoomCoordinate
     {
         get { return m_RoomCoord; }
 
@@ -28,20 +40,41 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         }
     }
 
+    GameObject m_Target;
+    public GameObject Target
+    {
+        get { return m_Target; }
+
+        set { m_Target = value; }
+    }
+
+    float m_AttackTimer;
+    public bool CanAttack
+    {
+        get
+        {
+            return m_AttackTimer <= 0.0f;
+        }
+    }
+
     public void Init()
     {
         m_RoomCoord = new CTRoomCoordinate(0,0);
 
         m_EnemyStats = new CStats();
-        SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
+        SetStats(1, 5, 10, 0, 20, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
 
         m_SM = new CStateMachine();
-        //m_SM.AddState(new StateNoisePatrol(this.gameObject));
-        //m_SM.SetNextState("StateNoisePatrol");
-        m_SM.AddState(new CStatePathTest(this.gameObject));
-        m_SM.SetNextState("StatePathTest");
+        m_SM.AddState(new CStateIdle(this.gameObject));
+        m_SM.AddState(new CStatePatrol(this.gameObject));
+        m_SM.AddState(new CStateChangeRoom(this.gameObject));
+        m_SM.AddState(new CStateChase(this.gameObject));
+        m_SM.AddState(new CStateAttack(this.gameObject));
+        m_SM.AddState(new CStateDead(this.gameObject));
+
+        m_SM.SetNextState("StateIdle");
     }
 
     public void Init(CTRoomCoordinate _spawnCoord)
@@ -54,10 +87,14 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
         
         m_SM = new CStateMachine();
-        //m_SM.AddState(new StateNoisePatrol(this.gameObject));
-        //m_SM.SetNextState("StateNoisePatrol");
-        m_SM.AddState(new CStatePathTest(this.gameObject));
-        m_SM.SetNextState("StatePathTest");
+        m_SM.AddState(new CStateIdle(this.gameObject));
+        m_SM.AddState(new CStatePatrol(this.gameObject));
+        m_SM.AddState(new CStateChangeRoom(this.gameObject));
+        m_SM.AddState(new CStateChase(this.gameObject));
+        m_SM.AddState(new CStateAttack(this.gameObject));
+        m_SM.AddState(new CStateDead(this.gameObject));
+
+        m_SM.SetNextState("StateIdle");
     }
 
     public void Delete()
@@ -82,9 +119,44 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         return m_EnemyStats;
     }
 
-    public void IsDamaged(int damage)
+    public void IsDamaged(float damage)
+    {
+        m_EnemyStats.HP -= damage;
+    }
+
+    public void Spawn()
+    {
+        
+        
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (m_EnemyStats.HP <= 0)
+            m_SM.SetNextState("StateDead");
+
+        if (m_SM != null)
+            m_SM.Update();
+
+        if (m_AttackTimer > 0.0f)
+            m_AttackTimer -= Time.deltaTime;
+    }
+
+    public void IsAttackedByPlayer()
     {
         throw new System.NotImplementedException();
+    }
+
+    public void ResetAtkTimer()
+    {
+        m_AttackTimer = m_EnemyStats.PlayRate;
     }
 
     public void SetSprite(Sprite _sprite)
@@ -112,32 +184,5 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_EnemyStats.MoveSpeed = _movespeed;
     }
 
-    public void Spawn()
-    {
-        
-        
-    }
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (m_EnemyStats.HP <= 0)
-            Delete();
-
-        if (m_SM != null)
-            m_SM.Update();
-
-        Debug.Log(name + " : " + m_EnemyStats.HP);
-    }
-
-    public void IsAttackedByPlayer()
-    {
-        throw new System.NotImplementedException();
-    }
 }
