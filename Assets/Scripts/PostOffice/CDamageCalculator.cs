@@ -30,7 +30,7 @@ public class CDamageCalculator
         float AttackerAtk = _Attacker.GetComponent<IEntity>().GetStats().Attack;
         float DefenderDef = _Target.GetComponent<IEntity>().GetStats().Defense;
 
-        float FinalDMG = 100 / (100 + DefenderDef) * AttackerAtk;
+        float FinalDMG = FinalDMGAlgo(AttackerAtk, DefenderDef);
 
         _Target.GetComponent<IEntity>().IsDamaged(FinalDMG);
 
@@ -44,10 +44,15 @@ public class CDamageCalculator
 
         float DefenderDef = _Target.GetComponent<IEntity>().GetStats().Defense;
 
-        float FinalDMG = 100 / (100 + DefenderDef) * _damage;
+        float FinalDMG = FinalDMGAlgo(_damage, DefenderDef);
 
         _Target.GetComponent<IEntity>().IsDamaged(FinalDMG);
 
         return true;
+    }
+
+    private float FinalDMGAlgo(float _atk, float _def)
+    {
+        return 100 / (100 + _def * 10) * _atk;
     }
 }
