@@ -38,7 +38,7 @@ public class CStateChase : IStateBase
             Vector2 forwardVec = (Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position;
 
             //is able to reach next point in this frame
-            if (forwardVec.magnitude <= m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * 0.5f)
+            if (forwardVec.magnitude <= 1)
             {
                 m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * Time.deltaTime);
                 m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateAttack");
@@ -46,8 +46,8 @@ public class CStateChase : IStateBase
             else
                 m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * Time.deltaTime);
 
-            if (forwardVec.magnitude >= m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * 5)
-                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+            if (forwardVec.magnitude >= 10)
+                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StatePatrol");
         }
     }
 

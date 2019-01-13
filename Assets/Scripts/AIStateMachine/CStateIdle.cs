@@ -41,7 +41,7 @@ public class CStateIdle : IStateBase
                 m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChangeRoom");
         }
 
-        if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * 3)
+        if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= 5)
         {
             m_GO.GetComponent<IEnemy>().Target = GameObject.FindGameObjectWithTag("Player");
             m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");

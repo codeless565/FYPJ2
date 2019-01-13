@@ -35,7 +35,7 @@ public class CStateAttack : IStateBase
             m_GO.GetComponent<IEnemy>().ResetAtkTimer();
         }
 
-        if (((Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position).magnitude > m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed)
+        if (((Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position).magnitude > 1)
         {
             m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
         }

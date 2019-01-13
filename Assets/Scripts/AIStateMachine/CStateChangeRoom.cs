@@ -32,8 +32,12 @@ public class CStateChangeRoom : IStateBase
 
         m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing != null)
+        {
             if (m_Pathing.Count > 0)
                 nextDest = m_Pathing.Dequeue();
+        }
+        else
+            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
     }
 
     public void UpdateState()
@@ -52,12 +56,12 @@ public class CStateChangeRoom : IStateBase
                 if (m_Pathing.Count > 0) //still have more point till final point
                     nextDest = m_Pathing.Dequeue();
                 else //Reached
-                    m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+                    m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StatePatrol");
             }
             else
                 m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
 
-            if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * 3)
+            if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= 5)
             {
                 Debug.Log("Dist to plyer = " + (m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude);
                 m_GO.GetComponent<IEnemy>().Target = GameObject.FindGameObjectWithTag("Player");
