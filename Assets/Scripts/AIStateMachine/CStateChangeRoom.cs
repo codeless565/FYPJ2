@@ -41,7 +41,7 @@ public class CStateChangeRoom : IStateBase
 
     public void UpdateState()
     {
-        if (nextDest == null)
+        if (nextDest == null || m_Pathing == null)
             m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
         else
         {
