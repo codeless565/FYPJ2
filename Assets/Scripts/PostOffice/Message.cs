@@ -16,11 +16,17 @@ public class Message {
         Debug.Log("EncodedMessage: " + EncodedMessage);
     }
 
-    // for quest
-    public Message(MESSAGE_TYPE _messagetype,string questname, string propname, float amount)
+    // for Achievement
+    public Message(MESSAGE_TYPE _messagetype,string Achievementname, string propname, float amount)
     {
-        EncodedMessage = "MessageType=" + _messagetype + "," + MESSAGE_DATA.QUESTNAME.ToString() + "=" + questname + "," + MESSAGE_DATA.PROPERTYNAME + "=" + propname + "," + MESSAGE_DATA.AMOUNT + "=" + amount;
+        EncodedMessage = "MessageType=" + _messagetype + "," + MESSAGE_DATA.ACHIEVEMENTNAME.ToString() + "=" + Achievementname + "," + MESSAGE_DATA.PROPERTYNAME + "=" + propname + "," + MESSAGE_DATA.AMOUNT + "=" + amount;
         Debug.Log("EncodedMessage: " + EncodedMessage);
+    }
+
+    // for Quest
+    public Message(MESSAGE_TYPE _messagetype, string _monstername)
+    {
+
     }
 }
 
@@ -29,13 +35,12 @@ public enum MESSAGE_TYPE
     NONE,
     ADDEXP,
     ADDPROP,
+    ADDQUEST
 }
 
 public enum MESSAGE_DATA
 {
-    ENEMYLEVEL,
-    ENEMYEXP,
-    QUESTNAME,
+    ACHIEVEMENTNAME,
     PROPERTYNAME,
     AMOUNT
 }

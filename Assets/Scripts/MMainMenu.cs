@@ -9,6 +9,10 @@ public class MMainMenu : MonoBehaviour {
     public GameObject MainMenuPanel;
     public GameObject OptionsPanel;
 
+    public Slider BGMSlider;
+    public Slider FXSlider;
+    public Toggle BGMToggle;
+    public Toggle FXToggle;
 
     // Use this for initialization
     void Start () {
@@ -17,8 +21,12 @@ public class MMainMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        MAudio.Instance.BGMSource.volume = BGMSlider.value;
+        MAudio.Instance.FXSource.volume = FXSlider.value;
+
+        MAudio.Instance.BGMSource.mute = BGMToggle.isOn;
+        MAudio.Instance.FXSource.mute = FXToggle.isOn;
+    }
 
     public void StartGame_Click()
     {
@@ -57,6 +65,6 @@ public class MMainMenu : MonoBehaviour {
     public void Apply_Click()
     {
         print("Not done");
-    }
+    } 
     #endregion
 }

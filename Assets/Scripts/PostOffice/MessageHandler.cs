@@ -23,20 +23,7 @@ public class MessageHandler{
     {
         if (!_receiver)
             return;
-        //switch (message.m_MessageType)
-        //{
-        //    case MESSAGE_TYPE.ADDEXP:
-        //        {
-        //            if (message.m_Sender.GetComponent<IEnemy>() != null)
-        //                _receiver.GetComponent<PlayerUIScript>().AddEXP(_receiver.GetComponent<CPlayer>().GetStats().EXP,message.m_Sender.GetComponent<IEnemy>().GetStats().Level * (int)message.m_Sender.GetComponent<IEnemy>().GetStats().EXP);
-        //        }
-        //        break;
-        //    case MESSAGE_TYPE.ADDPROP:
-        //        {
-        //            _receiver.GetComponent<CPlayer>().m_QuestSystem.UpdateQuestProperty(NoiseSlayer.m_questName, KillNoiseProp.m_propertyname, 1);
-        //        }
-        //        break;
-        //}
+
         if (GetStringFromMessage(message.EncodedMessage, "MessageType") == MESSAGE_TYPE.ADDEXP.ToString())
         {
             float amount = 0.0f;
@@ -53,12 +40,14 @@ public class MessageHandler{
             float.TryParse(GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.AMOUNT.ToString()), out amount);
             
 
-            _receiver.GetComponent<CPlayer>().m_QuestSystem.UpdateQuestProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.QUESTNAME.ToString()),
+            AchievementSystem.Instance.UpdateAchievementProperty(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.ACHIEVEMENTNAME.ToString()),
                 GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.PROPERTYNAME.ToString()),
                 amount);
 
         }
     }
+
+
     string GetStringFromMessage(string _message, string wanteddata)
     {
         if (_message.Contains(wanteddata))
