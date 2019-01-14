@@ -335,6 +335,11 @@ public class CBossFloor : IFloor
         }
     }
 
+    public CTRoom GetRoomFromCoord(CTRoomCoordinate _coord)
+    {
+        return null;
+    }
+
     public bool Generated
     {
         get { return m_isGenerated; }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalNote : MonoBehaviour, IProjectile
+public class EnemyNote : MonoBehaviour, IProjectile
 {
     bool m_initialized;
     float m_damage;
@@ -76,7 +76,7 @@ public class NormalNote : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter2D(Collider2D _other)
     {
-        if (_other.tag == "Player")
+        if (_other.tag == "Monster")
             return;
 
         Debug.Log("collided name: " + _other.tag);
@@ -84,7 +84,7 @@ public class NormalNote : MonoBehaviour, IProjectile
         {
             Destroy(gameObject);
         }
-        else if (_other.tag == "Monster")
+        else if (_other.tag == "Player")
         {
             CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
             Destroy(gameObject);

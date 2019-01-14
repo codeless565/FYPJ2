@@ -19,8 +19,23 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     CWeapon m_EquippedWeapon;
 
+    public Slider HPSlider;
+    public Slider SPSlider;
+    public Slider EXPSlider;
+
+    float m_FromHealth;
+    float m_TargetedHealth;
+
+    bool m_IsInRoom;
+    public bool IsInRoom
+    {
+        get { return m_IsInRoom; }
+
+        set { m_IsInRoom = value; }
+    }
+
     CTRoomCoordinate m_RoomCoord;
-    public CTRoomCoordinate roomCoordinate
+    public CTRoomCoordinate RoomCoordinate
     {
         get { return m_RoomCoord; }
 
@@ -49,7 +64,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
 
         m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 1, 5, 10, 100, 100, 10, 10, 1, 5);
+        SetStats(1, 0, 10, 1, 50, 50, 100, 100, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
@@ -224,7 +239,7 @@ public class CPlayer : MonoBehaviour ,IEntity
                 m_InventorySystem.RemoveItem(_itemKey);
             return;
         }
-        Debug.Log("Item dont exist");
+        //Debug.Log("Item dont exist");
     }
 
     public void Delete()
@@ -248,7 +263,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         return m_PlayerStats;
     }
 
-    public void IsDamaged(int damage)
+    public void IsDamaged(float damage)
     {
         //if (m_PrestigeSystem.GetList().ContainsKey(Perfection.prestigename))
         //{

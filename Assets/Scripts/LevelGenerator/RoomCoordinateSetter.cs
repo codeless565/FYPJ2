@@ -21,11 +21,11 @@ public class RoomCoordinateSetter : MonoBehaviour {
     {
         if (_other.GetComponent<IEntity>() != null)
         {
-            if (_other.GetComponent<IEntity>().roomCoordinate != null)
+            if (_other.GetComponent<IEntity>().RoomCoordinate != null)
             {
-                _other.GetComponent<IEntity>().roomCoordinate = m_roomCoord;
+                _other.GetComponent<IEntity>().RoomCoordinate = m_roomCoord;
             }
-            Debug.Log("Coordinate of " + " is " + _other.GetComponent<IEntity>().roomCoordinate.x + ", " + _other.GetComponent<IEntity>().roomCoordinate.y);
+            Debug.Log("Coordinate of " + " is " + _other.GetComponent<IEntity>().RoomCoordinate.x + ", " + _other.GetComponent<IEntity>().RoomCoordinate.y);
         }
     }
 }

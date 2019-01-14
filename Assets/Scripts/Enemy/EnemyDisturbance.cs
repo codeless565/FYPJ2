@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Sprite))]
-public class EnemyNoise : MonoBehaviour, IEnemy
+public class EnemyDisturbance : MonoBehaviour, IEnemy, IAreaOfEffect
 {
     private bool m_IsImmortal;
 
@@ -29,7 +29,8 @@ public class EnemyNoise : MonoBehaviour, IEnemy
     {
         get { return m_RoomCoord; }
 
-        set {
+        set
+        {
             if (m_RoomCoord == null)
             {
                 m_RoomCoord = new CTRoomCoordinate(value);
@@ -56,9 +57,18 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         }
     }
 
+    List<GameObject> m_TargetList;
+    public List<GameObject> TargetList
+    {
+        get { return m_TargetList; }
+
+        set { m_TargetList = value; }
+    }
+
     public void Init()
     {
-        m_RoomCoord = new CTRoomCoordinate(0,0);
+        m_TargetList = new List<GameObject>();
+        m_RoomCoord = new CTRoomCoordinate(0, 0);
 
         m_EnemyStats = new CStats();
         SetStats(1, 5, 10, 0, 20, 10, 10, 10, 10, 10, 1, 2);
@@ -70,7 +80,7 @@ public class EnemyNoise : MonoBehaviour, IEnemy
         m_SM.AddState(new CStatePatrol(this.gameObject));
         m_SM.AddState(new CStateChangeRoom(this.gameObject));
         m_SM.AddState(new CStateChase(this.gameObject));
-        m_SM.AddState(new CStateAttack(this.gameObject));
+        m_SM.AddState(new CStateAttackDisturb(this.gameObject));
         m_SM.AddState(new CStateDead(this.gameObject));
 
         m_SM.SetNextState("StateIdle");
@@ -78,19 +88,20 @@ public class EnemyNoise : MonoBehaviour, IEnemy
 
     public void Init(CTRoomCoordinate _spawnCoord)
     {
+        m_TargetList = new List<GameObject>();
         m_RoomCoord = new CTRoomCoordinate(_spawnCoord);
 
         m_EnemyStats = new CStats();
         SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
-        
+
         m_SM = new CStateMachine();
         m_SM.AddState(new CStateIdle(this.gameObject));
         m_SM.AddState(new CStatePatrol(this.gameObject));
         m_SM.AddState(new CStateChangeRoom(this.gameObject));
         m_SM.AddState(new CStateChase(this.gameObject));
-        m_SM.AddState(new CStateAttack(this.gameObject));
+        m_SM.AddState(new CStateAttackDisturb(this.gameObject));
         m_SM.AddState(new CStateDead(this.gameObject));
 
         m_SM.SetNextState("StateIdle");
@@ -99,9 +110,7 @@ public class EnemyNoise : MonoBehaviour, IEnemy
     public void Delete()
     {
         PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, m_EnemyStats.Level * m_EnemyStats.EXP));
-        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDPROP, NoiseSlayer.m_AchievementName, KillNoiseProp.m_propertyname, 1f));
-
-        QBQuest.Instance.UpdateQuest(QuestType.SLAY, QuestTarget.NOISE);
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDPROP, NoiseSlayer.m_questName, KillNoiseProp.m_propertyname, 1f));
         Destroy(gameObject);
     }
 
@@ -127,8 +136,8 @@ public class EnemyNoise : MonoBehaviour, IEnemy
 
     public void Spawn()
     {
-        
-        
+
+
     }
 
     // Use this for initialization

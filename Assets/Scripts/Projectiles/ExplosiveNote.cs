@@ -92,7 +92,7 @@ public class ExplosiveNote : MonoBehaviour, IProjectile
         else if (_other.tag == "Monster")
         {
             //Hit monster, deal damage and spawn 
-            _other.GetComponent<IEnemy>().GetStats().HP -= m_damage;
+            CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
             Destroy(gameObject);
         }
     }

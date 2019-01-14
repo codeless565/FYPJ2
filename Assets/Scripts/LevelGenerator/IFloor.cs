@@ -30,4 +30,5 @@ public interface IFloor
 
     void InitNewLevel(int _floorNum, int _columns, int _rows, int _numRooms, int _gridSize, int _roomWidth, int _roomHeight, int _corridorLength);
 
+    CTRoom GetRoomFromCoord(CTRoomCoordinate _coord);
 }
