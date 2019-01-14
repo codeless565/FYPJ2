@@ -9,7 +9,7 @@ public class CTBoardGenerator : MonoBehaviour
     private int columns;        // The number of columns on the board (how wide it will be).
     private int rows;           // The number of rows on the board (how tall it will be).
 
-    public int rooms = 20;
+    private int rooms;
     public int roomWidth = 11;
     public int roomHeight = 11;
     public int corridorLength = 8;
@@ -27,10 +27,18 @@ public class CTBoardGenerator : MonoBehaviour
 
     public GameObject boardHolder;              // GameObject that acts as a container for all other tiles.
 
-    CItemGenerator itemGenerator;
-
     public void Init()
     {
+        currFloor = CTDungeon.Instance.currentFloor;
+
+        if (currFloor < 0)
+        {
+            currFloor = 1;
+            CTDungeon.Instance.currentFloor = currFloor;
+        }
+
+        rooms = Random.Range(6 + currFloor / 3, 6 + currFloor / 2);
+
         if (!isBossLevel)
         {
             gridSize = rooms / 2;
@@ -48,17 +56,7 @@ public class CTBoardGenerator : MonoBehaviour
             rows = gridSize * (roomHeight + corridorLength) + 2 * (roomHeight + corridorLength);
         }
 
-        currFloor = CTDungeon.Instance.currentFloor;
-
-        if (currFloor < 0)
-        {
-            currFloor = 24;
-            CTDungeon.Instance.currentFloor = currFloor;
-        }
-
         CreateBoard(currFloor);
-        itemGenerator = new CItemGenerator();
-        //itemGenerator.GenerateItemsOnFloor(10);
     }
 
     public void CreateBoard(int _currentFloor)
