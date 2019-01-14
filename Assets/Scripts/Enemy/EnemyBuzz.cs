@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -151,8 +150,6 @@ public class EnemyBuzz : MonoBehaviour, IEnemy
 
         if (m_AttackTimer > 0.0f)
             m_AttackTimer -= Time.deltaTime;
-
-        Debug.Log("Speed: " + m_EnemyStats.MoveSpeed);
     }
 
     public void IsAttackedByPlayer()
