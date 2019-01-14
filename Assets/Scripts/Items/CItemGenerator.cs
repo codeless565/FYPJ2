@@ -11,6 +11,11 @@ public class CItemGenerator : MonoBehaviour
     {
         List<CTRoom> roomList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
 
+        if (NumberOfItems < 0)
+        {
+            NumberOfItems = Random.Range(CTDungeon.Instance.currentFloor, roomList.Count);
+        }
+        
         int generatedItem = 0;
 
         foreach (var room in roomList)

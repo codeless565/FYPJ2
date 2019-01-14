@@ -5,17 +5,23 @@ using UnityEngine;
 public class CMonsterGenerator : MonoBehaviour
 {
     [SerializeField]
-    int NumberOfMonsters = 1;
+    int NumberOfMonsters = 0;
 
     public void Init()
     {
         List<CTRoom> roomList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
 
-        int generatedItem = 0;
+        if (NumberOfMonsters < 0)
+        {
+            int currFloor = CTDungeon.Instance.currentFloor;
+            NumberOfMonsters = Random.Range(roomList.Count , currFloor + roomList.Count);
+        }
+
+        int generatedMobs = 0;
 
         foreach (var room in roomList)
         {
-            if (generatedItem >= NumberOfMonsters)
+            if (generatedMobs >= NumberOfMonsters)
                 break;
 
             int randomAmtInThisRoom = Random.Range(0, 3);
