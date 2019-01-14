@@ -2,46 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CItemGenerator
+public class CItemGenerator : MonoBehaviour
 {
-    public CItemGenerator()
-    {
-    }
+    [SerializeField]
+    int NumberOfItems = 1;
 
-    public void GenerateItemsOnFloor(int _numItems = 1)
+    public void Init()
     {
         List<CTRoom> roomList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
-
-        int amtOfItems = _numItems;
 
         int generatedItem = 0;
 
         foreach (var room in roomList)
         {
-            if (generatedItem >= amtOfItems)
+            if (generatedItem >= NumberOfItems)
                 break;
 
             int randomAmtInThisRoom = Random.Range(0, 3);
             for (int i = 0; i < randomAmtInThisRoom; ++i)
             {
-                GenerateIteminRoom(room);
+                GenerateIteminRoom(room.RandomPoint);
             }
         }
     }
 
-    private void GenerateIteminRoom(CTRoom _room)
+    private void GenerateIteminRoom(Vector3 _pos)
     {
-        float xPos = Random.Range(_room.xPos, _room.xPos + _room.roomWidth);
-        float yPos = Random.Range(_room.yPos, _room.yPos + _room.roomHeight);
-
         //get a random item from itemdatabase and generate in room
         if (CTDungeon.Instance.currentFloor < 10)
         {
-            Object.Instantiate(CItemDatabase.Instance.RandomLowGradeItem, new Vector3(xPos, yPos, 0f), Quaternion.identity);
+            Object.Instantiate(CItemDatabase.Instance.RandomLowGradeItem, _pos, Quaternion.identity);
         }
         else
         {
-            Object.Instantiate(CItemDatabase.Instance.RandomItem, new Vector3(xPos, yPos, 0f), Quaternion.identity);
+            Object.Instantiate(CItemDatabase.Instance.RandomItem, _pos, Quaternion.identity);
         }
     }
 }
