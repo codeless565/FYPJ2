@@ -69,7 +69,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         {
             //IsDamaged(2);
             //GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP,7);
-            GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 2);
+            //GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 2);
         }
         if (m_PlayerStats.EXP >= m_PlayerStats.MaxEXP)
             LevelingSystem();
