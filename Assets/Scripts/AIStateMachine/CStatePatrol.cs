@@ -25,7 +25,6 @@ public class CStatePatrol : IStateBase
 
     public void EnterState()
     {
-        Debug.Log("Entered StatePatrol");
         if (!m_GO.GetComponent<IEnemy>().IsInRoom)
         {
             m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChangeRoom");

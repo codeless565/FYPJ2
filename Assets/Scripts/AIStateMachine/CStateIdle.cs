@@ -25,7 +25,6 @@ public class CStateIdle : IStateBase
 
     public void EnterState()
     {
-        Debug.Log("Entered StateIdle");
         m_timer = Random.Range(1.0f, 3.0f);
     }
 

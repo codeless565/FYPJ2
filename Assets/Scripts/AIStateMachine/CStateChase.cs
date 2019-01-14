@@ -18,13 +18,10 @@ public class CStateChase : IStateBase
     public CStateChase(GameObject _go)
     {
         m_GO = _go;
-        EnterState();
     }
 
     public void EnterState()
     {
-        Debug.Log("Entered StateChase");
-
         if (m_GO.GetComponent<IEnemy>().Target == null)
             m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
     }

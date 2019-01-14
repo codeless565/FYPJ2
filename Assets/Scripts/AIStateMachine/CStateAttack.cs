@@ -18,13 +18,10 @@ public class CStateAttack : IStateBase
     public CStateAttack(GameObject _go)
     {
         m_GO = _go;
-        EnterState();
     }
 
     public void EnterState()
     {
-        Debug.Log("Entered StateAttack");
-
     }
 
     public void UpdateState()

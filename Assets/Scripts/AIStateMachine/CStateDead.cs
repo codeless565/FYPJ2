@@ -22,7 +22,6 @@ public class CStateDead : IStateBase
 
     public void EnterState()
     {
-        Debug.Log("Entered StateDead");
         //spawn item? play animation? Call delete();
         m_GO.GetComponent<IEnemy>().Delete();
     }

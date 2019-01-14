@@ -26,7 +26,6 @@ public class CStateChangeRoom : IStateBase
 
     public void EnterState()
     {
-        Debug.Log("Entered StateChangeRoom");
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
