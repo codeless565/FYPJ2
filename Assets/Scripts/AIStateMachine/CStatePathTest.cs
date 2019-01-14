@@ -35,7 +35,7 @@ public class CStatePathTest : IStateBase
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
-        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().roomCoordinate, rmList[randomDestIndex].coordinate);
+        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing != null)
             nextDest = m_Pathing.Dequeue();
     }
@@ -74,7 +74,7 @@ public class CStatePathTest : IStateBase
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
-        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().roomCoordinate, rmList[randomDestIndex].coordinate);
+        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing == null)
             newPathing();
     }

@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 212127358189648222}
   - component: {fileID: 61067398132094302}
   - component: {fileID: 50353998856006398}
-  - component: {fileID: 114659094564697338}
+  - component: {fileID: 114259868340992366}
   m_Layer: 0
-  m_Name: NoiseBuzz
+  m_Name: EnemyStatic
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114659094564697338
+--- !u!114 &114259868340992366
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1280511927308638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4eca1a1a99694440833e354d399ca95, type: 3}
+  m_Script: {fileID: 11500000, guid: dde4f31f4198028429e62be46ca1cf6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212127358189648222
