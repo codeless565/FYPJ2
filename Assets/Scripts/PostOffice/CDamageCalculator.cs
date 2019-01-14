@@ -51,6 +51,16 @@ public class CDamageCalculator
         return true;
     }
 
+    public bool SendHealing(GameObject _Target, GameObject _Healer)
+    {
+        if (_Target == null || _Target.GetComponent<IEntity>() == null)
+            return false;
+
+        _Target.GetComponent<IEntity>().IsDamaged(-_Healer.GetComponent<IEntity>().GetStats().Attack);
+
+        return true;
+    }
+
     private float FinalDMGAlgo(float _atk, float _def)
     {
         return 100 / (100 + _def * 10) * _atk;
