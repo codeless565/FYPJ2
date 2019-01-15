@@ -182,7 +182,7 @@ public class CTRoom
         //Check if its enough rooms
         while (currNumRooms < _maxRooms)
         {
-            CreateEndRooms(_roomWidth, _roomHeight, _corridorLength - 2, GetEndRooms(_rooms, _maxRooms / 4), ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors);
+            CreateEndRooms(_roomWidth, _roomHeight, _corridorLength, GetEndRooms(_rooms, _maxRooms / 4), ref currNumRooms, ref availableRooms, ref _maxRooms, ref _gameBoard, ref _rooms, ref _corridors);
         }
 
         return currNumRooms;

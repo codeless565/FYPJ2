@@ -39,9 +39,9 @@ GameObject:
   - component: {fileID: 212127358189648222}
   - component: {fileID: 61067398132094302}
   - component: {fileID: 50353998856006398}
-  - component: {fileID: 114154936336051530}
+  - component: {fileID: 114146997843704384}
   m_Layer: 0
-  m_Name: NoiseBoom
+  m_Name: EnemyDisturbance
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114154936336051530
+--- !u!114 &114146997843704384
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1280511927308638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5de072d1cee878441be680421a7018c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 148848bcd6bcc2840878e84a1e7a6ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114348169930912666

@@ -20,11 +20,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4294178427492044}
   - component: {fileID: 212127358189648222}
+  - component: {fileID: 50105083314847422}
   - component: {fileID: 61067398132094302}
-  - component: {fileID: 50353998856006398}
-  - component: {fileID: 114659094564697338}
+  - component: {fileID: 114810713970012436}
   m_Layer: 0
-  m_Name: NoiseBuzz
+  m_Name: EnemyNoise
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50353998856006398
+--- !u!50 &50105083314847422
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
@@ -88,7 +88,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114659094564697338
+--- !u!114 &114810713970012436
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1280511927308638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4eca1a1a99694440833e354d399ca95, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ff0ad9a14be85148947df479f40b2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212127358189648222

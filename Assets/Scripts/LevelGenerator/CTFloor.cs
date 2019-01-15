@@ -274,7 +274,7 @@ public class CTFloor : IFloor
             m_StairsBack = new Vector2(0, 0);
 
         if (_goForward)
-            m_StairsForward = m_Rooms[m_Rooms.Count - 1].RandomPoint;
+            m_StairsForward = m_Rooms[Random.Range(m_Rooms.Count / 2, m_Rooms.Count)].RandomPoint;
         else
             m_StairsForward = new Vector2(0, 0);
     }
