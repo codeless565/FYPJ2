@@ -88,4 +88,7 @@ public class CWeapon
         m_WeaponStats.AttackMultiplier = _attackMultiplier;
         m_WeaponStats.Range = _attackRange;
     }
+
+    public virtual string Name
+    { get { return ""; } }
 }
