@@ -12,21 +12,21 @@ public class Message {
     public Message(MESSAGE_TYPE _messagetype, float _amount)
     {
         EncodedMessage = "MessageType=" + _messagetype + "," + MESSAGE_DATA.AMOUNT.ToString() + "=" + _amount;
-
-        Debug.Log("EncodedMessage: " + EncodedMessage);
+        //Debug.Log("EncodedMessage: " + EncodedMessage);
     }
 
     // for Achievement
     public Message(MESSAGE_TYPE _messagetype,string Achievementname, string propname, float amount)
     {
         EncodedMessage = "MessageType=" + _messagetype + "," + MESSAGE_DATA.ACHIEVEMENTNAME.ToString() + "=" + Achievementname + "," + MESSAGE_DATA.PROPERTYNAME + "=" + propname + "," + MESSAGE_DATA.AMOUNT + "=" + amount;
-        Debug.Log("EncodedMessage: " + EncodedMessage);
+        //Debug.Log("EncodedMessage: " + EncodedMessage);
     }
 
     // for Quest
-    public Message(MESSAGE_TYPE _messagetype, string _monstername)
+    public Message(MESSAGE_TYPE _messagetype, string _questtype, string _questtarget)
     {
-
+        EncodedMessage = "MessageType=" + _messagetype + "," + MESSAGE_DATA.QUESTTYPE.ToString() + "=" + _questtype + "," + MESSAGE_DATA.QUESTTARGET + "=" + _questtarget;
+        //Debug.Log("EncodedMessage: " + EncodedMessage);
     }
 }
 
@@ -35,12 +35,14 @@ public enum MESSAGE_TYPE
     NONE,
     ADDEXP,
     ADDPROP,
-    ADDQUEST
+    QUEST
 }
 
 public enum MESSAGE_DATA
 {
     ACHIEVEMENTNAME,
     PROPERTYNAME,
-    AMOUNT
+    AMOUNT,
+    QUESTTYPE,
+    QUESTTARGET
 }

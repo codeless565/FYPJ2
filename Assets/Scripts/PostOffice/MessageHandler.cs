@@ -45,6 +45,17 @@ public class MessageHandler{
                 amount);
 
         }
+        if (GetStringFromMessage(message.EncodedMessage, "MessageType") == MESSAGE_TYPE.QUEST.ToString())
+        {
+
+            //float amount = 0.0f;
+            //float.TryParse(GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.AMOUNT.ToString()), out amount);
+
+            _receiver.GetComponent<CPlayer>().UpdateQuest(GetStringFromMessage(message.EncodedMessage,MESSAGE_DATA.QUESTTYPE.ToString()), GetStringFromMessage(message.EncodedMessage, MESSAGE_DATA.QUESTTARGET.ToString()));
+
+            
+
+        }
     }
 
 
