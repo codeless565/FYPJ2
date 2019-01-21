@@ -69,8 +69,8 @@ public class HPRation : MonoBehaviour, IItem
         CPlayer player = _other.GetComponent<CPlayer>();
         if (player != null)
         {
-            player.m_InventorySystem.AddItem(this);
-            Destroy(gameObject);
+            if (player.m_InventorySystem.AddItem(this))
+                Destroy(gameObject);
         }
     }
 }

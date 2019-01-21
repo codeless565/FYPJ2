@@ -48,7 +48,12 @@ public class CInventorySystem
     public bool AddItem(IItem _newItem, int _quantity = 1)
     {
         if (m_Items.ContainsKey(_newItem.ItemKey))
-            m_Items[_newItem.ItemKey].quantity += _quantity;
+        {
+            if (m_Items[_newItem.ItemKey].quantity >= 999)
+                return false;
+            else
+                m_Items[_newItem.ItemKey].quantity += _quantity;
+        }
         else
             return false;
 
@@ -58,7 +63,12 @@ public class CInventorySystem
     public bool RemoveItem(string _itemKey, int _quantity = 1)
     {
         if (m_Items.ContainsKey(_itemKey))
-            m_Items[_itemKey].quantity -= _quantity;
+        {
+            if (m_Items[_itemKey].quantity - _quantity < 0)
+                return false;
+            else
+                m_Items[_itemKey].quantity -= _quantity;
+        }
         else
             return false;
 
