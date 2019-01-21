@@ -8,6 +8,19 @@ public class QuestBase {
     float m_Amount;
     float m_CompleteAmount;
     bool m_QuestComplete;
+    string m_questString;
+
+    public string QuestString
+    {
+        get
+        {
+            return m_questString;
+        }
+        set
+        {
+            m_questString = value;
+        }
+    }
 
     public QuestType QuestType
     {
@@ -78,6 +91,7 @@ public class QuestBase {
         m_Amount = 0;
         m_CompleteAmount = 0;
         m_QuestComplete = false;
+        m_questString = "";
     }
 
     // for slay quests
@@ -88,8 +102,10 @@ public class QuestBase {
         m_Amount = 0;
         m_CompleteAmount = _completeamount;
         m_QuestComplete = false;
+        m_questString = _questtype + " " + _questtarget + " " + _completeamount + " times";
     }
 
+    // for reach quests
     public QuestBase(QuestType _questtype, float _completeamount)
     {
         m_QuestType = _questtype;
@@ -97,6 +113,7 @@ public class QuestBase {
         m_Amount = 0;
         m_CompleteAmount = _completeamount;
         m_QuestComplete = false;
+        m_questString = _questtype + " level " + _completeamount;
     }
 }
 
