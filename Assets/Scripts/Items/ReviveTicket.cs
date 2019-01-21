@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SPPotion : MonoBehaviour, IItem
+public class ReviveTicket : MonoBehaviour, IItem
 {
     Sprite m_ItemSprite;
 
@@ -13,15 +13,7 @@ public class SPPotion : MonoBehaviour, IItem
 
     public bool UseItem(ref CStats _playerStats)
     {
-        if (_playerStats.SP >= _playerStats.MaxSP)
-            return false;
-
-        _playerStats.SP += _playerStats.MaxSP * 0.5f;
-
-        if (_playerStats.SP > _playerStats.MaxSP)
-            _playerStats.SP = _playerStats.MaxSP;
-
-        Debug.Log("Player sp: " + _playerStats.SP + " Max: " + _playerStats.MaxSP);
+        Debug.Log("Revive item used!");
         return true;
     }
 
@@ -29,7 +21,7 @@ public class SPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "SPPOTION";
+            return "REVIVETIX";
         }
     }
 
@@ -37,7 +29,7 @@ public class SPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Spirit Potion";
+            return "Revival Amulet";
         }
     }
 
@@ -45,7 +37,7 @@ public class SPPotion : MonoBehaviour, IItem
     {
         get
         {
-            return "Recovers 50% of your max spirit upon use.";
+            return "Allow you to revive upon taking fatal damage.";
         }
     }
 
@@ -73,4 +65,5 @@ public class SPPotion : MonoBehaviour, IItem
                 Destroy(gameObject);
         }
     }
+
 }

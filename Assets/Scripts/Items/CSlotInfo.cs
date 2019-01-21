@@ -4,24 +4,44 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
+public class CSlotInfo : MonoBehaviour, IDragHandler, IEndDragHandler
 {
+    bool moving;
     CItemSlot m_itemSlot;
     public ItemSlotType m_slotType;
 
+    Text QuantText;
+
+    //Impt info for drag
+    float m_OriginalPosX;
+    float m_OriginalPosY;
     float m_OriginalWidth;
     float m_OriginalHeight;
     GameObject m_OriginalParent;
     GameObject m_MovingParent;
 
-    public void Init(GameObject _movingParent = null )
+    public void Init(CItemSlot _item, GameObject _movingParent = null )
     {
-        GetComponent<Image>().sprite = null;
-        //GetComponent<Image>().color = Color.gray;
-        transform.GetChild(0).GetComponent<Text>().text = "";
-        m_itemSlot = null;
+        moving = false;
+
+        m_itemSlot = _item;
+        GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
+
+        if (transform.GetComponentInParent<Text>() == null)
+        {
+            if (transform.GetComponentInChildren<Text>() == null)
+                return;
+            else
+                QuantText = transform.GetComponentInChildren<Text>();
+        }
+        else
+            QuantText = transform.GetComponentInParent<Text>();
+
+        QuantText.text = "X " + m_itemSlot.quantity.ToString();
 
         m_OriginalParent = transform.parent.gameObject;
+        m_OriginalPosX = GetComponent<RectTransform>().localPosition.x;
+        m_OriginalPosY = GetComponent<RectTransform>().localPosition.y;
         m_OriginalWidth = GetComponent<RectTransform>().rect.width;
         m_OriginalHeight = GetComponent<RectTransform>().rect.height;
 
@@ -30,150 +50,72 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
 
     public void Update()
     {
-        if (m_itemSlot != null)
+        if (m_itemSlot != null && !moving)
         {
             if (m_itemSlot.quantity <= 0)
-            {
-                GetComponent<Image>().sprite = null;
-                //GetComponent<Image>().color = Color.gray;
-                transform.GetChild(0).GetComponent<Text>().text = "";
-                m_itemSlot = null;
-                return;
-            }
-            GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
-            //GetComponent<Image>().color = Color.white;
-            transform.GetChild(0).GetComponent<Text>().text = m_itemSlot.quantity.ToString();
+                GetComponent<Image>().color = Color.grey;
+            else
+                GetComponent<Image>().color = Color.white;
+            QuantText.text = "X " + m_itemSlot.quantity.ToString();
         }
     }
 
-    public void SetItemSlot(CItemSlot _newItemInfo)
-    {
-        m_itemSlot = _newItemInfo;
-        GetComponent<Image>().sprite = m_itemSlot.itemInfo.ItemSprite;
-        //GetComponent<Image>().color = Color.white;
-        transform.GetChild(0).GetComponent<Text>().text = m_itemSlot.quantity.ToString();
-    }
-
-    public bool isEmpty()
-    {
-        if (m_itemSlot == null)
-            return true;
-
-        return false;
-    }
-
-    public bool isSameItem(CItemSlot _newItemInfo)
-    {
-        if (_newItemInfo.itemInfo.ItemKey == m_itemSlot.itemInfo.ItemKey)
-            return true;
-
-        return false;
-    }
-
-    private void ResetSlot()
-    {
-        GetComponent<Image>().sprite = null;
-        //GetComponent<Image>().color = Color.gray;
-        transform.GetChild(0).GetComponent<Text>().text = "";
-        m_itemSlot = null;
-    }
-    
     public ItemSlotType SlotType
     { get { return m_slotType; } }
+
+    public string ItemDescription
+    {
+        get { return m_itemSlot.itemInfo.Description; }
+    }
 
     /********************
      * Drag Drop Control
      ********************/
     #region DragDrop
-    private bool isSwapping;
-    private bool isReplacing;
-    private GameObject otherSlot;
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        //Change rendering layer to forward
-        transform.SetParent(m_MovingParent.transform);
-    }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (SlotType != ItemSlotType.InventoryUse)
+            return;
+
         if (m_itemSlot == null)
             return;
 
+        moving = true;
+        transform.SetParent(m_MovingParent.transform);
         transform.position = Input.mousePosition; 
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (isSwapping)
-        {
-            CItemSlot oldSlot = m_itemSlot;
-            m_itemSlot = otherSlot.GetComponent<CSlotInfo>().m_itemSlot;
-            if (m_itemSlot == null)
-                ResetSlot();
-            otherSlot.GetComponent<CSlotInfo>().m_itemSlot = oldSlot;
-            isSwapping = false;
-            Debug.Log("Swapped");
-        }
-        else if (isReplacing)
-        {
-            otherSlot.GetComponent<CSlotInfo>().m_itemSlot = m_itemSlot;
-            isReplacing = false;
-            Debug.Log("Replaced");
-        }
-        else
-        {
-            if (m_slotType == ItemSlotType.ItemBar)
-                if ((transform.localPosition - Vector3.zero).magnitude >= 50)
-                {
-                    GetComponent<Image>().sprite = null;
-                    //GetComponent<Image>().color = Color.gray;
-                    transform.GetChild(0).GetComponent<Text>().text = "";
-                    m_itemSlot = null;
-                    Debug.Log("item removed from hotbar");
-                }
-        }
+        if (SlotType != ItemSlotType.InventoryUse)
+            return;
 
+        moving = false;
         //Always return back to origin
         transform.SetParent(m_OriginalParent.transform);
-        transform.localPosition = Vector3.zero;
-        GetComponent<RectTransform>().rect.Set(0, 0, m_OriginalWidth, m_OriginalHeight);
+        transform.localPosition = new Vector3(m_OriginalPosX, m_OriginalPosY, 0);
+        GetComponent<RectTransform>().sizeDelta = new Vector2(m_OriginalWidth, m_OriginalHeight);
+
+        Debug.Log("w: " + GetComponent<RectTransform>().rect.width + "act w: " + m_OriginalWidth + " h: " + GetComponent<RectTransform>().rect.height + "act h: " + m_OriginalHeight);
     }
 
     private void OnTriggerEnter2D(Collider2D _other)
     {
+        if (SlotType != ItemSlotType.InventoryUse)
+            return;
+
         if (_other.gameObject.GetComponent<CSlotInfo>())
         {
             switch (m_slotType)
             {
-                case ItemSlotType.ItemBar:
-                    if (_other.gameObject.GetComponent<CSlotInfo>().SlotType != ItemSlotType.ItemBar)
-                        return;
-                    isSwapping = true;
-                    otherSlot = _other.gameObject;
-                    Debug.Log("Swap detected");
-                    return;
                 case ItemSlotType.InventoryUse:
                     switch (_other.gameObject.GetComponent<CSlotInfo>().SlotType)
                     {
-                        case ItemSlotType.ItemBar:
-                            isReplacing = true;
-                            otherSlot = _other.gameObject;
-                            Debug.Log("Replace detected - InventoryUse to ItemBar");
-                            break;
-                        case ItemSlotType.InventoryUse:
-                            isSwapping = true;
-                            otherSlot = _other.gameObject;
-                            Debug.Log("Swap detected - InventoryUse to InventoryUse");
+                        case ItemSlotType.Shop:
+                            //sell the item
                             break;
                     }
-                    return;
-                case ItemSlotType.InventoryEquip:
-                    if (_other.gameObject.GetComponent<CSlotInfo>().SlotType != ItemSlotType.InventoryEquip)
-                        return;
-                    isSwapping = true;
-                    otherSlot = _other.gameObject;
-                    Debug.Log("Swap detected - InventoryEquip to InventoryEquip");
                     return;
             }
         }
@@ -181,9 +123,6 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        isSwapping = false;
-        isReplacing = false;
-        otherSlot = null;
     }
 
     #endregion
@@ -192,5 +131,5 @@ public class CSlotInfo : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
 [SerializeField]
 public enum ItemSlotType
 {
-    ItemBar, InventoryUse, InventoryEquip, PlayerEquip, Smith, 
+    None, ItemBar, InventoryUse, Shop 
 }
