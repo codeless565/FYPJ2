@@ -6,7 +6,7 @@ public class QBQuest {
     private static QBQuest instance;
     private QBQuest()
     {
-        RandomizeCurrQuest();
+        QuestList = new List<QuestBase>();
     }
 
     public static QBQuest Instance
@@ -19,29 +19,9 @@ public class QBQuest {
         }
     }
 
-    public QuestBase currQuest;
+    public List<QuestBase> QuestList;
 
-    public void RandomizeCurrQuest()
-    {
-        currQuest = RandomizeQuest();
-    }
-	
-    public void UpdateQuest(QuestType _questtype, QuestTarget _questtarget)
-    {
-        // if slay
-        if (_questtype == QuestType.SLAY)
-        {
-            if (_questtarget == currQuest.QuestTarget)
-                currQuest.QuestAmount++;
-            if (currQuest.QuestAmount >= currQuest.QuestCompleteAmount)
-                currQuest.QuestComplete = true;
-        }
-        if(_questtype == QuestType.REACH)
-        {
-            if(CTDungeon.Instance.currentFloor == currQuest.QuestCompleteAmount)
-                currQuest.QuestComplete = true;
-        }
-    }
+
 
     public QuestBase RandomizeQuest()
     {
@@ -57,13 +37,17 @@ public class QBQuest {
         }
         else if (randomType == QuestType.REACH)
         {
-            bool found = false;
+            
             int nextlevel = CTDungeon.Instance.currentFloor;
-            while (!found)
+
+            if (CTDungeon.Instance.currentFloor == -1)
+                nextlevel = 0;
+
+            if (nextlevel % 10 == 0)
+                nextlevel++;
+
+            while (nextlevel % 10 != 0)
             {
-                if (nextlevel % 10 == 0)
-                    found = true;
-                else
                     nextlevel++;
             }
 
