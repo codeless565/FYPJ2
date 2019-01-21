@@ -21,6 +21,7 @@ public class CItemDatabase
     GameObject m_HPElixir;
     GameObject m_SPPotion;
     GameObject m_SPElixir;
+    GameObject m_ReviveTix;
 
     List<GameObject> m_ItemPool;
     List<GameObject> m_LowGradePool;
@@ -51,6 +52,10 @@ public class CItemDatabase
         m_SPElixir = (GameObject)Resources.Load("Items/SPElixir");
         m_ItemPool.Add(m_SPElixir);
         m_HighGradePool.Add(m_SPElixir);
+
+        m_ReviveTix = (GameObject)Resources.Load("Items/RevivalAmulet");
+        m_ItemPool.Add(m_ReviveTix);
+        m_HighGradePool.Add(m_ReviveTix);
     }
 
     //Only allow other script to "get" without modification to original item
@@ -73,6 +78,10 @@ public class CItemDatabase
     public GameObject SPElixir
     {
         get { return m_SPElixir; }
+    }
+    public GameObject ReviveTix
+    {
+        get { return m_ReviveTix; }
     }
 
     public GameObject RandomItem
