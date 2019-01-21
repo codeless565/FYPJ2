@@ -17,6 +17,12 @@ public class PlayerUIScript : MonoBehaviour {
     public float m_FromSP;
     public float m_TargetedSP;
 
+    public Canvas m_playerQuestBoardUI;
+    public Button btnPrefab;
+    public List<Button> btnlist;
+    float startPos = -175;
+
+
     // Use this for initialization
     public void Init () { 
         HPSlider.maxValue = GetComponent<CPlayer>().GetStats().MaxHP;
@@ -31,6 +37,21 @@ public class PlayerUIScript : MonoBehaviour {
 
         m_TargetedSP = GetComponent<CPlayer>().GetStats().SP;
         m_FromSP = GetComponent<CPlayer>().GetStats().SP;
+
+        btnlist = new List<Button>();
+        for(int i =0;i<3;++i)
+        {
+            Button newbtn = Instantiate(btnPrefab, m_playerQuestBoardUI.transform);
+            newbtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPos, 0, 0);
+            
+            btnlist.Add(newbtn);
+            
+            //btnlist[i].onClick.RemoveAllListeners();
+            //btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
+
+            startPos += 175;
+        }
+        m_playerQuestBoardUI.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -78,6 +99,59 @@ public class PlayerUIScript : MonoBehaviour {
         HPSlider.value = GetComponent<CPlayer>().GetStats().HP;
         SPSlider.value = GetComponent<CPlayer>().GetStats().SP;
         EXPSlider.value = GetComponent<CPlayer>().GetStats().EXP;
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            UpdateQuestUI();
+            m_playerQuestBoardUI.gameObject.SetActive(!m_playerQuestBoardUI.gameObject.activeSelf);
+        }
+
+    }
+
+
+    public void ResetQuestDisplay()
+    {
+        foreach(Button bt in btnlist)
+        {
+            bt.GetComponent<Image>().color = Color.white;
+            bt.GetComponent<Button>().onClick.RemoveAllListeners();
+            bt.GetComponentInChildren<Text>().text = "";
+        }
+    }
+    public void UpdateQuestUI()
+    {
+        ResetQuestDisplay();
+
+        for(int i =0;i<GetComponent<CPlayer>().m_playerQuestList.Count;++i)
+        {
+            // todo ui
+            QuestBase quest = GetComponent<CPlayer>().m_playerQuestList[i];
+
+
+            btnlist[i].GetComponentInChildren<Text>().text = quest.QuestString;
+            btnlist[i].GetComponent<Button>().onClick.RemoveAllListeners();
+            btnlist[i].GetComponent<Button>().onClick.AddListener(delegate { CompleteQuest(quest); });
+
+            if (GetComponent<CPlayer>().m_playerQuestList[i].QuestComplete)
+                btnlist[i].GetComponent<Image>().color = Color.green;
+            else
+                btnlist[i].GetComponent<Image>().color = Color.red;
+        }
+    }
+
+    public void CompleteQuest(QuestBase _quest)
+    {
+        Debug.Log("Quest Complete. TODO --- Quest Reward");
+
+        foreach(QuestBase qb in GetComponent<CPlayer>().m_playerQuestList)
+        {
+            if(qb == _quest)
+            {
+                GetComponent<CPlayer>().m_playerQuestList.Remove(qb);
+                UpdateQuestUI();
+                return;
+            }
+        }
     }
 
     public void RemoveHealth(float _health, float _amount)

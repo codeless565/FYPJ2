@@ -26,6 +26,10 @@ public class CPlayer : MonoBehaviour ,IEntity
     float m_FromHealth;
     float m_TargetedHealth;
 
+
+    public List<QuestBase> m_playerQuestList;
+    
+
     bool m_IsInRoom;
     public bool IsInRoom
     {
@@ -69,9 +73,11 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
         m_EquippedWeapon = new TestWeapon();
-        GetComponent<PlayerUIScript>().Init();
         m_PrestigeSystem = new PrestigeSystem();
         AchievementSystem.Instance.Init(this.GetStats());
+        m_playerQuestList = new List<QuestBase>();
+
+        GetComponent<PlayerUIScript>().Init();
     }
 
     public void Update()
@@ -144,6 +150,49 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_EquippedWeapon.UpdateWeapon(Time.deltaTime);
         //Debug.Log(m_PlayerStats.Level + ": " + m_PlayerStats.EXP + "/" + m_PlayerStats.MaxEXP);
 
+        //if(Input.GetKeyDown(KeyCode.C))
+        //{
+        //    if(m_playerQuestList.Count > 0)
+        //        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
+        //}
+
+    }
+
+    public void UpdateQuest(string _questtype, string _questtarget)
+    {
+        foreach (QuestBase qb in m_playerQuestList)
+        {
+            if (qb.QuestComplete)
+                continue;
+
+            // if slay
+            if (_questtype == QuestType.SLAY.ToString())
+            {
+                if (qb.QuestTarget.ToString() == _questtarget.ToString())
+                    qb.QuestAmount++;
+                if (qb.QuestAmount >= qb.QuestCompleteAmount)
+                    qb.QuestComplete = true;
+                
+            }
+            else if (_questtype == QuestType.REACH.ToString())
+            {
+                if (CTDungeon.Instance.currentFloor == qb.QuestCompleteAmount)
+                    qb.QuestComplete = true;
+                
+            }
+        }
+    }
+
+    public bool AddNewQuest(QuestBase _quest)
+    {
+        if (m_playerQuestList.Count >= 3)
+            return false;
+        else
+        {
+            m_playerQuestList.Add(_quest);
+            //GetComponent<PlayerUIScript>().UpdateQuestUI();
+            return true;
+        }
     }
 
     public void RemoveAllPrestigeStats()

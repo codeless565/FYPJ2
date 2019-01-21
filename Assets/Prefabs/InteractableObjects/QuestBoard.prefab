@@ -79,7 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuestBoardCanvas: {fileID: 0}
-  QuestText: {fileID: 0}
+  btnPrefab: {fileID: 114248630760845182, guid: 801b242ed7e64db4a82badd1266ee757,
+    type: 2}
+  btnlist: []
 --- !u!212 &212677703477025314
 SpriteRenderer:
   m_ObjectHideFlags: 1
