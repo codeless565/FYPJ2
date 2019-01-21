@@ -6,7 +6,7 @@ public class CInventorySystem
 {
     private int m_Notes;    //Regular Currency
     private int m_Gems;     //Premium Currency
-    private List<CItemSlot> m_Items;
+    private Dictionary<string, CItemSlot> m_Items;
     private CInventorySlots m_HotBar;
     private CInventory m_Inventory;
 
@@ -14,7 +14,7 @@ public class CInventorySystem
     {
         m_Notes = 0;
         m_Gems = 0;
-        m_Items = new List<CItemSlot>();
+        m_Items = new Dictionary<string, CItemSlot>();
         m_HotBar = null;
         m_Inventory = null;
     }
@@ -23,121 +23,69 @@ public class CInventorySystem
     {
         m_Notes = 0;
         m_Gems = 0;
-        m_Items = new List<CItemSlot>();
+        m_Items = new Dictionary<string, CItemSlot>();
         m_HotBar = _HotbarScript;
-        m_HotBar.Init();
         m_Inventory = _InventoryScript;
-        m_Inventory.Init();
+    }
+
+    public void Init(int _notes, int _gems, int _HPRations, int _HPPot, int _HPElix, int _SPPot, int _SPElix, int _ReviveTix)
+    {
+        m_Inventory.UpdateNoteText(m_Notes = _notes);
+        m_Inventory.UpdateGemText(m_Gems = _gems);
+
+        m_Items.Add(CItemDatabase.Instance.HPRation.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.HPRation.GetComponent<IItem>(), _HPRations));
+        m_Items.Add(CItemDatabase.Instance.HPPotion.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.HPPotion.GetComponent<IItem>(), _HPPot));
+        m_Items.Add(CItemDatabase.Instance.HPElixir.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.HPElixir.GetComponent<IItem>(), _HPElix));
+        m_Items.Add(CItemDatabase.Instance.SPPotion.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.SPPotion.GetComponent<IItem>(), _SPPot));
+        m_Items.Add(CItemDatabase.Instance.SPElixir.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.SPElixir.GetComponent<IItem>(), _SPElix));
+        m_Items.Add(CItemDatabase.Instance.ReviveTix.GetComponent<IItem>().ItemKey, new CItemSlot(CItemDatabase.Instance.ReviveTix.GetComponent<IItem>(), _ReviveTix));
+
+        m_HotBar.Init(m_Items);
+        m_Inventory.Init(m_Items);
     }
 
     //returning false means bag for that itemType is full
     public bool AddItem(IItem _newItem, int _quantity = 1)
     {
-        CItemSlot newItem = new CItemSlot(_newItem, _quantity);
-        
-        //Bag is full / Item exists in slot
-        switch (_newItem.ItemType)
-        {
-            case ItemType.Use:
-                if (m_Inventory.UseTabFull(newItem))
-                    return false;
-                break;
-            case ItemType.Equip:
-                if (m_Inventory.EquipTabFull(newItem))
-                    return false;
-                break;
-        }
-
-        //New item can be added
-        foreach (CItemSlot slot in m_Items)
-        {
-            if (slot.itemInfo.ItemKey == _newItem.ItemKey)
-            {
-                slot.quantity += _quantity;
-                AddItem2Itembar(slot);
-                Debug.Log(_newItem.ItemKey + "'s quantity is " + slot.quantity);
-                return true;
-            }
-        }
-
-        //Create new ItemSlot with info to add to inventory
-        AddItem2Inventory(newItem);
-
-        if (_newItem.ItemType == ItemType.Use)
-            AddItem2Itembar(newItem);
-
-        //Add to universal List
-        m_Items.Add(newItem);
-        Debug.Log(_newItem.ItemKey + " has been added to inventory, quantity is " + m_Items[m_Items.Count - 1].quantity);
+        if (m_Items.ContainsKey(_newItem.ItemKey))
+            m_Items[_newItem.ItemKey].quantity += _quantity;
+        else
+            return false;
 
         return true;
     }
 
     public bool RemoveItem(string _itemKey, int _quantity = 1)
     {
-        foreach (CItemSlot slot in m_Items)
-        {
-            if (slot.itemInfo.ItemKey == _itemKey)
-            {
-                if (slot.quantity - _quantity < 0)
-                {
-                    Debug.Log(_itemKey + "'s quantity is < 0");
-                    return false;
-                }
+        if (m_Items.ContainsKey(_itemKey))
+            m_Items[_itemKey].quantity -= _quantity;
+        else
+            return false;
 
-                slot.quantity -= _quantity;
-                Debug.Log(_itemKey + "'s quantity is now " + slot.quantity);
-                if (slot.quantity <= 0)
-                {
-                    m_Items.Remove(slot);
-                    Debug.Log(_itemKey + "'s quantity is removed from inventory");
-                }
-                return true;
-            }
-        }
-
-        Debug.Log(_itemKey + "does not exist in inventory");
-        return false;
-    }
-
-    private void AddItem2Itembar(CItemSlot _newItem)
-    {
-        m_HotBar.AddItem(_newItem);
-    }
-
-    private bool AddItem2Inventory(CItemSlot _newItem)
-    {
-        return m_Inventory.AddItem(_newItem);
+        return true;
     }
 
     public IItem GetItem(string _itemKey)
     {
-        foreach (CItemSlot slot in m_Items)
+        if (m_Items.ContainsKey(_itemKey))
         {
-            if (slot.itemInfo.ItemKey == _itemKey)
-            {
-                return slot.itemInfo;
-            }
+            if (m_Items[_itemKey].quantity > 0)
+                return m_Items[_itemKey].itemInfo;
         }
-
         return null;
     }
 
     //Set _value to negative if subtracting value
     public void AddNotes(int _value)
     {
-        if (m_Notes + _value > int.MaxValue)
-        {
-            m_Notes = int.MaxValue;
-            return;
-        }
-        if (m_Notes + _value < 0)
-        {
+        if (m_Notes + _value > int.MaxValue - 1)
+            m_Notes = int.MaxValue - 1;
+        else if (m_Notes + _value < 0)
             m_Notes = 0;
-            return;
-        }
+        else
+            m_Notes += _value;
 
-        m_Notes += _value;
+        m_Inventory.UpdateNoteText(m_Notes);
     }
 
     public int Notes
@@ -148,18 +96,14 @@ public class CInventorySystem
     //Set _value to negative if subtracting value
     public void AddGems(int _value)
     {
-        if (m_Gems + _value > int.MaxValue)
-        {
-            m_Gems = int.MaxValue;
-            return;
-        }
-        if (m_Gems + _value < 0)
-        {
+        if (m_Gems + _value > int.MaxValue - 1)
+            m_Gems = int.MaxValue - 1;
+        else if (m_Gems + _value < 0)
             m_Gems = 0;
-            return;
-        }
+        else
+            m_Gems += _value;
 
-        m_Gems += _value;
+        m_Inventory.UpdateGemText(m_Gems);
     }
 
     public int Gems
@@ -174,7 +118,7 @@ public class CInventorySystem
     public void DebugLogAll()
     {
         int i = 0;
-        foreach (var items in m_Items)
+        foreach (var items in m_Items.Values)
         {
             i++;
             Debug.Log("Slot " + i + " : Key - " + items.itemInfo.ItemKey + ", ItemName - " + items.itemInfo.ItemName + ", Quantity - " + items.quantity);

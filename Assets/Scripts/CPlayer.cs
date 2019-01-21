@@ -59,6 +59,8 @@ public class CPlayer : MonoBehaviour ,IEntity
     {
         this.name = "Player";
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
+        m_InventorySystem.Init(100, int.MaxValue, 1, 2, 3, 4, 0, 0);
+
         m_RoomCoord = new CTRoomCoordinate(0, 0);
 
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
@@ -239,7 +241,6 @@ public class CPlayer : MonoBehaviour ,IEntity
                 m_InventorySystem.RemoveItem(_itemKey);
             return;
         }
-        //Debug.Log("Item dont exist");
     }
 
     public void Delete()
