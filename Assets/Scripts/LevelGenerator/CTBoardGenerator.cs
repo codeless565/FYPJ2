@@ -33,7 +33,7 @@ public class CTBoardGenerator : MonoBehaviour
 
         if (currFloor < 0)
         {
-            currFloor = 1;
+            currFloor = 34;
             CTDungeon.Instance.currentFloor = currFloor;
         }
 

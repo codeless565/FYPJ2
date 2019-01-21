@@ -396,23 +396,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Ending Corner
@@ -421,23 +429,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Side walls
@@ -446,23 +462,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Floor
