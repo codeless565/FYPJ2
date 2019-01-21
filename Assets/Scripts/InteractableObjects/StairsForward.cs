@@ -9,6 +9,8 @@ public class StairsForward : MonoBehaviour
     {
         if (_other.tag == "Player")
         {
+            CProgression.Instance.UpdatePlayerSave(_other.GetComponent<CPlayer>());
+
             CTDungeon.Instance.currentFloor += 1;
 
             int CurrFloor = CTDungeon.Instance.currentFloor;
