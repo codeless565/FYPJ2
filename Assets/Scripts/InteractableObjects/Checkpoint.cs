@@ -12,6 +12,8 @@ public class Checkpoint : MonoBehaviour {
                 CTDungeon.Instance.CheckpointRed = true;
             else if (CTDungeon.Instance.currentFloor == CTDungeon.Instance.BossFloorPink)
                 CTDungeon.Instance.CheckpointPink = true;
+
+            CProgression.Instance.UpdateDungeonProgression();
         }
     }
 }

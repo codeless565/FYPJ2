@@ -27,6 +27,27 @@ public class CProgression
     }
 
 
+    /******************************
+    * UNIVERSAL PROGRESSION SAVES
+    *****************************/
+    public void UpdateDungeonProgression()
+    {
+        PlayerPrefs.SetInt("DungeonFloorMax", CTDungeon.Instance.currentFloor);
+    }
+
+    public void UpdateDungeonProgression(int _floorNum)
+    {
+        PlayerPrefs.SetInt("DungeonFloorMax", _floorNum);
+    }
+
+    public int GetMaxDungeonProgression()
+    {
+        if (PlayerPrefs.HasKey("DungeonFloorMax"))
+            return PlayerPrefs.GetInt("DungeonFloorMax");
+
+        return 1;
+    }
+
     /***************************
      * PLAYER PROGRESSION SAVES
      **************************/

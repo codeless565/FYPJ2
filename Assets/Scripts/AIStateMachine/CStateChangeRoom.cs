@@ -82,7 +82,6 @@ public class CStateChangeRoom : IStateBase
             {
                 Vector2 makeleft = -Vector3.Cross(forwardVec, Vector3.forward).normalized;
                 m_GO.transform.Translate(makeleft * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
-                Debug.Log(m_GO.name +" making way: " + makeleft);
             }
         }
         else
