@@ -5,19 +5,21 @@ using UnityEngine;
 public class CPathNode : MonoBehaviour
 {
     private Vector2 m_position;
-    private Direction m_pathDir;
+    private PathNodeDir m_pathDir;
     private CTRoom m_room;
 
-    public CPathNode (float _posX, float _posY, Direction _dir, CTRoom _room)
+    public CPathNode (float _posX, float _posY, PathNodeDir _dir, CTRoom _room)
     {
         m_position = new Vector2(_posX, _posY);
+        gameObject.transform.position = m_position;
         m_pathDir = _dir;
         m_room = _room;
     }
 
-    public void Init(float _posX, float _posY, Direction _dir, CTRoom _room)
+    public void Init(float _posX, float _posY, PathNodeDir _dir, CTRoom _room)
     {
         m_position = new Vector2(_posX, _posY);
+        gameObject.transform.position = m_position;
         m_pathDir = _dir;
         m_room = _room;
     }
@@ -25,9 +27,14 @@ public class CPathNode : MonoBehaviour
     public Vector2 position
     { get { return m_position; } }
 
-    public Direction direction
+    public PathNodeDir direction
     { get { return m_pathDir; } }
 
     public CTRoom room
     { get { return m_room; } }
+}
+
+public enum PathNodeDir
+{
+    NorthL, NorthR, SouthL, SouthR, EastU, EastD, WestU, WestD
 }

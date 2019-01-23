@@ -172,45 +172,45 @@ public class CTDungeon
             switch (mShortestPath[i - 1].coordinate.directionTo(mShortestPath[i].coordinate))
             {
                 case Direction.NORTH:
-                    nextnode1 = mShortestPath[i - 1].GetPathnode(Direction.NORTH);
+                    nextnode1 = mShortestPath[i - 1].GetPathnode(PathNodeDir.NorthL);
                     if (nextnode1 == null)
                         return pathList;
                     pathList.Enqueue(nextnode1);
 
-                    nextnode2 = mShortestPath[i].GetPathnode(Direction.SOUTH);
+                    nextnode2 = mShortestPath[i].GetPathnode(PathNodeDir.SouthL);
                     if (nextnode2 == null)
                         return pathList;
                     pathList.Enqueue(nextnode2);
                     break;
                 case Direction.SOUTH:
-                    nextnode1 = mShortestPath[i - 1].GetPathnode(Direction.SOUTH);
+                    nextnode1 = mShortestPath[i - 1].GetPathnode(PathNodeDir.SouthR);
                     if (nextnode1 == null)
                         return pathList;
                     pathList.Enqueue(nextnode1);
 
-                    nextnode2 = mShortestPath[i].GetPathnode(Direction.NORTH);
+                    nextnode2 = mShortestPath[i].GetPathnode(PathNodeDir.NorthR);
                     if (nextnode2 == null)
                         return pathList;
                     pathList.Enqueue(nextnode2);
                     break;
                 case Direction.EAST:
-                    nextnode1 = mShortestPath[i - 1].GetPathnode(Direction.EAST);
+                    nextnode1 = mShortestPath[i - 1].GetPathnode(PathNodeDir.EastU);
                     if (nextnode1 == null)
                         return pathList;
                     pathList.Enqueue(nextnode1);
 
-                    nextnode2 = mShortestPath[i].GetPathnode(Direction.WEST);
+                    nextnode2 = mShortestPath[i].GetPathnode(PathNodeDir.WestU);
                     if (nextnode2 == null)
                         return pathList;
                     pathList.Enqueue(nextnode2);
                     break;
                 case Direction.WEST:
-                    nextnode1 = mShortestPath[i - 1].GetPathnode(Direction.WEST);
+                    nextnode1 = mShortestPath[i - 1].GetPathnode(PathNodeDir.WestD);
                     if (nextnode1 == null)
                         return pathList;
                     pathList.Enqueue(nextnode1);
 
-                    nextnode2 = mShortestPath[i].GetPathnode(Direction.EAST);
+                    nextnode2 = mShortestPath[i].GetPathnode(PathNodeDir.EastD);
                     if (nextnode2 == null)
                         return pathList;
                     pathList.Enqueue(nextnode2);

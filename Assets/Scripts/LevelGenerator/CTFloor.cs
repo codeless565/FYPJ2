@@ -125,35 +125,59 @@ public class CTFloor : IFloor
                 switch (dir)
                 {
                     case Direction.NORTH:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.NorthL))
                         {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x - 1, currRoom.yPos + currRoom.roomHeight - 1, PathNodeDir.NorthL, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.NorthL, node.GetComponent<CPathNode>());
+                        }
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.NorthR))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x + 1, currRoom.yPos + currRoom.roomHeight - 1, PathNodeDir.NorthR, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.NorthR, node.GetComponent<CPathNode>());
                         }
                         break;
                     case Direction.SOUTH:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.SouthL))
                         {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x - 1, currRoom.yPos, PathNodeDir.SouthL, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.SouthL, node.GetComponent<CPathNode>());
+                        }
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.SouthR))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x + 1, currRoom.yPos, PathNodeDir.SouthR, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.SouthR, node.GetComponent<CPathNode>());
                         }
                         break;
                     case Direction.EAST:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.EastU))
                         {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y + 1, PathNodeDir.EastU, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.EastU, node.GetComponent<CPathNode>());
+                        }
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.EastD))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y - 1, PathNodeDir.EastD, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.EastD, node.GetComponent<CPathNode>());
                         }
                         break;
                     case Direction.WEST:
-                        if (!currRoom.pathnodes.ContainsKey(dir))
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.WestU))
                         {
-                            node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                            node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, dir, currRoom);
-                            currRoom.pathnodes.Add(dir, node.GetComponent<CPathNode>());
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y + 1, PathNodeDir.WestU, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.WestU, node.GetComponent<CPathNode>());
+                        }
+                        if (!currRoom.pathnodes.ContainsKey(PathNodeDir.WestD))
+                        {
+                            node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                            node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y - 1, PathNodeDir.WestD, currRoom);
+                            currRoom.pathnodes.Add(PathNodeDir.WestD, node.GetComponent<CPathNode>());
                         }
                         break;
                 }
@@ -178,13 +202,20 @@ public class CTFloor : IFloor
                                     continue;
                                 }
                                 if (otherRm.nextCorridors.ContainsKey(Direction.SOUTH))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                {
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.NorthL))
                                     {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight - 1, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos + currRoom.roomHeight, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x - 1, currRoom.yPos + currRoom.roomHeight - 1, PathNodeDir.NorthL, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.NorthL, node.GetComponent<CPathNode>());
                                     }
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.NorthR))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x + 1, currRoom.yPos + currRoom.roomHeight - 1, PathNodeDir.NorthR, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.NorthR, node.GetComponent<CPathNode>());
+                                    }
+                                }
                             }
                         continue;
                     case Direction.SOUTH:
@@ -198,13 +229,20 @@ public class CTFloor : IFloor
                                     continue;
                                 }
                                 if (otherRm.nextCorridors.ContainsKey(Direction.NORTH))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                {
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.SouthL))
                                     {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.CenterPoint.x, currRoom.yPos, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x, currRoom.yPos, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x - 1, currRoom.yPos, PathNodeDir.SouthL, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.SouthL, node.GetComponent<CPathNode>());
                                     }
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.SouthR))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.CenterPoint.x + 1, currRoom.yPos, PathNodeDir.SouthR, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.SouthR, node.GetComponent<CPathNode>());
+                                    }
+                                }
                             }
                         continue;
                     case Direction.EAST:
@@ -218,13 +256,20 @@ public class CTFloor : IFloor
                                     continue;
                                 }
                                 if (otherRm.nextCorridors.ContainsKey(Direction.WEST))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                {
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.EastU))
                                     {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth, currRoom.CenterPoint.y, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y + 1, PathNodeDir.EastU, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.EastU, node.GetComponent<CPathNode>());
                                     }
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.EastD))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos + currRoom.roomWidth - 1, currRoom.CenterPoint.y - 1, PathNodeDir.EastD, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.EastD, node.GetComponent<CPathNode>());
+                                    }
+                                }
                             }
                         continue;
                     case Direction.WEST:
@@ -238,13 +283,20 @@ public class CTFloor : IFloor
                                     continue;
                                 }
                                 if (otherRm.nextCorridors.ContainsKey(Direction.EAST))
-                                    if (!currRoom.pathnodes.ContainsKey(nextDir))
+                                {
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.WestU))
                                     {
-                                        node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(currRoom.xPos, currRoom.CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                        node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y, nextDir, currRoom);
-                                        currRoom.pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
-                                        break;
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y + 1, PathNodeDir.WestU, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.WestU, node.GetComponent<CPathNode>());
                                     }
+                                    if (!currRoom.pathnodes.ContainsKey(PathNodeDir.WestD))
+                                    {
+                                        node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                        node.GetComponent<CPathNode>().Init(currRoom.xPos, currRoom.CenterPoint.y - 1, PathNodeDir.WestD, currRoom);
+                                        currRoom.pathnodes.Add(PathNodeDir.WestD, node.GetComponent<CPathNode>());
+                                    }
+                                }
                             }
                         continue;
                 }
@@ -396,23 +448,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Ending Corner
@@ -421,23 +481,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q3;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q3;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.WallOuterCorner_Q2;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.WallOuterCorner_Q2;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.WallOuterCorner_Q1;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.WallOuterCorner_Q1;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.WallOuterCorner_Q4;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Side walls
@@ -446,23 +514,31 @@ public class CTFloor : IFloor
                     {
                         case Direction.NORTH:
                             yCoord += j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.EAST:
                             xCoord += j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                         case Direction.SOUTH:
                             yCoord -= j;
-                            m_Tiles[xCoord - 1][yCoord] = TileType.Wall_Left;
-                            m_Tiles[xCoord + 1][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 2][yCoord] = TileType.Wall_Left;
+                            m_Tiles[xCoord + 2][yCoord] = TileType.Wall_Right;
+                            m_Tiles[xCoord - 1][yCoord] = TileType.Floor;
+                            m_Tiles[xCoord + 1][yCoord] = TileType.Floor;
                             break;
                         case Direction.WEST:
                             xCoord -= j;
-                            m_Tiles[xCoord][yCoord + 1] = TileType.Wall_Up;
-                            m_Tiles[xCoord][yCoord - 1] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 2] = TileType.Wall_Up;
+                            m_Tiles[xCoord][yCoord - 2] = TileType.Wall_Down;
+                            m_Tiles[xCoord][yCoord + 1] = TileType.Floor;
+                            m_Tiles[xCoord][yCoord - 1] = TileType.Floor;
                             break;
                     }
                 //Floor
