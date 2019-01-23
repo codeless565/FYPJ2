@@ -33,36 +33,55 @@ public class CProgression
     public void UpdatePlayerSave(CPlayer _player)
     {
         //Stats
-        PlayerPrefs.SetInt  ("PlayerStats_Level",     _player.GetStats().Level);
-        PlayerPrefs.SetFloat("PlayerStats_CurrEXP",   _player.GetStats().EXP);
-        PlayerPrefs.SetFloat("PlayerStats_MaxEXP",    _player.GetStats().MaxEXP);
-        PlayerPrefs.SetFloat("PlayerStats_EXPBoost",  _player.GetStats().EXPBoost);
+        PlayerPrefs.SetInt("PlayerStats_Level", _player.GetStats().Level);
+        PlayerPrefs.SetFloat("PlayerStats_CurrEXP", _player.GetStats().EXP);
+        PlayerPrefs.SetFloat("PlayerStats_MaxEXP", _player.GetStats().MaxEXP);
+        PlayerPrefs.SetFloat("PlayerStats_EXPBoost", _player.GetStats().EXPBoost);
 
-        PlayerPrefs.SetFloat("PlayerStats_CurrHP",    _player.GetStats().HP);
-        PlayerPrefs.SetFloat("PlayerStats_MaxHP",     _player.GetStats().MaxHP);
-        PlayerPrefs.SetFloat("PlayerStats_CurrSP",    _player.GetStats().SP);
-        PlayerPrefs.SetFloat("PlayerStats_MaxSP",     _player.GetStats().MaxSP);
-        PlayerPrefs.SetInt  ("PlayerStats_ATK",       _player.GetStats().Attack);
-        PlayerPrefs.SetInt  ("PlayerStats_DEF",       _player.GetStats().Defense);
-        PlayerPrefs.SetFloat("PlayerStats_PlayRate",  _player.GetStats().PlayRate);
+        PlayerPrefs.SetFloat("PlayerStats_CurrHP", _player.GetStats().HP);
+        PlayerPrefs.SetFloat("PlayerStats_MaxHP", _player.GetStats().MaxHP);
+        PlayerPrefs.SetFloat("PlayerStats_CurrSP", _player.GetStats().SP);
+        PlayerPrefs.SetFloat("PlayerStats_MaxSP", _player.GetStats().MaxSP);
+        PlayerPrefs.SetInt("PlayerStats_ATK", _player.GetStats().Attack);
+        PlayerPrefs.SetInt("PlayerStats_DEF", _player.GetStats().Defense);
+        PlayerPrefs.SetFloat("PlayerStats_PlayRate", _player.GetStats().PlayRate);
         PlayerPrefs.SetFloat("PlayerStats_MoveSpeed", _player.GetStats().MoveSpeed);
 
         //Items
-        PlayerPrefs.SetInt("PlayerItems_Notes",     _player.m_InventorySystem.Notes);
-        PlayerPrefs.SetInt("PlayerItems_Gems",      _player.m_InventorySystem.Gems);
-        PlayerPrefs.SetInt("PlayerItems_HPRation",  _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPRation.GetComponent<IItem>().ItemKey));
-        PlayerPrefs.SetInt("PlayerItems_HPPotion",  _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPPotion.GetComponent<IItem>().ItemKey));
-        PlayerPrefs.SetInt("PlayerItems_HPElixir",  _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPElixir.GetComponent<IItem>().ItemKey));
-        PlayerPrefs.SetInt("PlayerItems_SPPotion",  _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.SPPotion.GetComponent<IItem>().ItemKey));
-        PlayerPrefs.SetInt("PlayerItems_SPElixir",  _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.SPElixir.GetComponent<IItem>().ItemKey));
+        PlayerPrefs.SetInt("PlayerItems_Notes", _player.m_InventorySystem.Notes);
+        PlayerPrefs.SetInt("PlayerItems_Gems", _player.m_InventorySystem.Gems);
+        PlayerPrefs.SetInt("PlayerItems_HPRation", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPRation.GetComponent<IItem>().ItemKey));
+        PlayerPrefs.SetInt("PlayerItems_HPPotion", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPPotion.GetComponent<IItem>().ItemKey));
+        PlayerPrefs.SetInt("PlayerItems_HPElixir", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.HPElixir.GetComponent<IItem>().ItemKey));
+        PlayerPrefs.SetInt("PlayerItems_SPPotion", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.SPPotion.GetComponent<IItem>().ItemKey));
+        PlayerPrefs.SetInt("PlayerItems_SPElixir", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.SPElixir.GetComponent<IItem>().ItemKey));
         PlayerPrefs.SetInt("PlayerItems_ReviveTix", _player.m_InventorySystem.GetItemQuantity(CItemDatabase.Instance.ReviveTix.GetComponent<IItem>().ItemKey));
 
         //Equipment
         PlayerPrefs.SetString("PlayerWeapon_Equipped", _player.EquippedWeapon.Name);
+
+        //Quest
+        for (int i = 0; i < 3; ++i)
+        {
+            if (PlayerPrefs.HasKey("PlayerQuestName" + i))
+            {
+                PlayerPrefs.DeleteKey("PlayerQuestName" + i);
+                PlayerPrefs.DeleteKey("PlayerQuestCurrAmt" + i);
+                PlayerPrefs.DeleteKey("PlayerQuestReqAmt" + i);
+            }
+        }
+
+        for (int i = 0; i < _player.QuestList.Count; ++i)
+        {
+            PlayerPrefs.SetString("PlayerQuestName" + i, _player.QuestList[i].QuestString);
+            PlayerPrefs.SetFloat("PlayerQuestCurrAmt" + i, _player.QuestList[i].QuestAmount);
+            PlayerPrefs.SetFloat("PlayerQuestReqAmt" + i, _player.QuestList[i].QuestCompleteAmount);
+        }
     }
 
     public bool LoadPlayerSave(CPlayer _player)
     {
+        //Stats
         if (PlayerPrefs.HasKey("PlayerStats_Level"))
         {
             _player.SetStats(
@@ -82,7 +101,7 @@ public class CProgression
         else
             _player.SetStats(1, 0, 10, 1, 50, 50, 100, 100, 10, 10, 1, 5);
 
-
+        //Items
         if (PlayerPrefs.HasKey("PlayerItems_Notes"))
         {
             _player.m_InventorySystem.Init(
@@ -98,6 +117,7 @@ public class CProgression
         else
             _player.m_InventorySystem.Init(0, int.MaxValue, 0, 0, 0, 0, 0, 0);
 
+        //Weapon
         if (PlayerPrefs.HasKey("PlayerWeapon_Equipped"))
         {
             switch (PlayerPrefs.GetString("PlayerWeapon_Equipped"))
@@ -133,6 +153,12 @@ public class CProgression
         }
         else
             _player.EquippedWeapon = new TestWeapon();
+        
+        //Quest
+        for (int i = 0; i < 3; ++i)
+        {
+        }
+
 
         return true;
     }
