@@ -95,11 +95,11 @@ public class QuestBase {
     }
 
     // for slay quests
-    public QuestBase(QuestType _questtype, QuestTarget _questtarget, float _completeamount)
+    public QuestBase(QuestType _questtype, QuestTarget _questtarget, float _completeamount, float _amount = 0)
     {
         m_QuestType = _questtype;
         m_QuestTarget = _questtarget;
-        m_Amount = 0;
+        m_Amount = _amount;
         m_CompleteAmount = _completeamount;
         m_QuestComplete = false;
         m_questString = _questtype + " " + _questtarget + " " + _completeamount + " times";
