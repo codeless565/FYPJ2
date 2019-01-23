@@ -32,8 +32,12 @@ public class CPlayer : MonoBehaviour ,IEntity
     float m_TargetedHealth;
 
 
-    public List<QuestBase> m_playerQuestList;
-    
+    private List<QuestBase> m_playerQuestList;
+    public List<QuestBase> QuestList
+    {
+        get
+        { return m_playerQuestList; }
+    }
 
     bool m_IsInRoom;
     public bool IsInRoom
