@@ -58,6 +58,7 @@ public class CItemDatabase
         m_HighGradePool.Add(m_ReviveTix);
     }
 
+    #region GetGameObject
     //Only allow other script to "get" without modification to original item
     public GameObject HPRation
     {
@@ -98,4 +99,48 @@ public class CItemDatabase
     {
         get { return m_HighGradePool[Random.Range(0, m_HighGradePool.Count)]; }
     }
+    #endregion
+
+    #region GetItemData
+    public IItem HPRationData
+    {
+        get { return m_HPRation.GetComponent<IItem>(); }
+    }
+    public IItem HPPotionData
+    {
+        get { return m_HPPotion.GetComponent<IItem>(); }
+    }
+    public IItem HPElixirData
+    {
+        get { return m_HPElixir.GetComponent<IItem>(); }
+    }
+    public IItem SPPotionData
+    {
+        get { return m_SPPotion.GetComponent<IItem>(); }
+    }
+    public IItem SPElixirData
+    {
+        get { return m_SPElixir.GetComponent<IItem>(); }
+    }
+    public IItem ReviveTixData
+    {
+        get { return m_ReviveTix.GetComponent<IItem>(); }
+    }
+
+    public IItem RandomItemData
+    {
+        get { return m_ItemPool[Random.Range(0, m_ItemPool.Count)].GetComponent<IItem>(); }
+    }
+
+    public IItem RandomLowGradeItemData
+    {
+        get { return m_LowGradePool[Random.Range(0, m_LowGradePool.Count)].GetComponent<IItem>(); }
+    }
+
+    public IItem RandomHighGradeItemData
+    {
+        get { return m_HighGradePool[Random.Range(0, m_HighGradePool.Count)].GetComponent<IItem>(); }
+    }
+    #endregion
+
 }
