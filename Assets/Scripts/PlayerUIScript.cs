@@ -39,13 +39,13 @@ public class PlayerUIScript : MonoBehaviour {
         m_FromSP = GetComponent<CPlayer>().GetStats().SP;
 
         btnlist = new List<Button>();
-        for(int i =0;i<3;++i)
+        for (int i = 0; i < 3; ++i)
         {
             Button newbtn = Instantiate(btnPrefab, m_playerQuestBoardUI.transform);
             newbtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPos, 0, 0);
-            
+
             btnlist.Add(newbtn);
-            
+
             //btnlist[i].onClick.RemoveAllListeners();
             //btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
 
@@ -122,17 +122,17 @@ public class PlayerUIScript : MonoBehaviour {
     {
         ResetQuestDisplay();
 
-        for(int i =0;i<GetComponent<CPlayer>().m_playerQuestList.Count;++i)
+        for(int i =0;i<GetComponent<CPlayer>().QuestList.Count;++i)
         {
             // todo ui
-            QuestBase quest = GetComponent<CPlayer>().m_playerQuestList[i];
+            QuestBase quest = GetComponent<CPlayer>().QuestList[i];
 
 
             btnlist[i].GetComponentInChildren<Text>().text = quest.QuestString;
             btnlist[i].GetComponent<Button>().onClick.RemoveAllListeners();
             btnlist[i].GetComponent<Button>().onClick.AddListener(delegate { CompleteQuest(quest); });
 
-            if (GetComponent<CPlayer>().m_playerQuestList[i].QuestComplete)
+            if (GetComponent<CPlayer>().QuestList[i].QuestComplete)
                 btnlist[i].GetComponent<Image>().color = Color.green;
             else
                 btnlist[i].GetComponent<Image>().color = Color.red;
@@ -143,11 +143,11 @@ public class PlayerUIScript : MonoBehaviour {
     {
         Debug.Log("Quest Complete. TODO --- Quest Reward");
 
-        foreach(QuestBase qb in GetComponent<CPlayer>().m_playerQuestList)
+        foreach(QuestBase qb in GetComponent<CPlayer>().QuestList)
         {
             if(qb == _quest)
             {
-                GetComponent<CPlayer>().m_playerQuestList.Remove(qb);
+                GetComponent<CPlayer>().QuestList.Remove(qb);
                 UpdateQuestUI();
                 return;
             }
