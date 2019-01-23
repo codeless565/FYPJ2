@@ -16,7 +16,7 @@ public class CTRoom
     public Direction prevCorridor;         // The direction of the corridor that is entering this room.
     public Dictionary<Direction, CTCorridor> nextCorridors;   // The dir of the other corridors
     public CTRoomCoordinate coordinate;
-    public Dictionary<Direction, CPathNode> pathnodes;
+    public Dictionary<PathNodeDir, CPathNode> pathnodes;
 
     public Vector2 CenterPoint
     {
@@ -34,7 +34,7 @@ public class CTRoom
         }
     }
 
-    public CPathNode GetPathnode(Direction _direction)
+    public CPathNode GetPathnode(PathNodeDir _direction)
     {
         if (pathnodes.ContainsKey(_direction))
             return pathnodes[_direction];
@@ -52,7 +52,7 @@ public class CTRoom
         prevCorridor = Direction.Size;
         coordinate = new CTRoomCoordinate(0, 0);
         nextCorridors = new Dictionary<Direction, CTCorridor>();
-        pathnodes = new Dictionary<Direction, CPathNode>();
+        pathnodes = new Dictionary<PathNodeDir, CPathNode>();
     }
 
     public int SetupAllRoom(int _boardWidth, int _boardHeight, int _roomWidth, int _roomHeight, int _corridorLength, CTRoomCoordinate _startingCoord,
@@ -214,7 +214,7 @@ public class CTRoom
         coordinate = new CTRoomCoordinate(_roomCoordinate);
 
         //set up pathnodes
-        pathnodes = new Dictionary<Direction, CPathNode>();
+        pathnodes = new Dictionary<PathNodeDir, CPathNode>();
 
         //Create Room
         switch (_prevCorridor.direction)
@@ -427,13 +427,15 @@ public class CTRoom
                     switch (nextDir)
                     {
                         case Direction.NORTH:
-                            //if the next room will be out of board
                             if (coordinate.y + 1 < _gameBoard[0].Length)
                                 if (!_gameBoard[coordinate.x][coordinate.y + 1])
                                 {
-                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(CenterPoint.x, yPos + roomHeight - 1, 0), Quaternion.identity) as GameObject;
-                                    node.GetComponent<CPathNode>().Init(CenterPoint.x, yPos + roomHeight, nextDir, this);
-                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x - 1, yPos + roomHeight - 1, PathNodeDir.NorthL, this);
+                                    pathnodes.Add(PathNodeDir.NorthL, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x + 1, yPos + roomHeight - 1, PathNodeDir.NorthR, this);
+                                    pathnodes.Add(PathNodeDir.NorthR, node.GetComponent<CPathNode>());
                                     break;
                                 }
                             continue;
@@ -441,9 +443,12 @@ public class CTRoom
                             if (coordinate.y - 1 >= 0)
                                 if (!_gameBoard[coordinate.x][coordinate.y - 1])
                                 {
-                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(CenterPoint.x, yPos, 0), Quaternion.identity) as GameObject;
-                                    node.GetComponent<CPathNode>().Init(CenterPoint.x, yPos, nextDir, this);
-                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x - 1, yPos, PathNodeDir.SouthL, this);
+                                    pathnodes.Add(PathNodeDir.SouthL, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(CenterPoint.x + 1, yPos, PathNodeDir.SouthR, this);
+                                    pathnodes.Add(PathNodeDir.SouthR, node.GetComponent<CPathNode>());
                                     break;
                                 }
                             continue;
@@ -451,9 +456,12 @@ public class CTRoom
                             if (coordinate.x + 1 < _gameBoard.Length)
                                 if (!_gameBoard[coordinate.x + 1][coordinate.y])
                                 {
-                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(xPos + roomWidth - 1, CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                    node.GetComponent<CPathNode>().Init(xPos + roomWidth, CenterPoint.y, nextDir, this);
-                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos + roomWidth - 1, CenterPoint.y - 1, PathNodeDir.EastD, this);
+                                    pathnodes.Add(PathNodeDir.EastD, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos + roomWidth - 1, CenterPoint.y + 1, PathNodeDir.EastU, this);
+                                    pathnodes.Add(PathNodeDir.EastU, node.GetComponent<CPathNode>());
                                     break;
                                 }
                             continue;
@@ -461,9 +469,12 @@ public class CTRoom
                             if (coordinate.x - 1 >= 0)
                                 if (!_gameBoard[coordinate.x - 1][coordinate.y])
                                 {
-                                    node = Object.Instantiate(Resources.Load("Pathnode"), new Vector3(xPos, CenterPoint.y, 0), Quaternion.identity) as GameObject;
-                                    node.GetComponent<CPathNode>().Init(xPos, CenterPoint.y, nextDir, this);
-                                    pathnodes.Add(nextDir, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos, CenterPoint.y - 1, PathNodeDir.WestD, this);
+                                    pathnodes.Add(PathNodeDir.WestD, node.GetComponent<CPathNode>());
+                                    node = Object.Instantiate(Resources.Load("Pathnode"), Vector3.zero, Quaternion.identity) as GameObject;
+                                    node.GetComponent<CPathNode>().Init(xPos, CenterPoint.y + 1, PathNodeDir.WestU, this);
+                                    pathnodes.Add(PathNodeDir.WestU, node.GetComponent<CPathNode>());
                                     break;
                                 }
                             continue;
