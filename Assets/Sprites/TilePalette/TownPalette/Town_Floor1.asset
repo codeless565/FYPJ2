@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Town_Floor1
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 9a1c2d1e857cd924699141c4e63dcae4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 46c34914f76090e44a89a4d4a3071938, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
