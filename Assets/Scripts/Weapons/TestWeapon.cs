@@ -8,6 +8,11 @@ public class TestWeapon : CWeapon
     float R_chargeTime = 2.0f;
     float m_SPCost = 50.0f;
 
+    public override string Name
+    {
+        get { return "TestWeapon"; }
+    }
+
     public TestWeapon()
     {
         m_WeaponStats = new CWeaponStats();

@@ -85,6 +85,15 @@ public class CInventorySystem
         return null;
     }
 
+    public int GetItemQuantity(string _itemKey)
+    {
+        if (m_Items.ContainsKey(_itemKey))
+        {
+            return m_Items[_itemKey].quantity;
+        }
+        return 0;
+    }
+
     //Set _value to negative if subtracting value
     public void AddNotes(int _value)
     {

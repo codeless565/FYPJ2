@@ -18,6 +18,11 @@ public class CPlayer : MonoBehaviour ,IEntity
     public GameObject InventoryUI;
 
     CWeapon m_EquippedWeapon;
+    public CWeapon EquippedWeapon
+    {
+        get { return m_EquippedWeapon; }
+        set { m_EquippedWeapon = value; }
+    }
 
     public Slider HPSlider;
     public Slider SPSlider;
@@ -27,8 +32,12 @@ public class CPlayer : MonoBehaviour ,IEntity
     float m_TargetedHealth;
 
 
-    public List<QuestBase> m_playerQuestList;
-    
+    private List<QuestBase> m_playerQuestList;
+    public List<QuestBase> QuestList
+    {
+        get
+        { return m_playerQuestList; }
+    }
 
     bool m_IsInRoom;
     public bool IsInRoom
@@ -62,19 +71,21 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void Init()
     {
         this.name = "Player";
+        m_PlayerStats = new CStats();
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
-        m_InventorySystem.Init(100, int.MaxValue, 1, 2, 3, 4, 0, 0);
+
+        CProgression.Instance.LoadPlayerSave(this);
+        //SetStats(1, 0, 10, 1, 50, 50, 100, 100, 10, 10, 1, 5);
+        //m_InventorySystem.Init(100, int.MaxValue, 1, 2, 3, 4, 0, 0);
+        //m_EquippedWeapon = new TestWeapon();
 
         m_RoomCoord = new CTRoomCoordinate(0, 0);
 
         PostOffice.Instance.Register(name, gameObject); // TODO Move to Spawn() ?
 
-        m_PlayerStats = new CStats();
-        SetStats(1, 0, 10, 1, 50, 50, 100, 100, 10, 10, 1, 5);
         m_IsImmortal = false;
         m_PlayerSprite = GetComponent<SpriteRenderer>().sprite;
 
-        m_EquippedWeapon = new TestWeapon();
         m_PrestigeSystem = new PrestigeSystem();
         AchievementSystem.Instance.Init(this.GetStats());
         m_playerQuestList = new List<QuestBase>();
