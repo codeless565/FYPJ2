@@ -9,6 +9,7 @@ public class DungeonExit : MonoBehaviour {
     {
         if (_other.tag == "Player")
         {
+            CProgression.Instance.UpdateDungeonProgression();
             SceneManager.LoadScene("TownScene");
         }
     }

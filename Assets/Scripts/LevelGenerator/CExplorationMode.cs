@@ -17,7 +17,7 @@ public class CExplorationMode : MonoBehaviour {
 
         if (SceneManager.GetActiveScene().name == "TownScene")
         {
-            player.transform.position = new Vector3(1.5f, -13, 0);
+            player.transform.position = new Vector3(0, -13, 0);
             return;
         }
 
