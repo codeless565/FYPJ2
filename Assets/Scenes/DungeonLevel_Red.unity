@@ -1925,6 +1925,8 @@ GameObject:
   - component: {fileID: 1931853796}
   - component: {fileID: 1931853798}
   - component: {fileID: 1931853797}
+  - component: {fileID: 1931853800}
+  - component: {fileID: 1931853799}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -2022,6 +2024,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NumberOfItems: -1
+--- !u!114 &1931853799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1931853793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ecf7fa2dae4c144964392255703d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FloorDisplayPanelPrefab: {fileID: 1730411995271702, guid: 56b04cf6e96e47e49b44d85b0f3947c4,
+    type: 2}
+--- !u!114 &1931853800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1931853793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c1473653ffbea84ca8e0ccb5cdc360e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 319128169}
+  GameOverPanelPrefab: {fileID: 1698700460022950, guid: 85e7d8f4810b0654ea840f3516806209,
+    type: 2}
 --- !u!1 &2140261693
 GameObject:
   m_ObjectHideFlags: 0

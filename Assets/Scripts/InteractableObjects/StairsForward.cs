@@ -25,24 +25,25 @@ public class StairsForward : MonoBehaviour
 
             if (CurrFloor == CTDungeon.Instance.BossFloorRed + 1)
             {
-                SceneManager.LoadScene("GameScene");
+                SceneManager.LoadScene("TownScene");
                 return;
             }
 
             if (CurrFloor == CTDungeon.Instance.BossFloorPink)
             {
-                Debug.Log("BossPinkStage Not Implemented owo");
+                SceneManager.LoadScene("TownScene");
                 return;
             }
 
             if (CurrFloor == CTDungeon.Instance.BossFloorPink + 1)
             {
                 //Victory stage? 
+                SceneManager.LoadScene("TownScene");
                 Debug.Log("VictoryStage Not Implemented uwu");
                 return;
             }
             else
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                SceneManager.LoadScene("DungeonLevel_Red");
         }
     }
 }

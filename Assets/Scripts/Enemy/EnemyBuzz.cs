@@ -61,7 +61,7 @@ public class EnemyBuzz : MonoBehaviour, IEnemy
         m_RoomCoord = new CTRoomCoordinate(0,0);
 
         m_EnemyStats = new CStats();
-        SetStats(1, 5, 10, 0, 20, 10, 10, 10, 10, 10, 1, 2);
+        SetStatsByLevel(CTDungeon.Instance.currentFloor);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
 
@@ -83,7 +83,7 @@ public class EnemyBuzz : MonoBehaviour, IEnemy
         m_RoomCoord = new CTRoomCoordinate(_spawnCoord);
 
         m_EnemyStats = new CStats();
-        SetStats(1, 5, 10, 0, 10, 10, 10, 10, 10, 10, 1, 2);
+        SetStatsByLevel(CTDungeon.Instance.currentFloor);
         m_IsImmortal = false;
         m_EnemySprite = GetComponent<SpriteRenderer>().sprite;
         
@@ -104,6 +104,7 @@ public class EnemyBuzz : MonoBehaviour, IEnemy
     {
         PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, m_EnemyStats.Level * m_EnemyStats.EXP));
         PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDPROP, NoiseSlayer.m_AchievementName, KillNoiseProp.m_propertyname, 1f));
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
         Destroy(gameObject);
     }
 
@@ -193,5 +194,23 @@ public class EnemyBuzz : MonoBehaviour, IEnemy
         m_EnemyStats.MoveSpeed = _movespeed;
     }
 
+    public void SetStatsByLevel(int _Floor)
+    {
+        int RandLevel = Random.Range(_Floor - 3, _Floor + 3);
+        if (RandLevel < 1)
+            RandLevel = 1;
+        m_EnemyStats.Level = RandLevel;
+        m_EnemyStats.EXP = 7 * RandLevel;
+        m_EnemyStats.MaxEXP = 7 * RandLevel;
+        m_EnemyStats.EXPBoost = 0;
 
+        m_EnemyStats.MaxHP = m_EnemyStats.HP = 15 * RandLevel;
+        m_EnemyStats.MaxSP = m_EnemyStats.SP = 20 * RandLevel;
+
+        m_EnemyStats.Attack = 7 * RandLevel;
+        m_EnemyStats.Defense = 7 * RandLevel;
+
+        m_EnemyStats.PlayRate = 0.1f * RandLevel + 1;
+        m_EnemyStats.MoveSpeed = 3;
+    }
 }

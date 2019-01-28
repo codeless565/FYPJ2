@@ -165,8 +165,31 @@ public class CPlayer : MonoBehaviour ,IEntity
         //        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
         //}
         GetComponent<PlayerUIScript>().AddSP(m_PlayerStats.SP, Time.deltaTime);
+
+        //Use item
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            UseItem(CItemDatabase.Instance.HPRationData.ItemKey);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            UseItem(CItemDatabase.Instance.HPPotionData.ItemKey);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UseItem(CItemDatabase.Instance.HPElixirData.ItemKey);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            UseItem(CItemDatabase.Instance.SPPotionData.ItemKey);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad5) || Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            UseItem(CItemDatabase.Instance.SPElixirData.ItemKey);
+        }
+
     }
-    
+
 
     public void OutOfCombatSystem()
     {

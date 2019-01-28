@@ -26,7 +26,10 @@ public class PostOffice {
         if (go == null)
             return;
         if (m_addressBook.ContainsKey(addressname))
+        {
+            m_addressBook[addressname] = go;
             return;
+        }
         m_addressBook.Add(addressname, go);
     }
 
