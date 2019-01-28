@@ -113,7 +113,7 @@ public class PlayerUIScript : MonoBehaviour {
         SPSlider.fillAmount = m_Player.GetStats().SP / m_Player.GetStats().MaxSP;
         EXPSlider.fillAmount = m_Player.GetStats().EXP / m_Player.GetStats().MaxEXP;
         ChargingCircle.fillAmount = m_Player.EquippedWeapon.ChargingState;
-        HealthPercentageDisplay.text = (m_Player.GetStats().HP / m_Player.GetStats().MaxHP).ToString() + "%";
+        HealthPercentageDisplay.text = ((int)(m_Player.GetStats().HP / m_Player.GetStats().MaxHP * 100)).ToString() + "%";
         LevelDisplay.text = m_Player.GetStats().Level.ToString();
     }
 

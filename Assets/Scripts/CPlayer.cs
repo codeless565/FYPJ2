@@ -352,18 +352,18 @@ public class CPlayer : MonoBehaviour ,IEntity
     public void IsDamaged(float _incomingDamage, AttackType _attackType)
     {
         // Guardian Angel 
-        if (m_PrestigeSystem.GetList().ContainsKey(GuardianAngel.prestigename))
+        if (m_PrestigeSystem.GetList().ContainsKey("GuardianAngel"))
         {
-            GuardianAngel perfectionprestige = (GuardianAngel)m_PrestigeSystem.GetPrestige(GuardianAngel.prestigename);
+            GuardianAngel perfectionprestige = (GuardianAngel)m_PrestigeSystem.GetPrestige("GuardianAngel");
 
             if (perfectionprestige.isInvulnerable)
                 return;
         }
 
         // Perfection
-        if (m_PrestigeSystem.GetList().ContainsKey(Perfection.prestigename))
+        if (m_PrestigeSystem.GetList().ContainsKey("Perfection"))
         {
-            Perfection perfectionprestige = (Perfection)m_PrestigeSystem.GetPrestige(Perfection.prestigename);
+            Perfection perfectionprestige = (Perfection)m_PrestigeSystem.GetPrestige("Perfection");
 
             if (perfectionprestige.isProtected)
             {
