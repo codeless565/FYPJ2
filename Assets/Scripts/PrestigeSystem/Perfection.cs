@@ -7,6 +7,8 @@ public class Perfection : PrestigeBase
     private CPlayer playerInfo;
     public float timer;
     public static string prestigename;
+    public bool isProtected;
+
     public string PrestigeName
     {
         get
@@ -20,6 +22,7 @@ public class Perfection : PrestigeBase
         playerInfo = _playerinfo;
         prestigename = "Perfection";
         timer = 0.0f;
+        isProtected = true;
     }
 
     public void AddPrestigeStats()
@@ -32,9 +35,9 @@ public class Perfection : PrestigeBase
 
     public void Update()
     {
-        // reset if player is damaged
-        timer += Time.deltaTime ;
-        Debug.Log("timer: " + timer);
+        timer += Time.deltaTime;
 
+        if (timer >= 10f)
+            isProtected = true;
     }
 }
