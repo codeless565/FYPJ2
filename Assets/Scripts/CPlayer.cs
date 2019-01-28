@@ -175,8 +175,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         if (OOCtimer >= 5f) // 5s
         {
-            // encore regen on active
-            if(m_PrestigeSystem.GetList().ContainsKey(Encore.prestigename))
+            if(m_PrestigeSystem.GetList().ContainsKey("Encore"))
             {
                 Encore encoreprestige = (Encore)m_PrestigeSystem.GetPrestige(Encore.prestigename);
                 if(encoreprestige.isActive)
