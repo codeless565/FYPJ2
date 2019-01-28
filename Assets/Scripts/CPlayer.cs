@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Sprite))]
 public class CPlayer : MonoBehaviour ,IEntity
@@ -24,12 +25,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         set { m_EquippedWeapon = value; }
     }
 
-    public Slider HPSlider;
-    public Slider SPSlider;
-    public Slider EXPSlider;
-
-    float m_FromHealth;
-    float m_TargetedHealth;
+    float OOCtimer = 0f;
 
 
     private List<QuestBase> m_playerQuestList;
@@ -168,24 +164,29 @@ public class CPlayer : MonoBehaviour ,IEntity
         //    if(m_playerQuestList.Count > 0)
         //        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
         //}
-
+        GetComponent<PlayerUIScript>().AddSP(m_PlayerStats.SP, Time.deltaTime);
     }
+    
 
     public void OutOfCombatSystem()
     {
-        /* float OOCtimer=0f;
-         * OOCtimer += Time.DeltaTime;
-         * 
-         * inside IsDamaged(), OOCTimer =0f if get damaged
-         * 
-         * if(OOCtimer >= 5f) // 5s 
-         *         GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1);
-         * 
-         * add HealthRegen stats for encore prestige
-         * *         GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1*HealthRegen);
-         */
+        OOCtimer += Time.deltaTime;
 
 
+        if (OOCtimer >= 5f) // 5s
+        {
+            // encore regen on active
+            if(m_PrestigeSystem.GetList().ContainsKey(Encore.prestigename))
+            {
+                Encore encoreprestige = (Encore)m_PrestigeSystem.GetPrestige(Encore.prestigename);
+                if(encoreprestige.isActive)
+                    GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 2);
+            }
+            else
+                GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1);
+
+
+        }
     }
 
     public void UpdateQuest(string _questtype, string _questtarget)
@@ -267,8 +268,8 @@ public class CPlayer : MonoBehaviour ,IEntity
                 m_PrestigeSystem.AddPrestige(new PopularityBoost(this));
         else if (m_PlayerStats.Level == 60)
             m_PrestigeSystem.AddPrestige(new Perfection(this));
-        //else if (m_PlayerStats.Level == 70)
-        //    m_PrestigeSystem.GetList().Add(new Encore());
+        else if (m_PlayerStats.Level == 70)
+            m_PrestigeSystem.AddPrestige(new Encore(this));
         else if (m_PlayerStats.Level == 80)
             m_PrestigeSystem.AddPrestige(new GuardianAngel(this));
         //else if (m_PlayerStats.Level == 90)
@@ -298,6 +299,9 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void Attack()
     {
+        if (SceneManager.GetActiveScene().name == "TownScene")
+            return;
+
         if (Input.GetMouseButtonDown(0))
             m_EquippedWeapon.IsCharging();
 
@@ -366,7 +370,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         
       
         GetComponent<PlayerUIScript>().RemoveHealth(m_PlayerStats.HP, damage);
-        
+        OOCtimer = 0f;
     }
 
     public void SetSprite(Sprite _sprite)
