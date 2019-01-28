@@ -82,17 +82,17 @@ public class PlayerUIScript : MonoBehaviour {
                 GetComponent<CPlayer>().GetStats().EXP = m_TargetedEXP;
         }
 
-        if (GetComponent<CPlayer>().GetStats().SP > m_TargetedHealth)
+        if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
         {
-            GetComponent<CPlayer>().GetStats().SP -= Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP < m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedHealth;
+            GetComponent<CPlayer>().GetStats().SP -= Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
+                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
         }
-        else if (GetComponent<CPlayer>().GetStats().SP < m_TargetedHealth)
+        else if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
         {
-            GetComponent<CPlayer>().GetStats().SP += Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP > m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedHealth;
+            GetComponent<CPlayer>().GetStats().SP += Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
+                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
         }
 
 
@@ -144,7 +144,7 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void CompleteQuest(QuestBase _quest)
     {
-        Debug.Log("Quest Complete. TODO --- Quest Reward");
+        //Debug.Log("Quest Complete. TODO --- Quest Reward");
 
         foreach(QuestBase qb in GetComponent<CPlayer>().QuestList)
         {
@@ -201,8 +201,8 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void AddSP(float _SP, float _amount)
     {
-        if ((m_TargetedSP + _amount) >= GetComponent<CPlayer>().GetStats().MaxHP)
-            m_TargetedSP = GetComponent<CPlayer>().GetStats().MaxHP;
+        if ((m_TargetedHealth + _amount) >= GetComponent<CPlayer>().GetStats().MaxSP)
+            m_TargetedHealth = GetComponent<CPlayer>().GetStats().MaxSP;
         else
             m_TargetedSP += _amount;
 
