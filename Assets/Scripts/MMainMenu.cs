@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class MMainMenu : MonoBehaviour {
 
-    public GameObject MainMenuPanel;
-    public GameObject OptionsPanel;
+    [SerializeField]
+    GameObject MainMenuPanel;
+    [SerializeField]
+    GameObject OptionsPanel;
+    [SerializeField]
+    GameObject WarningReset;
 
     // Use this for initialization
     void Start () {
         MainMenuPanel.SetActive(true);
+        WarningReset.SetActive(false);
     }
 
     // Update is called once per frame
@@ -20,12 +25,27 @@ public class MMainMenu : MonoBehaviour {
 
     public void StartGame_Click()
     {
-        SceneManager.LoadScene("GameScene");
+    }
+    public void StartGame_OpenRestartProgressConfirmation()
+    {
+        WarningReset.SetActive(true);
+    }
+    public void StartGame_RestartYes()
+    {
+        WarningReset.SetActive(false);
+        SceneManager.LoadScene("TownScene");
+        CProgression.Instance.ResetSave();
         MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("townscene"));// 2 is game scene
     }
+    public void StartGame_RestartNo()
+    {
+        WarningReset.SetActive(false);
+    }
+
     public void ContinueGame_Click()
     {
-        print("Not done");
+        SceneManager.LoadScene("TownScene");
+        MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("townscene"));// 2 is game scene
     }
     public void MusicalAttack_Click()
     {

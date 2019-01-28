@@ -26,6 +26,10 @@ public class CProgression
     {
     }
 
+    public void ResetSave()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 
     /******************************
     * UNIVERSAL PROGRESSION SAVES
@@ -176,7 +180,7 @@ public class CProgression
             }
         }
         else
-            _player.EquippedWeapon = new TestWeapon();
+            _player.EquippedWeapon = new Melodica();
         
         //Quest
         for (int i = 0; i < 3; ++i)

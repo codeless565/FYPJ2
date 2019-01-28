@@ -74,9 +74,6 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
 
         CProgression.Instance.LoadPlayerSave(this);
-        //SetStats(1, 0, 10, 1, 50, 50, 100, 100, 10, 10, 1, 5);
-        //m_InventorySystem.Init(100, int.MaxValue, 1, 2, 3, 4, 0, 0);
-        //m_EquippedWeapon = new TestWeapon();
 
         m_RoomCoord = new CTRoomCoordinate(0, 0);
 
@@ -244,30 +241,35 @@ public class CPlayer : MonoBehaviour ,IEntity
     {
         RemoveAllPrestigeStats();
 
-            m_PlayerStats.Level += 1;
-            float excessEXP = GetComponent<PlayerUIScript>().m_TargetedEXP - m_PlayerStats.MaxEXP;
-            m_PlayerStats.EXP = 0f;
+        int CurrLevel = m_PlayerStats.Level += 1;
+        float excessEXP = GetComponent<PlayerUIScript>().m_TargetedEXP - m_PlayerStats.MaxEXP;
+        m_PlayerStats.EXP = 0f;
 
-            m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
-            GetComponent<PlayerUIScript>().EXPSlider.fillAmount = m_PlayerStats.MaxEXP;
-            GetComponent<PlayerUIScript>().m_FromEXP = m_PlayerStats.EXP;
-            GetComponent<PlayerUIScript>().m_TargetedEXP = m_PlayerStats.EXP;
+        m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
+        GetComponent<PlayerUIScript>().EXPSlider.fillAmount = m_PlayerStats.MaxEXP;
+        GetComponent<PlayerUIScript>().m_FromEXP = m_PlayerStats.EXP;
+        GetComponent<PlayerUIScript>().m_TargetedEXP = m_PlayerStats.EXP;
 
-            // HP/SP level update with UI Update
-            //m_PlayerStats.MaxHP = m_PlayerStats.Level * 10;
-            //m_PlayerStats.HP = m_PlayerStats.MaxHP;
+        // Update State according to level
+        m_PlayerStats.MaxHP = CurrLevel * 10;
+        m_PlayerStats.HP += m_PlayerStats.MaxHP * 0.1f;
+        m_PlayerStats.MaxSP = CurrLevel * 10;
+        m_PlayerStats.SP += m_PlayerStats.MaxHP * 0.1f;
+        m_PlayerStats.Attack = CurrLevel * 8;
+        m_PlayerStats.Defense = CurrLevel * 8;
+        m_PlayerStats.PlayRate = CurrLevel * 0.05f + 1;
 
-            print("Level up");
-            if (m_PlayerStats.Level == 10)
-                m_PrestigeSystem.AddPrestige(new Maintenance(this));
-            else if (m_PlayerStats.Level == 20)
-                m_PrestigeSystem.AddPrestige(new Metronome(this));
-            else if (m_PlayerStats.Level == 30)
-                m_PrestigeSystem.AddPrestige(new Amplifier(this));
-            else if (m_PlayerStats.Level == 40)
-                m_PrestigeSystem.AddPrestige(new NoiseCanceller(this));
-            else if (m_PlayerStats.Level == 50)
-                m_PrestigeSystem.AddPrestige(new PopularityBoost(this));
+        print("Level up");
+        if (m_PlayerStats.Level == 10)
+            m_PrestigeSystem.AddPrestige(new Maintenance(this));
+        else if (m_PlayerStats.Level == 20)
+            m_PrestigeSystem.AddPrestige(new Metronome(this));
+        else if (m_PlayerStats.Level == 30)
+            m_PrestigeSystem.AddPrestige(new Amplifier(this));
+        else if (m_PlayerStats.Level == 40)
+            m_PrestigeSystem.AddPrestige(new NoiseCanceller(this));
+        else if (m_PlayerStats.Level == 50)
+            m_PrestigeSystem.AddPrestige(new PopularityBoost(this));
         else if (m_PlayerStats.Level == 60)
             m_PrestigeSystem.AddPrestige(new Perfection(this));
         else if (m_PlayerStats.Level == 70)
@@ -279,8 +281,8 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         // Add Excess EXP
         GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP, excessEXP);
-            
-        
+
+
         AddAllPrestigeStats();
     }
 
