@@ -17,9 +17,12 @@ public class CStateAttackRanged : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     public CStateAttackRanged(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
     }
 
     public void EnterState()
@@ -28,20 +31,20 @@ public class CStateAttackRanged : IStateBase
 
     public void UpdateState()
     {
-        if (m_GO.GetComponent<IEnemy>().CanAttack)
+        if (m_Owner.CanAttack)
         {
             GameObject newBullet = Object.Instantiate(Bullet, m_GO.transform.position, Quaternion.identity);
             newBullet.GetComponent<IProjectile>().Init(
-                m_GO.GetComponent<IEnemy>().GetStats().Attack, 10, 10, 
-                ((Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position).normalized, 
+                m_Owner.GetStats().Attack, 10, 10, 
+                ((Vector2)m_Owner.Target.transform.position - (Vector2)m_GO.transform.position).normalized, 
                 ProjectileType.Normal, AttackType.Basic);
 
-            m_GO.GetComponent<IEnemy>().ResetAtkTimer();
+            m_Owner.ResetAtkTimer();
         }
 
-        if (((Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position).magnitude > 3)
+        if (((Vector2)m_Owner.Target.transform.position - (Vector2)m_GO.transform.position).magnitude > 3)
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
+            m_Owner.StateMachine.SetNextState("StateChase");
         }
     }
 

@@ -15,29 +15,32 @@ public class CStatePatrol : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     Vector2 m_destination;
 
     public CStatePatrol(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
         EnterState();
     }
 
     public void EnterState()
     {
-        if (!m_GO.GetComponent<IEnemy>().IsInRoom)
+        if (!m_Owner.IsInRoom)
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChangeRoom");
+            m_Owner.StateMachine.SetNextState("StateChangeRoom");
             return;
         }
 
-        CTRoom temp = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRoomFromCoord(m_GO.GetComponent<IEnemy>().RoomCoordinate);
+        CTRoom temp = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].GetRoomFromCoord(m_Owner.RoomCoordinate);
 
         if (temp != null)
             m_destination = temp.RandomPoint;
         else
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChangeRoom");
+            m_Owner.StateMachine.SetNextState("StateChangeRoom");
             Debug.Log(m_GO.name + "::EnterState() ERROR. Dungeon.Floor[currentFloor].GetRoomFromCoord() return null");
         }
     }
@@ -45,24 +48,24 @@ public class CStatePatrol : IStateBase
     public void UpdateState()
     {
         if (m_destination == Vector2.zero)
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+            m_Owner.StateMachine.SetNextState("StateIdle");
         else
         {
             Vector2 forwardVec = m_destination - (Vector2)m_GO.transform.position;
 
             //is able to reach next point in this frame
-            if (forwardVec.magnitude <= m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * Time.deltaTime)
+            if (forwardVec.magnitude <= m_Owner.GetStats().MoveSpeed * Time.deltaTime)
             {
-                m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * Time.deltaTime);
-                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+                m_GO.transform.Translate(forwardVec.normalized * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
+                m_Owner.StateMachine.SetNextState("StateIdle");
             }
             else
-                m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEnemy>().GetStats().MoveSpeed * Time.deltaTime);
+                m_GO.transform.Translate(forwardVec.normalized * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
 
             if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= 5)
             {
-                m_GO.GetComponent<IEnemy>().Target = GameObject.FindGameObjectWithTag("Player");
-                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
+                m_Owner.Target = GameObject.FindGameObjectWithTag("Player");
+                m_Owner.StateMachine.SetNextState("StateChase");
             }
         }
     }

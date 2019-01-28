@@ -15,6 +15,8 @@ public class CStateChangeRoom : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     Queue<CPathNode> m_Pathing;
     CPathNode nextDest;
 
@@ -24,6 +26,7 @@ public class CStateChangeRoom : IStateBase
     public CStateChangeRoom(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
         EnterState();
     }
 
@@ -32,14 +35,14 @@ public class CStateChangeRoom : IStateBase
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
-        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
+        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_Owner.RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing != null)
         {
             if (m_Pathing.Count > 0)
                 nextDest = m_Pathing.Dequeue();
         }
         else
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+            m_Owner.StateMachine.SetNextState("StateIdle");
 
         m_lastknowposition = m_GO.gameObject.transform.position;
     }
@@ -48,31 +51,31 @@ public class CStateChangeRoom : IStateBase
     {
         if (nextDest == null || m_Pathing == null)
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateIdle");
+            m_Owner.StateMachine.SetNextState("StateIdle");
             return;
         }
 
         if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= 5)
         {
             Debug.Log("Dist to plyer = " + (m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude);
-            m_GO.GetComponent<IEnemy>().Target = GameObject.FindGameObjectWithTag("Player");
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
+            m_Owner.Target = GameObject.FindGameObjectWithTag("Player");
+            m_Owner.StateMachine.SetNextState("StateChase");
         }
 
         //Move to next point
         Vector2 forwardVec = nextDest.position - (Vector2)m_GO.transform.position;
 
         //Reaching next point in the this frame
-        if (forwardVec.magnitude <= m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime)
+        if (forwardVec.magnitude <= m_Owner.GetStats().MoveSpeed * Time.deltaTime)
         {
-            m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
+            m_GO.transform.Translate(forwardVec.normalized * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
             if (m_Pathing.Count > 0) //still have more point till final point
                 nextDest = m_Pathing.Dequeue();
             else //Reached
                 m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StatePatrol");
         }
         else
-            m_GO.transform.Translate(forwardVec.normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
+            m_GO.transform.Translate(forwardVec.normalized * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
 
         //Make way if it is blocked
         if ((m_lastknowposition - m_GO.gameObject.transform.position).magnitude < 1)
@@ -81,7 +84,7 @@ public class CStateChangeRoom : IStateBase
             if (m_blockedTime >= 1)
             {
                 Vector2 makeleft = -Vector3.Cross(forwardVec, Vector3.forward).normalized;
-                m_GO.transform.Translate(makeleft * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
+                m_GO.transform.Translate(makeleft * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
             }
         }
         else

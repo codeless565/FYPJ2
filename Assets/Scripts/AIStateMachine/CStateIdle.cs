@@ -15,11 +15,14 @@ public class CStateIdle : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     float m_timer;
 
     public CStateIdle(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
         EnterState();
     }
 
@@ -35,15 +38,15 @@ public class CStateIdle : IStateBase
         if (m_timer <= 0.0f)
         {
             if (Random.Range(0.0f, 1.0f) < 0.5f)
-                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StatePatrol");
+                m_Owner.StateMachine.SetNextState("StatePatrol");
             else
-                m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChangeRoom");
+                m_Owner.StateMachine.SetNextState("StateChangeRoom");
         }
 
         if ((m_GO.transform.position - GameObject.FindGameObjectWithTag("Player").transform.position).magnitude <= 5)
         {
-            m_GO.GetComponent<IEnemy>().Target = GameObject.FindGameObjectWithTag("Player");
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
+            m_Owner.Target = GameObject.FindGameObjectWithTag("Player");
+            m_Owner.StateMachine.SetNextState("StateChase");
         }
     }
 

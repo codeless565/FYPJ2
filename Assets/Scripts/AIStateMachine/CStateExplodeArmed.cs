@@ -15,16 +15,19 @@ public class CStateExplodeArmed : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     float m_CountdownTimer;
     public CStateExplodeArmed(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
         m_CountdownTimer = 3.0f;
     }
 
     public void EnterState()
     {
-        m_GO.GetComponent<IEnemy>().ResetAtkTimer();
+        m_Owner.ResetAtkTimer();
         m_CountdownTimer = 3.0f;
     }
 
@@ -33,12 +36,12 @@ public class CStateExplodeArmed : IStateBase
         m_CountdownTimer -= Time.deltaTime;
         if (m_CountdownTimer <= 0)
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateExplode");
+            m_Owner.StateMachine.SetNextState("StateExplode");
         }
 
-        if (((Vector2)m_GO.GetComponent<IEnemy>().Target.transform.position - (Vector2)m_GO.transform.position).magnitude > 2)
+        if (((Vector2)m_Owner.Target.transform.position - (Vector2)m_GO.transform.position).magnitude > 2)
         {
-            m_GO.GetComponent<IEnemy>().StateMachine.SetNextState("StateChase");
+            m_Owner.StateMachine.SetNextState("StateChase");
         }
     }
 
