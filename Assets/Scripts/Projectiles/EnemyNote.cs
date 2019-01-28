@@ -79,14 +79,13 @@ public class EnemyNote : MonoBehaviour, IProjectile
         if (_other.tag == "Monster")
             return;
 
-        Debug.Log("collided name: " + _other.tag);
         if(_other.tag == "Wall")
         {
             Destroy(gameObject);
         }
         else if (_other.tag == "Player")
         {
-            CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
+            _other.GetComponent<IEntity>().IsDamaged(m_damage, m_attackType);
             Destroy(gameObject);
         }
     }

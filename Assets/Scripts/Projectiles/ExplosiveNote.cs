@@ -84,7 +84,6 @@ public class ExplosiveNote : MonoBehaviour, IProjectile
         if (_other.tag == "Player")
             return;
 
-        Debug.Log("collided name: " + _other.tag);
         if (_other.tag == "Wall")
         {
             GameObject newBullet1 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
@@ -109,7 +108,7 @@ public class ExplosiveNote : MonoBehaviour, IProjectile
         else if (_other.tag == "Monster")
         {
             //Hit monster, deal damage and spawn 
-            CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
+            _other.GetComponent<IEntity>().IsDamaged(m_damage, m_attackType);
             GameObject newBullet1 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
             newBullet1.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(0, 1).normalized, ProjectileType.Normal, AttackType.Basic);
             GameObject newBullet2 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);

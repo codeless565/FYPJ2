@@ -58,7 +58,6 @@ public class Guitar : CWeapon
     {
         if (m_firingDelay > 0)
         {
-            Debug.Log("Melodica.NormalAttack Called - m_firingDelay > 0");
             return;
         }
         m_isCharging = true;
@@ -75,8 +74,6 @@ public class Guitar : CWeapon
             return;
         }
 
-        Debug.Log("Melodica.IsAttacking Called - m_firingDelay = " + m_firingDelay);
-
         if (C_chargeTime >= R_chargeTime)
             ChargeAttack(_damage, _position, _direction, _firingDelay);
         else
@@ -86,7 +83,6 @@ public class Guitar : CWeapon
     protected override void NormalAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.NormalAttack Called - Fired");
         GameObject newBullet = Object.Instantiate(NormalBullet, _transfrom.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
 
@@ -101,8 +97,6 @@ public class Guitar : CWeapon
     protected override void ChargeAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create ChargeAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.ChargeAttack Called - Fired");
-
         m_isFiring = true;
         m_damage = _damage;
         m_playerTransform = _transfrom;
@@ -125,8 +119,6 @@ public class Guitar : CWeapon
             return 0.0f;
 
         //Create SpecialAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.SpecialAttack Called");
-
         GameObject newBullet = Object.Instantiate(SpecialBullet, _transfrom.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Explosive, AttackType.Special);
 
@@ -149,7 +141,6 @@ public class Guitar : CWeapon
             newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Charged);
             m_firedCount += 1;
             m_firingBTime = 0.0f;
-            Debug.Log("fireTime = " + m_firingBTime);
 
             if (m_firedCount >= 3)
             {

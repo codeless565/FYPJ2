@@ -39,7 +39,6 @@ public class Melodica : CWeapon
     {
         if (m_firingDelay > 0)
         {
-            Debug.Log("Melodica.NormalAttack Called - m_firingDelay > 0");
             return;
         }
         m_isCharging = true;
@@ -56,8 +55,6 @@ public class Melodica : CWeapon
             return;
         }
 
-        Debug.Log("Melodica.IsAttacking Called - m_firingDelay = " + m_firingDelay);
-
         if (C_chargeTime >= R_chargeTime)
             ChargeAttack(_damage, _transfrom, _direction, _firingDelay);
         else
@@ -67,7 +64,6 @@ public class Melodica : CWeapon
     protected override void NormalAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.NormalAttack Called - Fired");
         GameObject newBullet = Object.Instantiate(NormalBullet, _transfrom.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
 
@@ -82,7 +78,6 @@ public class Melodica : CWeapon
     protected override void ChargeAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create ChargeAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.ChargeAttack Called - Fired");
         GameObject newBullet = Object.Instantiate(ChargeBullet, _transfrom.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Piercing, AttackType.Charged);
 
@@ -100,8 +95,6 @@ public class Melodica : CWeapon
             return 0.0f;
 
         //Create SpecialAttack prefab or smthing with projectile script
-        Debug.Log("Melodica.SpecialAttack Called");
-
         GameObject newBullet = Object.Instantiate(SpecialBullet, _transfrom.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Explosive, AttackType.Special);
 

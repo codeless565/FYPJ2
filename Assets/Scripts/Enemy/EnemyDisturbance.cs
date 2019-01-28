@@ -129,9 +129,15 @@ public class EnemyDisturbance : MonoBehaviour, IEnemy, IAreaOfEffect
         return m_EnemyStats;
     }
 
-    public void IsDamaged(float damage)
+    public void IsDamaged(float _IncomingDamage, AttackType _attackType)
     {
-        m_EnemyStats.HP -= damage;
+        if (_attackType == AttackType.Size)
+        {
+            m_EnemyStats.HP += _IncomingDamage;
+            if (m_EnemyStats.HP > m_EnemyStats.MaxHP)
+                m_EnemyStats.HP = m_EnemyStats.MaxHP;
+        }
+        m_EnemyStats.HP -= CDamageCalculator.Instance.CalculateDamage(_IncomingDamage, m_EnemyStats.Defense);
     }
 
     public void Spawn()

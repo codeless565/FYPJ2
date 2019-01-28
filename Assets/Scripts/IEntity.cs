@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IEntity {
     void Init();
     void Delete();
-    void IsDamaged(float damage);
+    void IsDamaged(float _IncomingDamage, AttackType _attackType = AttackType.Basic);
     bool GetIsImmortalObject();
     CStats GetStats();
     void SetStats(int _level, float _exp, float _maxexp, float _expboost, float _hp, float _maxhp, float _sp, float _maxsp, int _attack, int _defense, float _playrate, float _movespeed);
