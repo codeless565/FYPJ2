@@ -72,7 +72,8 @@ public class TestWeapon : CWeapon
         m_isCharging = false;
         C_chargeTime = 0.0f;
 
-        MAudio.Instance.PlayFX(MAudio.Instance.FXClipList[0]);
+        MAudio.Instance.PlayFX(AudioDatabase.Instance.getFXAudio("normalpiano"));
+
     }
 
     protected override void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
@@ -88,6 +89,9 @@ public class TestWeapon : CWeapon
         //reset charging status
         m_isCharging = false;
         C_chargeTime = 0.0f;
+
+        MAudio.Instance.PlayFX(AudioDatabase.Instance.getFXAudio("specialpiano"));
+
     }
 
     public override float SpecialAttack(float userSP, int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
@@ -107,6 +111,7 @@ public class TestWeapon : CWeapon
         //reset charging status
         m_isCharging = false;
         C_chargeTime = 0.0f;
+        MAudio.Instance.PlayFX(AudioDatabase.Instance.getFXAudio("chargedpiano"));
 
         return m_SPCost;
     }
