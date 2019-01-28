@@ -8,7 +8,7 @@ public class QuestBoard : MonoBehaviour {
     //public Text QuestText;
     public Button btnPrefab;
     public List<Button> btnlist;
-    float startPos = -175;
+    float startPos = -200;
 
     private void Start()
     {
@@ -27,7 +27,7 @@ public class QuestBoard : MonoBehaviour {
             btnlist[i].onClick.RemoveAllListeners();
             btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
 
-            startPos += 175;
+            startPos += 200;
         }
 
 
@@ -41,11 +41,7 @@ public class QuestBoard : MonoBehaviour {
         if (_other.tag == "Player")
         {
             QuestBoardCanvas.gameObject.SetActive(true);
-            //if (QBQuest.Instance.currQuest.QuestComplete)
-            //{
-            //    // reward quest
-            //    QBQuest.Instance.RandomizeCurrQuest();
-            //}
+
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -61,7 +57,8 @@ public class QuestBoard : MonoBehaviour {
     {
         for (int i = 0;i<QBQuest.Instance.QuestList.Count;++i)
         {            
-                btnlist[i].GetComponentInChildren<Text>().text = QBQuest.Instance.QuestList[i].QuestString;
+            btnlist[i].transform.GetChild(0).GetComponent<Text>().text = QBQuest.Instance.QuestList[i].QuestString;
+            btnlist[i].transform.GetChild(1).GetComponent<Text>().text = QBQuest.Instance.QuestList[i].QuestReward + " " + QBQuest.Instance.QuestList[i].QuestRewardType;
         }
     }
     public void AddQuestToPlayer(QuestBase _quest)
@@ -72,7 +69,8 @@ public class QuestBoard : MonoBehaviour {
         else
         
         // change the image
-        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().GetComponentInChildren<Text>().text = "";
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().transform.GetChild(0).GetComponent<Text>().text = "";
+        UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().transform.GetChild(1).GetComponent<Text>().text = "";
     }
 
 

@@ -20,7 +20,7 @@ public class PlayerUIScript : MonoBehaviour {
     public Canvas m_playerQuestBoardUI;
     public Button btnPrefab;
     public List<Button> btnlist;
-    float startPos = -175;
+    float startPos = -200;
 
 
     // Use this for initialization
@@ -49,7 +49,7 @@ public class PlayerUIScript : MonoBehaviour {
             //btnlist[i].onClick.RemoveAllListeners();
             //btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
 
-            startPos += 175;
+            startPos += 200;
         }
         m_playerQuestBoardUI.gameObject.SetActive(false);
     }
@@ -124,11 +124,14 @@ public class PlayerUIScript : MonoBehaviour {
 
         for(int i =0;i<GetComponent<CPlayer>().QuestList.Count;++i)
         {
-            // todo ui
             QuestBase quest = GetComponent<CPlayer>().QuestList[i];
 
 
-            btnlist[i].GetComponentInChildren<Text>().text = quest.QuestString;
+            
+            btnlist[i].transform.GetChild(0).GetComponent<Text>().text = quest.QuestString;
+            btnlist[i].transform.GetChild(1).GetComponent<Text>().text = quest.QuestReward + " " + quest.QuestRewardType;
+
+
             btnlist[i].GetComponent<Button>().onClick.RemoveAllListeners();
             btnlist[i].GetComponent<Button>().onClick.AddListener(delegate { CompleteQuest(quest); });
 
@@ -147,6 +150,11 @@ public class PlayerUIScript : MonoBehaviour {
         {
             if(qb == _quest)
             {
+                if (qb.QuestRewardType == RewardType.NOTES)
+                    GetComponent<CPlayer>().m_InventorySystem.AddNotes((int)qb.QuestReward);
+                else if (qb.QuestRewardType == RewardType.GEMS)
+                    GetComponent<CPlayer>().m_InventorySystem.AddGems((int)qb.QuestReward);
+
                 GetComponent<CPlayer>().QuestList.Remove(qb);
                 UpdateQuestUI();
                 return;

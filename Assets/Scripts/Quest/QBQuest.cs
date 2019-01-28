@@ -33,7 +33,9 @@ public class QBQuest {
         {
             QuestTarget randomTarget = (QuestTarget)Random.Range((int)QuestTarget.NONE + 1, (int)QuestTarget.TOTAL);
 
-            newquest = new QuestBase(randomType, randomTarget, Random.Range(1, 4) * 5);
+
+
+            newquest = new QuestBase(randomType, randomTarget, Random.Range(1, 4) * 5, Random.Range(1, 10) * 10, RewardType.NOTES);
         }
         else if (randomType == QuestType.REACH)
         {
@@ -51,7 +53,7 @@ public class QBQuest {
                     nextlevel++;
             }
 
-            newquest = new QuestBase(QuestType.REACH, nextlevel);
+            newquest = new QuestBase(QuestType.REACH, nextlevel, Random.Range(1, 5) * 5, RewardType.GEMS);
         }
 
         return newquest;

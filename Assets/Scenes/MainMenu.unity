@@ -190,7 +190,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -429,7 +429,7 @@ Prefab:
     - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
         type: 2}
       propertyPath: BGMClipList.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4281645489008804, guid: 10f5333460ec510448749bb4442cb8cd, type: 2}
       propertyPath: m_LocalPosition.x
@@ -467,12 +467,22 @@ Prefab:
         type: 2}
       propertyPath: BGMClipList.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: feb9ac3e52dca3843a5945891a2583bd, type: 3}
+      objectReference: {fileID: 8300000, guid: 0a21bec5129e8fb4bba59a431cb43bc0, type: 3}
     - target: {fileID: 82459040242837980, guid: 10f5333460ec510448749bb4442cb8cd,
         type: 2}
       propertyPath: Loop
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
+        type: 2}
+      propertyPath: BGMClipList.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: fe892b215b9ac944889cb4b70a277967, type: 3}
+    - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
+        type: 2}
+      propertyPath: BGMClipList.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 88ed7ba01a0f3ae4ab7185d5cf74f436, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10f5333460ec510448749bb4442cb8cd, type: 2}
   m_IsPrefabAsset: 0
@@ -1483,8 +1493,8 @@ RectTransform:
   m_Father: {fileID: 224576439}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2462,8 +2472,8 @@ RectTransform:
   m_Father: {fileID: 1221152224}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2677,7 +2687,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
