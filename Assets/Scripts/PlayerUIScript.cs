@@ -20,7 +20,7 @@ public class PlayerUIScript : MonoBehaviour {
     public Canvas m_playerQuestBoardUI;
     public Button btnPrefab;
     public List<Button> btnlist;
-    float startPos = -175;
+    float startPos = -200;
 
 
     // Use this for initialization
@@ -49,7 +49,7 @@ public class PlayerUIScript : MonoBehaviour {
             //btnlist[i].onClick.RemoveAllListeners();
             //btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
 
-            startPos += 175;
+            startPos += 200;
         }
         m_playerQuestBoardUI.gameObject.SetActive(false);
     }
@@ -82,17 +82,17 @@ public class PlayerUIScript : MonoBehaviour {
                 GetComponent<CPlayer>().GetStats().EXP = m_TargetedEXP;
         }
 
-        if (GetComponent<CPlayer>().GetStats().SP > m_TargetedHealth)
+        if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
         {
-            GetComponent<CPlayer>().GetStats().SP -= Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP < m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedHealth;
+            GetComponent<CPlayer>().GetStats().SP -= Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
+                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
         }
-        else if (GetComponent<CPlayer>().GetStats().SP < m_TargetedHealth)
+        else if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
         {
-            GetComponent<CPlayer>().GetStats().SP += Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP > m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedHealth;
+            GetComponent<CPlayer>().GetStats().SP += Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
+                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
         }
 
 
@@ -124,11 +124,14 @@ public class PlayerUIScript : MonoBehaviour {
 
         for(int i =0;i<GetComponent<CPlayer>().QuestList.Count;++i)
         {
-            // todo ui
             QuestBase quest = GetComponent<CPlayer>().QuestList[i];
 
 
-            btnlist[i].GetComponentInChildren<Text>().text = quest.QuestString;
+            
+            btnlist[i].transform.GetChild(0).GetComponent<Text>().text = quest.QuestString;
+            btnlist[i].transform.GetChild(1).GetComponent<Text>().text = quest.QuestReward + " " + quest.QuestRewardType;
+
+
             btnlist[i].GetComponent<Button>().onClick.RemoveAllListeners();
             btnlist[i].GetComponent<Button>().onClick.AddListener(delegate { CompleteQuest(quest); });
 
@@ -141,12 +144,17 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void CompleteQuest(QuestBase _quest)
     {
-        Debug.Log("Quest Complete. TODO --- Quest Reward");
+        //Debug.Log("Quest Complete. TODO --- Quest Reward");
 
         foreach(QuestBase qb in GetComponent<CPlayer>().QuestList)
         {
             if(qb == _quest)
             {
+                if (qb.QuestRewardType == RewardType.NOTES)
+                    GetComponent<CPlayer>().m_InventorySystem.AddNotes((int)qb.QuestReward);
+                else if (qb.QuestRewardType == RewardType.GEMS)
+                    GetComponent<CPlayer>().m_InventorySystem.AddGems((int)qb.QuestReward);
+
                 GetComponent<CPlayer>().QuestList.Remove(qb);
                 UpdateQuestUI();
                 return;
@@ -193,8 +201,8 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void AddSP(float _SP, float _amount)
     {
-        if ((m_TargetedSP + _amount) >= GetComponent<CPlayer>().GetStats().MaxHP)
-            m_TargetedSP = GetComponent<CPlayer>().GetStats().MaxHP;
+        if ((m_TargetedHealth + _amount) >= GetComponent<CPlayer>().GetStats().MaxSP)
+            m_TargetedHealth = GetComponent<CPlayer>().GetStats().MaxSP;
         else
             m_TargetedSP += _amount;
 

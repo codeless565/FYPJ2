@@ -31,6 +31,7 @@ public class MMainMenu : MonoBehaviour {
     public void StartGame_Click()
     {
         SceneManager.LoadScene("GameScene");
+        MAudio.Instance.PlayBGM(MAudio.Instance.BGMClipList[2]);// 2 is game scene
     }
     public void ContinueGame_Click()
     {
@@ -64,7 +65,20 @@ public class MMainMenu : MonoBehaviour {
     }
     public void Apply_Click()
     {
-        print("Not done");
+        PlayerPrefs.SetFloat("BGM_VOL", MAudio.Instance.BGMSource.volume);
+        PlayerPrefs.SetFloat("FX_VOL", MAudio.Instance.FXSource.volume);
+
+        if(BGMToggle.isOn)
+            PlayerPrefs.SetInt("BGM_MUTE", 1);
+        else
+            PlayerPrefs.SetInt("BGM_MUTE", 0);
+
+        if (FXToggle.isOn)
+            PlayerPrefs.SetInt("FX_MUTE", 1);
+        else
+            PlayerPrefs.SetInt("FX_MUTE", 0);
+
+        OptionsPanel.SetActive(false);
     } 
     #endregion
 }

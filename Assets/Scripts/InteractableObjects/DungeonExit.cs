@@ -11,6 +11,7 @@ public class DungeonExit : MonoBehaviour {
         {
             CProgression.Instance.UpdateDungeonProgression();
             SceneManager.LoadScene("TownScene");
+            MAudio.Instance.PlayBGM(MAudio.Instance.BGMClipList[1]);
         }
     }
 }
