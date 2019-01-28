@@ -72,6 +72,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         this.name = "Player";
         m_PlayerStats = new CStats();
         m_InventorySystem = new CInventorySystem(InventoryPanel.GetComponent<CInventorySlots>(), InventoryUI.GetComponent<CInventory>());
+        m_playerQuestList = new List<QuestBase>();
 
         CProgression.Instance.LoadPlayerSave(this);
 
@@ -84,7 +85,6 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         m_PrestigeSystem = new PrestigeSystem();
         AchievementSystem.Instance.Init(this.GetStats());
-        m_playerQuestList = new List<QuestBase>();
 
         GetComponent<PlayerUIScript>().Init();
     }

@@ -15,11 +15,11 @@ public class QuestBase {
 
     QuestType m_QuestType;
     QuestTarget m_QuestTarget;
-    float m_Amount;
-    float m_CompleteAmount;
+    int m_Amount;
+    int m_CompleteAmount;
     bool m_QuestComplete;
     string m_questString;
-    float m_QuestReward;
+    int m_QuestReward;
     RewardType m_QuestRewardType;
 
         public RewardType QuestRewardType
@@ -35,7 +35,7 @@ public class QuestBase {
     }
 
 
-    public float QuestReward
+    public int QuestReward
     {
         get
         {
@@ -85,7 +85,7 @@ public class QuestBase {
         }
     }
 
-    public float QuestAmount
+    public int QuestAmount
     {
         get
         {
@@ -97,7 +97,7 @@ public class QuestBase {
         }
     }
 
-    public float QuestCompleteAmount
+    public int QuestCompleteAmount
     {
         get
         {
@@ -131,16 +131,16 @@ public class QuestBase {
         m_CompleteAmount = 0;
         m_QuestComplete = false;
         m_questString = "";
-        m_QuestReward = 0f;
+        m_QuestReward = 0;
         m_QuestRewardType = RewardType.NONE;
     }
 
     // for slay quests
-    public QuestBase(QuestType _questtype, QuestTarget _questtarget, float _completeamount, float _rewardamount, RewardType _rewardtype)
+    public QuestBase(QuestType _questtype, QuestTarget _questtarget, int _amt, int _completeamount, int _rewardamount, RewardType _rewardtype)
     {
         m_QuestType = _questtype;
         m_QuestTarget = _questtarget;
-        m_Amount = 0;
+        m_Amount = _amt;
         m_CompleteAmount = _completeamount;
         m_QuestComplete = false;
         m_questString = _questtype + " " + _questtarget + " " + _completeamount + " times";
@@ -149,11 +149,11 @@ public class QuestBase {
     }
 
     // for reach quests
-    public QuestBase(QuestType _questtype, float _completeamount, float _rewardamount, RewardType _rewardtype)
+    public QuestBase(QuestType _questtype, int _amt, int _completeamount, int _rewardamount, RewardType _rewardtype)
     {
         m_QuestType = _questtype;
         m_QuestTarget = QuestTarget.NONE;
-        m_Amount = 0;
+        m_Amount = _amt;
         m_CompleteAmount = _completeamount;
         m_QuestComplete = false;
         m_questString = _questtype + " level " + _completeamount;

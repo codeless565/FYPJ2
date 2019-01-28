@@ -99,8 +99,14 @@ public class CProgression
         for (int i = 0; i < _player.QuestList.Count; ++i)
         {
             PlayerPrefs.SetString("PlayerQuestName" + i, _player.QuestList[i].QuestString);
-            PlayerPrefs.SetFloat("PlayerQuestCurrAmt" + i, _player.QuestList[i].QuestAmount);
-            PlayerPrefs.SetFloat("PlayerQuestReqAmt" + i, _player.QuestList[i].QuestCompleteAmount);
+            PlayerPrefs.SetString("PlayerQuestType" + i, _player.QuestList[i].QuestType.ToString());
+            PlayerPrefs.SetString("PlayerQuestTarget" + i, _player.QuestList[i].QuestTarget.ToString());
+
+            PlayerPrefs.SetInt("PlayerQuestCurrAmt" + i, _player.QuestList[i].QuestAmount);
+            PlayerPrefs.SetInt("PlayerQuestReqAmt" + i, _player.QuestList[i].QuestCompleteAmount);
+
+            PlayerPrefs.SetInt("PlayerQuestReward" + i, _player.QuestList[i].QuestReward);
+            PlayerPrefs.SetString("PlayerQuestRewardType" + i, _player.QuestList[i].QuestRewardType.ToString());
         }
     }
 
@@ -185,6 +191,42 @@ public class CProgression
         //Quest
         for (int i = 0; i < 3; ++i)
         {
+            if (!PlayerPrefs.HasKey("PlayerQuestName" + i))
+                continue;
+
+            QuestBase newquest = new QuestBase();
+            RewardType rewardType = RewardType.NONE;
+            if (PlayerPrefs.GetString("PlayerQuestRewardType" + i).Contains(RewardType.NOTES.ToString()))
+                rewardType = RewardType.NOTES;
+            else if (PlayerPrefs.GetString("PlayerQuestRewardType" + i).Contains(RewardType.GEMS.ToString()))
+                rewardType = RewardType.GEMS;
+
+
+
+            if (PlayerPrefs.GetString("PlayerQuestType" + i).Contains(QuestType.REACH.ToString()))
+            {
+                newquest = new QuestBase(QuestType.REACH,
+                    PlayerPrefs.GetInt("PlayerQuestCurrAmt" + i),
+                    PlayerPrefs.GetInt("PlayerQuestReqAmt" + i),
+                    PlayerPrefs.GetInt("PlayerQuestReward" + i),
+                    rewardType);
+            }
+            else if (PlayerPrefs.GetString("PlayerQuestType" + i).Contains(QuestType.SLAY.ToString()))
+            {
+                QuestTarget questtarget = QuestTarget.NONE;
+                if (PlayerPrefs.GetString("PlayerQuestTarget" + i).Contains(QuestTarget.NOISE.ToString()))
+                    questtarget = QuestTarget.NOISE;
+
+
+                newquest = new QuestBase(QuestType.REACH,
+                    questtarget,
+                    PlayerPrefs.GetInt("PlayerQuestCurrAmt" + i),
+                    PlayerPrefs.GetInt("PlayerQuestReqAmt" + i),
+                    PlayerPrefs.GetInt("PlayerQuestReward" + i),
+                    rewardType);
+            }
+
+            _player.AddNewQuest(newquest);
         }
 
 
