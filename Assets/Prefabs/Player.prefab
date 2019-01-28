@@ -11,6 +11,23 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1528520425641184}
   m_IsPrefabAsset: 1
+--- !u!1 &1173285830697826
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4666852369164342}
+  - component: {fileID: 20578133239107606}
+  - component: {fileID: 81873941607604328}
+  m_Layer: 0
+  m_Name: Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1340001162401630
 GameObject:
   m_ObjectHideFlags: 0
@@ -21,7 +38,7 @@ GameObject:
   - component: {fileID: 4063586884987354}
   - component: {fileID: 20042553058835626}
   - component: {fileID: 81046404609786020}
-  - component: {fileID: 92216427093285360}
+  - component: {fileID: 92012354770329548}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -39,10 +56,9 @@ GameObject:
   - component: {fileID: 4039073146634340}
   - component: {fileID: 114313467315244940}
   - component: {fileID: 212452847881014276}
-  - component: {fileID: 20682006051747874}
   - component: {fileID: 50564999128411006}
   - component: {fileID: 61633481481744530}
-  - component: {fileID: 114989469168300038}
+  - component: {fileID: 114468888577087216}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -73,8 +89,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4666852369164342}
   m_Father: {fileID: 4039073146634340}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4666852369164342
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1173285830697826}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4063586884987354}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20042553058835626
@@ -117,16 +147,16 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!20 &20682006051747874
+--- !u!20 &20578133239107606
 Camera:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1528520425641184}
+  m_GameObject: {fileID: 1173285830697826}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -141,13 +171,13 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
-  m_Depth: -1
+  orthographic size: 13
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 4915156c33c52f74c880f6a28c05a787, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -209,7 +239,14 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1340001162401630}
   m_Enabled: 1
---- !u!92 &92216427093285360
+--- !u!81 &81873941607604328
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1173285830697826}
+  m_Enabled: 0
+--- !u!92 &92012354770329548
 Behaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,10 +267,7 @@ MonoBehaviour:
   isDead: 0
   InventoryPanel: {fileID: 0}
   InventoryUI: {fileID: 0}
-  HPSlider: {fileID: 0}
-  SPSlider: {fileID: 0}
-  EXPSlider: {fileID: 0}
---- !u!114 &114989469168300038
+--- !u!114 &114468888577087216
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -253,6 +287,9 @@ MonoBehaviour:
   m_TargetedEXP: 0
   m_FromSP: 0
   m_TargetedSP: 0
+  m_playerQuestBoardUI: {fileID: 0}
+  btnPrefab: {fileID: 0}
+  btnlist: []
 --- !u!212 &212452847881014276
 SpriteRenderer:
   m_ObjectHideFlags: 1
