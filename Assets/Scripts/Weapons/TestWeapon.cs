@@ -71,6 +71,8 @@ public class TestWeapon : CWeapon
         //reset charging status
         m_isCharging = false;
         C_chargeTime = 0.0f;
+
+        MAudio.Instance.PlayFX(MAudio.Instance.FXClipList[0]);
     }
 
     protected override void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)

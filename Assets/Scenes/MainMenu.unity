@@ -428,6 +428,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
         type: 2}
+      propertyPath: FXClipList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
+        type: 2}
       propertyPath: BGMClipList.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -483,6 +488,11 @@ Prefab:
       propertyPath: BGMClipList.Array.data[2]
       value: 
       objectReference: {fileID: 8300000, guid: 88ed7ba01a0f3ae4ab7185d5cf74f436, type: 3}
+    - target: {fileID: 114664843700464232, guid: 10f5333460ec510448749bb4442cb8cd,
+        type: 2}
+      propertyPath: FXClipList.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5cca237267243484db2f6370417e8c10, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10f5333460ec510448749bb4442cb8cd, type: 2}
   m_IsPrefabAsset: 0
