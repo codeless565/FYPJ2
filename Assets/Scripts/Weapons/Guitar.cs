@@ -5,7 +5,6 @@ using UnityEngine;
 //Weapon Format - READY
 public class Guitar : CWeapon
 {
-    float R_chargeTime = 2.0f;
     float m_SPCost = 20.0f;
 
     //unique
@@ -31,6 +30,7 @@ public class Guitar : CWeapon
 
         m_WeaponStats.Range = 10;
         m_WeaponStats.AttackMultiplier = 1;
+        R_chargeTime = 2.0f;
 
         m_isFiring = false;
         m_firedCount = 0;

@@ -73,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1528520425641184}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4063586884987354}
@@ -264,6 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc55003fbf62911428f83b5306197317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsInTown: 1
   isDead: 0
   InventoryPanel: {fileID: 0}
   InventoryUI: {fileID: 0}
@@ -281,6 +282,7 @@ MonoBehaviour:
   HPSlider: {fileID: 0}
   SPSlider: {fileID: 0}
   EXPSlider: {fileID: 0}
+  ChargingCircle: {fileID: 0}
   m_FromHealth: 0
   m_TargetedHealth: 0
   m_FromEXP: 0
@@ -288,7 +290,8 @@ MonoBehaviour:
   m_FromSP: 0
   m_TargetedSP: 0
   m_playerQuestBoardUI: {fileID: 0}
-  btnPrefab: {fileID: 0}
+  btnPrefab: {fileID: 114248630760845182, guid: 801b242ed7e64db4a82badd1266ee757,
+    type: 2}
   btnlist: []
 --- !u!212 &212452847881014276
 SpriteRenderer:

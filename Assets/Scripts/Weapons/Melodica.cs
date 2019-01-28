@@ -5,7 +5,6 @@ using UnityEngine;
 //Weapon Format - READY
 public class Melodica : CWeapon
 {
-    float R_chargeTime = 2.0f;
     float m_SPCost = 20.0f;
 
     public override string Name
@@ -20,6 +19,7 @@ public class Melodica : CWeapon
 
         m_WeaponStats.Range = 10;
         m_WeaponStats.AttackMultiplier = 1;
+        R_chargeTime = 2.0f;
 
         NormalBullet = (GameObject)Resources.Load("Projectiles/NormalNote");
         ChargeBullet = (GameObject)Resources.Load("Projectiles/ExplosiveNote");

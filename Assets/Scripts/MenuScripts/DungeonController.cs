@@ -61,4 +61,9 @@ public class DungeonController : MonoBehaviour
         }
 
     }
+
+    public void CloseSelectorWindow()
+    {
+        gameObject.SetActive(false);
+    }
 }

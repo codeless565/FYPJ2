@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Sprite))]
 public class CPlayer : MonoBehaviour ,IEntity
 {
+    [SerializeField]
+    bool IsInTown = false;
+
     private bool m_IsImmortal;
     public bool isDead;
 
@@ -246,7 +249,7 @@ public class CPlayer : MonoBehaviour ,IEntity
             m_PlayerStats.EXP = 0f;
 
             m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
-            GetComponent<PlayerUIScript>().EXPSlider.maxValue = m_PlayerStats.MaxEXP;
+            GetComponent<PlayerUIScript>().EXPSlider.fillAmount = m_PlayerStats.MaxEXP;
             GetComponent<PlayerUIScript>().m_FromEXP = m_PlayerStats.EXP;
             GetComponent<PlayerUIScript>().m_TargetedEXP = m_PlayerStats.EXP;
 
@@ -298,17 +301,17 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     public void Attack()
     {
-        if (SceneManager.GetActiveScene().name == "TownScene")
+        if (IsInTown)
             return;
 
         if (Input.GetMouseButtonDown(0))
             m_EquippedWeapon.IsCharging();
 
         if (Input.GetMouseButtonUp(0))
-            m_EquippedWeapon.IsAttacking(m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
+            m_EquippedWeapon.IsAttacking(m_PlayerStats.Attack, transform, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, 1/m_PlayerStats.PlayRate);
 
         if (Input.GetMouseButtonDown(1))
-            m_PlayerStats.SP -= m_EquippedWeapon.SpecialAttack(m_PlayerStats.SP, m_PlayerStats.Attack, transform.position, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, m_PlayerStats.PlayRate);
+            m_PlayerStats.SP -= m_EquippedWeapon.SpecialAttack(m_PlayerStats.SP, m_PlayerStats.Attack, transform, ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized, 1/m_PlayerStats.PlayRate);
     }
 
     public void UseItem(string _itemKey)
@@ -344,7 +347,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         return m_PlayerStats;
     }
 
-    public void IsDamaged(float damage)
+    public void IsDamaged(float _incomingDamage, AttackType _attackType)
     {
         // Guardian Angel 
         if (m_PrestigeSystem.GetList().ContainsKey(GuardianAngel.prestigename))
@@ -366,9 +369,8 @@ public class CPlayer : MonoBehaviour ,IEntity
                 return;
             }
         }
-        
-      
-        GetComponent<PlayerUIScript>().RemoveHealth(m_PlayerStats.HP, damage);
+
+        GetComponent<PlayerUIScript>().RemoveHealth(m_PlayerStats.HP, CDamageCalculator.Instance.CalculateDamage(_incomingDamage, m_PlayerStats.Defense));
         OOCtimer = 0f;
     }
 

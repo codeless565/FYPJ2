@@ -6,6 +6,7 @@ public class CWeapon
 {
     protected bool m_isCharging;
     protected float C_chargeTime;
+    protected float R_chargeTime;
     protected float m_firingDelay;
     protected CWeaponStats m_WeaponStats;
     protected Sprite m_WeaponSprite;
@@ -57,6 +58,9 @@ public class CWeapon
         return 0.0f;
     }
 
+    public virtual string Name
+    { get { return ""; } }
+
     public Sprite WeaponSprite
     {
         get
@@ -89,6 +93,6 @@ public class CWeapon
         m_WeaponStats.Range = _attackRange;
     }
 
-    public virtual string Name
-    { get { return ""; } }
+    public float ChargingState
+    { get { return C_chargeTime / R_chargeTime; } }
 }

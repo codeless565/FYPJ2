@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerUIScript : MonoBehaviour {
-    public Slider HPSlider;
-    public Slider SPSlider;
-    public Slider EXPSlider;
+    public Image HPSlider;
+    public Image SPSlider;
+    public Image EXPSlider;
+    public Image ChargingCircle;
+
+    private Text LevelDisplay;
+    private Text HealthPercentageDisplay;
 
     public float m_FromHealth;
     public float m_TargetedHealth;
@@ -22,21 +26,30 @@ public class PlayerUIScript : MonoBehaviour {
     public List<Button> btnlist;
     float startPos = -200;
 
+    CPlayer m_Player;
 
     // Use this for initialization
-    public void Init () { 
-        HPSlider.maxValue = GetComponent<CPlayer>().GetStats().MaxHP;
-        SPSlider.maxValue = GetComponent<CPlayer>().GetStats().MaxSP;
-        EXPSlider.maxValue = GetComponent<CPlayer>().GetStats().MaxEXP;
+    public void Init () {
+        m_Player = GetComponent<CPlayer>();
+        LevelDisplay = EXPSlider.GetComponentInChildren<Text>();
+        HealthPercentageDisplay = HPSlider.GetComponentInChildren<Text>();
+        HPSlider = HPSlider.transform.GetChild(0).GetComponent<Image>();
+        SPSlider = SPSlider.transform.GetChild(0).GetComponent<Image>();
+        EXPSlider = EXPSlider.transform.GetChild(0).GetComponent<Image>();
+        ChargingCircle = ChargingCircle.transform.GetChild(0).GetComponent<Image>();
 
-        m_TargetedHealth = GetComponent<CPlayer>().GetStats().HP;
-        m_FromHealth = GetComponent<CPlayer>().GetStats().HP;
+        HPSlider.fillAmount = m_Player.GetStats().MaxHP;
+        SPSlider.fillAmount = m_Player.GetStats().MaxSP;
+        EXPSlider.fillAmount = m_Player.GetStats().MaxEXP;
 
-        m_TargetedEXP = GetComponent<CPlayer>().GetStats().EXP;
-        m_FromEXP = GetComponent<CPlayer>().GetStats().EXP;
+        m_TargetedHealth = m_Player.GetStats().HP;
+        m_FromHealth = m_Player.GetStats().HP;
 
-        m_TargetedSP = GetComponent<CPlayer>().GetStats().SP;
-        m_FromSP = GetComponent<CPlayer>().GetStats().SP;
+        m_TargetedEXP = m_Player.GetStats().EXP;
+        m_FromEXP = m_Player.GetStats().EXP;
+
+        m_TargetedSP = m_Player.GetStats().SP;
+        m_FromSP = m_Player.GetStats().SP;
 
         btnlist = new List<Button>();
         for (int i = 0; i < 3; ++i)
@@ -56,51 +69,52 @@ public class PlayerUIScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (GetComponent<CPlayer>().GetStats().HP > m_TargetedHealth)
+        if (m_Player.GetStats().HP > m_TargetedHealth)
         {
-            GetComponent<CPlayer>().GetStats().HP -= Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().HP < m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().HP = m_TargetedHealth;
+            m_Player.GetStats().HP -= Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
+            if (m_Player.GetStats().HP < m_TargetedHealth)
+                m_Player.GetStats().HP = m_TargetedHealth;
         }
-        else if (GetComponent<CPlayer>().GetStats().HP < m_TargetedHealth)
+        else if (m_Player.GetStats().HP < m_TargetedHealth)
         {
-            GetComponent<CPlayer>().GetStats().HP += Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().HP > m_TargetedHealth)
-                GetComponent<CPlayer>().GetStats().HP = m_TargetedHealth;
-        }
-
-        if (GetComponent<CPlayer>().GetStats().EXP > m_TargetedEXP)
-        {
-            GetComponent<CPlayer>().GetStats().EXP -= Mathf.Abs(m_FromEXP - m_TargetedEXP) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().EXP < m_TargetedEXP)
-                GetComponent<CPlayer>().GetStats().EXP = m_TargetedEXP;
-        }
-        else if (GetComponent<CPlayer>().GetStats().EXP < m_TargetedEXP)
-        {
-            GetComponent<CPlayer>().GetStats().EXP += Mathf.Abs(m_FromEXP - m_TargetedEXP) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().EXP > m_TargetedEXP)
-                GetComponent<CPlayer>().GetStats().EXP = m_TargetedEXP;
+            m_Player.GetStats().HP += Mathf.Abs(m_FromHealth - m_TargetedHealth) * Time.deltaTime;
+            if (m_Player.GetStats().HP > m_TargetedHealth)
+                m_Player.GetStats().HP = m_TargetedHealth;
         }
 
-        if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
+        if (m_Player.GetStats().EXP > m_TargetedEXP)
         {
-            GetComponent<CPlayer>().GetStats().SP -= Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
+            m_Player.GetStats().EXP -= Mathf.Abs(m_FromEXP - m_TargetedEXP) * Time.deltaTime;
+            if (m_Player.GetStats().EXP < m_TargetedEXP)
+                m_Player.GetStats().EXP = m_TargetedEXP;
         }
-        else if (GetComponent<CPlayer>().GetStats().SP < m_TargetedSP)
+        else if (m_Player.GetStats().EXP < m_TargetedEXP)
         {
-            GetComponent<CPlayer>().GetStats().SP += Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
-            if (GetComponent<CPlayer>().GetStats().SP > m_TargetedSP)
-                GetComponent<CPlayer>().GetStats().SP = m_TargetedSP;
+            m_Player.GetStats().EXP += Mathf.Abs(m_FromEXP - m_TargetedEXP) * Time.deltaTime;
+            if (m_Player.GetStats().EXP > m_TargetedEXP)
+                m_Player.GetStats().EXP = m_TargetedEXP;
+        }
+
+        if (m_Player.GetStats().SP > m_TargetedSP)
+        {
+            m_Player.GetStats().SP -= Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (m_Player.GetStats().SP < m_TargetedSP)
+                m_Player.GetStats().SP = m_TargetedSP;
+        }
+        else if (m_Player.GetStats().SP < m_TargetedSP)
+        {
+            m_Player.GetStats().SP += Mathf.Abs(m_FromSP - m_TargetedSP) * Time.deltaTime;
+            if (m_Player.GetStats().SP > m_TargetedSP)
+                m_Player.GetStats().SP = m_TargetedSP;
         }
 
 
-        HPSlider.value = GetComponent<CPlayer>().GetStats().HP;
-        SPSlider.value = GetComponent<CPlayer>().GetStats().SP;
-        EXPSlider.value = GetComponent<CPlayer>().GetStats().EXP;
-
-
+        HPSlider.fillAmount = m_Player.GetStats().HP / m_Player.GetStats().MaxHP;
+        SPSlider.fillAmount = m_Player.GetStats().SP / m_Player.GetStats().MaxSP;
+        EXPSlider.fillAmount = m_Player.GetStats().EXP / m_Player.GetStats().MaxEXP;
+        ChargingCircle.fillAmount = m_Player.EquippedWeapon.ChargingState;
+        HealthPercentageDisplay.text = (m_Player.GetStats().HP / m_Player.GetStats().MaxHP).ToString() + "%";
+        LevelDisplay.text = m_Player.GetStats().Level.ToString();
     }
 
     public void OpenQuestUI()
@@ -123,9 +137,9 @@ public class PlayerUIScript : MonoBehaviour {
     {
         ResetQuestDisplay();
 
-        for(int i =0;i<GetComponent<CPlayer>().QuestList.Count;++i)
+        for(int i =0;i<m_Player.QuestList.Count;++i)
         {
-            QuestBase quest = GetComponent<CPlayer>().QuestList[i];
+            QuestBase quest = m_Player.QuestList[i];
 
 
             
@@ -136,7 +150,7 @@ public class PlayerUIScript : MonoBehaviour {
             btnlist[i].GetComponent<Button>().onClick.RemoveAllListeners();
             btnlist[i].GetComponent<Button>().onClick.AddListener(delegate { CompleteQuest(quest); });
 
-            if (GetComponent<CPlayer>().QuestList[i].QuestComplete)
+            if (m_Player.QuestList[i].QuestComplete)
                 btnlist[i].GetComponent<Image>().color = Color.green;
             else
                 btnlist[i].GetComponent<Image>().color = Color.red;
@@ -147,16 +161,16 @@ public class PlayerUIScript : MonoBehaviour {
     {
         //Debug.Log("Quest Complete. TODO --- Quest Reward");
 
-        foreach(QuestBase qb in GetComponent<CPlayer>().QuestList)
+        foreach(QuestBase qb in m_Player.QuestList)
         {
             if(qb == _quest)
             {
                 if (qb.QuestRewardType == RewardType.NOTES)
-                    GetComponent<CPlayer>().m_InventorySystem.AddNotes((int)qb.QuestReward);
+                    m_Player.m_InventorySystem.AddNotes((int)qb.QuestReward);
                 else if (qb.QuestRewardType == RewardType.GEMS)
-                    GetComponent<CPlayer>().m_InventorySystem.AddGems((int)qb.QuestReward);
+                    m_Player.m_InventorySystem.AddGems((int)qb.QuestReward);
 
-                GetComponent<CPlayer>().QuestList.Remove(qb);
+                m_Player.QuestList.Remove(qb);
                 UpdateQuestUI();
                 return;
             }
@@ -175,8 +189,8 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void AddHealth(float _health, float _amount)
     {
-        if ((m_TargetedHealth + _amount) >= GetComponent<CPlayer>().GetStats().MaxHP)
-            m_TargetedHealth = GetComponent<CPlayer>().GetStats().MaxHP;
+        if ((m_TargetedHealth + _amount) >= m_Player.GetStats().MaxHP)
+            m_TargetedHealth = m_Player.GetStats().MaxHP;
         else
             m_TargetedHealth += _amount;
 
@@ -202,8 +216,8 @@ public class PlayerUIScript : MonoBehaviour {
 
     public void AddSP(float _SP, float _amount)
     {
-        if ((m_TargetedHealth + _amount) >= GetComponent<CPlayer>().GetStats().MaxSP)
-            m_TargetedHealth = GetComponent<CPlayer>().GetStats().MaxSP;
+        if ((m_TargetedHealth + _amount) >= m_Player.GetStats().MaxSP)
+            m_TargetedHealth = m_Player.GetStats().MaxSP;
         else
             m_TargetedSP += _amount;
 

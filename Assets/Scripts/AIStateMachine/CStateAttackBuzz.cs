@@ -22,11 +22,11 @@ public class CStateAttackBuzz : IStateBase
     {
         m_GO = _go;
         m_Owner = m_GO.GetComponent<IEnemy>();
-        m_Target = m_Owner.Target.GetComponent<IEntity>();
     }
 
     public void EnterState()
     {
+        m_Target = m_Owner.Target.GetComponent<IEntity>();
     }
 
     public void UpdateState()
