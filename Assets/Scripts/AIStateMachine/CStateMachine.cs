@@ -49,6 +49,20 @@ public class CStateMachine
         }
     }
 
+    public void SwapExistingState(IStateBase _newState)
+    {
+        if (m_stateMap.ContainsKey(_newState.StateID))
+            m_stateMap[_newState.StateID] = _newState;
+        else
+            m_stateMap.Add(_newState.StateID, _newState);
+    }
+
+    public void RefreshState()
+    {
+        m_currState = m_stateMap[m_currState.StateID];
+        m_nextState = m_stateMap[m_nextState.StateID];
+    }
+
     public string CurrentState
     {
         get

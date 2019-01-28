@@ -21,44 +21,14 @@ public class CDamageCalculator
 
     }
 
-    public bool SendDamage(GameObject _Target, GameObject _Attacker)
+    public float CalculateDamage(float _theirDamage, float _myDefense)
     {
-        if (_Target == null   || _Target.GetComponent<IEntity>() == null ||
-            _Attacker == null || _Attacker.GetComponent<IEntity>() == null)
-            return false;
-
-        float AttackerAtk = _Attacker.GetComponent<IEntity>().GetStats().Attack;
-        float DefenderDef = _Target.GetComponent<IEntity>().GetStats().Defense;
-
-        float FinalDMG = FinalDMGAlgo(AttackerAtk, DefenderDef);
-
-        _Target.GetComponent<IEntity>().IsDamaged(FinalDMG);
-
-        return true;
+        return 100 / (100 + _myDefense * 10) * _theirDamage;
     }
 
-    public bool SendDamage(GameObject _Target, float _damage)
+    public float CalculateDamage(float _theirDamage, float _myDefense, float _damageMultiplier)
     {
-        if (_Target == null || _Target.GetComponent<IEntity>() == null)
-            return false;
-
-        float DefenderDef = _Target.GetComponent<IEntity>().GetStats().Defense;
-
-        float FinalDMG = FinalDMGAlgo(_damage, DefenderDef);
-
-        _Target.GetComponent<IEntity>().IsDamaged(FinalDMG);
-
-        return true;
-    }
-
-    public bool SendHealing(GameObject _Target, GameObject _Healer)
-    {
-        if (_Target == null || _Target.GetComponent<IEntity>() == null)
-            return false;
-
-        _Target.GetComponent<IEntity>().IsDamaged(-_Healer.GetComponent<IEntity>().GetStats().Attack);
-
-        return true;
+        return 100 / (100 + _myDefense * 10) * _theirDamage * _damageMultiplier;
     }
 
     private float FinalDMGAlgo(float _atk, float _def)

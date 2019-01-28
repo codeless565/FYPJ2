@@ -84,15 +84,47 @@ public class ExplosiveNote : MonoBehaviour, IProjectile
         if (_other.tag == "Player")
             return;
 
-        Debug.Log("collided name: " + _other.tag);
         if (_other.tag == "Wall")
         {
+            GameObject newBullet1 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet1.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(0, 1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet2 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet2.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, 1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet3 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet3.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, 0).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet4 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet4.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet5 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet5.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(0, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet6 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet6.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet7 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet7.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, 0).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet8 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet8.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, 1).normalized, ProjectileType.Normal, AttackType.Basic);
+
             Destroy(gameObject);
         }
         else if (_other.tag == "Monster")
         {
             //Hit monster, deal damage and spawn 
-            CDamageCalculator.Instance.SendDamage(_other.gameObject, m_damage);
+            _other.GetComponent<IEntity>().IsDamaged(m_damage, m_attackType);
+            GameObject newBullet1 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet1.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(0, 1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet2 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet2.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, 1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet3 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet3.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, 0).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet4 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet4.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(1, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet5 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet5.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(0, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet6 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet6.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, -1).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet7 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet7.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, 0).normalized, ProjectileType.Normal, AttackType.Basic);
+            GameObject newBullet8 = Instantiate(m_NormalNote, transform.position, Quaternion.identity);
+            newBullet8.GetComponent<IProjectile>().Init(m_damage, 20, m_travelDist, new Vector2(-1, 1).normalized, ProjectileType.Normal, AttackType.Basic);
             Destroy(gameObject);
         }
     }

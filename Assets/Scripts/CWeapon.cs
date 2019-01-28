@@ -33,24 +33,24 @@ public class CWeapon
         m_isCharging = true;
     }
 
-    public virtual void IsAttacking(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public virtual void IsAttacking(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         Debug.Log("Using base function: CWeapon.IsAttacking");
     }
 
-    protected virtual void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    protected virtual void NormalAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.NormalAttack");
     }
 
-    protected virtual void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    protected virtual void ChargeAttack(int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create normal attack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.ChargeAttack");
     }
 
-    public virtual float SpecialAttack(float userSP, int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public virtual float SpecialAttack(float userSP, int _damage, Transform _transfrom, Vector2 _direction, float _firingDelay)
     {
         //Create SpecialAttack prefab or smthing with projectile script
         Debug.Log("Using base function: CWeapon.SpecialAttack");

@@ -45,7 +45,7 @@ public class TestWeapon : CWeapon
         m_isCharging = true;
     }
 
-    public override void IsAttacking(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public override void IsAttacking(int _damage, Transform _transform, Vector2 _direction, float _firingDelay)
     {
         if (!m_isCharging)
             return;
@@ -53,16 +53,16 @@ public class TestWeapon : CWeapon
         Debug.Log("TestWeapon.IsAttacking Called - m_firingDelay = " + m_firingDelay);
 
         if (C_chargeTime >= R_chargeTime)
-            ChargeAttack(_damage, _position, _direction, _firingDelay);
+            ChargeAttack(_damage, _transform, _direction, _firingDelay);
         else
-            NormalAttack(_damage, _position, _direction, _firingDelay);
+            NormalAttack(_damage, _transform, _direction, _firingDelay);
     }
 
-    protected override void NormalAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    protected override void NormalAttack(int _damage, Transform _transform, Vector2 _direction, float _firingDelay)
     {
         //Create NormalAttack prefab or smthing with projectile script
         Debug.Log("TestWeapon.NormalAttack Called - Fired");
-        GameObject newBullet = Object.Instantiate(NormalBullet, _position, Quaternion.identity);
+        GameObject newBullet = Object.Instantiate(NormalBullet, _transform.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 10, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Basic);
 
         //"reload" weapon
@@ -76,11 +76,11 @@ public class TestWeapon : CWeapon
 
     }
 
-    protected override void ChargeAttack(int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    protected override void ChargeAttack(int _damage, Transform _transform, Vector2 _direction, float _firingDelay)
     {
         //Create ChargeAttack prefab or smthing with projectile script
         Debug.Log("TestWeapon.ChargeAttack Called - Fired");
-        GameObject newBullet = Object.Instantiate(ChargeBullet, _position, Quaternion.identity);
+        GameObject newBullet = Object.Instantiate(ChargeBullet, _transform.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Piercing, AttackType.Charged);
 
         //"reload" weapon
@@ -94,7 +94,7 @@ public class TestWeapon : CWeapon
 
     }
 
-    public override float SpecialAttack(float userSP, int _damage, Vector2 _position, Vector2 _direction, float _firingDelay)
+    public override float SpecialAttack(float userSP, int _damage, Transform _transform, Vector2 _direction, float _firingDelay)
     {
         if (userSP < m_SPCost)
             return 0.0f;
@@ -102,7 +102,7 @@ public class TestWeapon : CWeapon
         //Create SpecialAttack prefab or smthing with projectile script
         Debug.Log("TestWeapon.SpecialAttack Called");
 
-        GameObject newBullet = Object.Instantiate(SpecialBullet, _position, Quaternion.identity);
+        GameObject newBullet = Object.Instantiate(SpecialBullet, _transform.position, Quaternion.identity);
         newBullet.GetComponent<IProjectile>().Init(_damage * m_WeaponStats.AttackMultiplier, 20, m_WeaponStats.Range, _direction, ProjectileType.Normal, AttackType.Special);
 
         //"reload" weapon

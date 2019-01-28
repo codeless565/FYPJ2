@@ -20,9 +20,12 @@ public class CStatePathTest : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     public CStatePathTest(GameObject _gameObj)
     {
         m_GO = _gameObj;
+        m_Owner = m_GO.GetComponent<IEnemy>();
         m_Pathing = new Queue<CPathNode>();
 
         EnterState();
@@ -35,7 +38,7 @@ public class CStatePathTest : IStateBase
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
-        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
+        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_Owner.RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing != null)
             nextDest = m_Pathing.Dequeue();
     }
@@ -52,9 +55,9 @@ public class CStatePathTest : IStateBase
         if (nextDest == null)
             return;
 
-        m_GO.transform.Translate((nextDest.position - (Vector2)m_GO.transform.position).normalized * m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime);
+        m_GO.transform.Translate((nextDest.position - (Vector2)m_GO.transform.position).normalized * m_Owner.GetStats().MoveSpeed * Time.deltaTime);
 
-        if ((nextDest.position - (Vector2)m_GO.transform.position).magnitude <= m_GO.GetComponent<IEntity>().GetStats().MoveSpeed * Time.deltaTime)
+        if ((nextDest.position - (Vector2)m_GO.transform.position).magnitude <= m_Owner.GetStats().MoveSpeed * Time.deltaTime)
         {
             if (m_Pathing.Count <= 0)
             {
@@ -74,7 +77,7 @@ public class CStatePathTest : IStateBase
         List<CTRoom> rmList = CTDungeon.Instance.Floors[CTDungeon.Instance.currentFloor].Rooms;
         int randomDestIndex = Random.Range(0, rmList.Count - 1);
 
-        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_GO.GetComponent<IEntity>().RoomCoordinate, rmList[randomDestIndex].coordinate);
+        m_Pathing = CTDungeon.Instance.BFS_ToRoom(m_Owner.RoomCoordinate, rmList[randomDestIndex].coordinate);
         if (m_Pathing == null)
             newPathing();
     }

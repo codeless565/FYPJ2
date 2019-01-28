@@ -29,6 +29,8 @@ public class CExplorationMode : MonoBehaviour {
                 GetComponent<CItemGenerator>().Init();
             if (GetComponent<CMonsterGenerator>())
                 GetComponent<CMonsterGenerator>().Init();
+            if (GetComponent<CBossGenerator>())
+                GetComponent<CBossGenerator>().Init();
         }
     }
 }

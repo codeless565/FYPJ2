@@ -146,12 +146,15 @@ public class CProgression
                 case "TestWeapon":
                     _player.EquippedWeapon = new TestWeapon();
                     break;
-                    //case "Melodica":
-                    //    _player.EquippedWeapon = new Weapon_Melodica();
-                    //    break;
-                    //case "Guitar":
-                    //    _player.EquippedWeapon = new Weapon_Guitar();
-                    //    break;
+                case "Melodica":
+                    _player.EquippedWeapon = new Melodica();
+                    break;
+                case "Guitar":
+                    _player.EquippedWeapon = new Guitar();
+                    break;
+                case "Recorder":
+                    _player.EquippedWeapon = new Recorder();
+                    break;
                     //case "Piano":
                     //    _player.EquippedWeapon = new Weapon_Piano();
                     //    break;
@@ -162,7 +165,7 @@ public class CProgression
                     //    _player.EquippedWeapon = new Weapon_ElectricGuitar();
                     //    break;
                     //case "Harp":
-                    //    _player.EquippedWeapon = new Weapon_Harp();
+                    //    _player.EquippedWeapon = new Harp();
                     //    break;
                     //case "Trumpet":
                     //    _player.EquippedWeapon = new Weapon_Trumpet();

@@ -36,5 +36,8 @@ public class CInventory : MonoBehaviour
     public void OpenInventoryTab()
     { gameObject.SetActive(true); }
 
+    public void ToggleInvetoryTab()
+    { gameObject.SetActive(!gameObject.activeSelf); }
+
     #endregion
 }

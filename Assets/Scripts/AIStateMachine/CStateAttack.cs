@@ -15,9 +15,14 @@ public class CStateAttack : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+    IEntity m_Target;
+
     public CStateAttack(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
+        m_Target = m_Owner.Target.GetComponent<IEntity>();
     }
 
     public void EnterState()
@@ -28,7 +33,7 @@ public class CStateAttack : IStateBase
     {
         if (m_GO.GetComponent<IEnemy>().CanAttack)
         {
-            CDamageCalculator.Instance.SendDamage(m_GO.GetComponent<IEnemy>().Target, m_GO);
+            m_Target.IsDamaged(m_Owner.GetStats().Attack);
             m_GO.GetComponent<IEnemy>().ResetAtkTimer();
         }
 

@@ -15,9 +15,12 @@ public class CStateAttackDisturb : IStateBase
         get { return m_GO; }
     }
 
+    IEnemy m_Owner;
+
     public CStateAttackDisturb(GameObject _go)
     {
         m_GO = _go;
+        m_Owner = m_GO.GetComponent<IEnemy>();
     }
 
     public void EnterState()
@@ -31,9 +34,9 @@ public class CStateAttackDisturb : IStateBase
             foreach (GameObject Obj in m_GO.GetComponent<IAreaOfEffect>().TargetList)
             {
                 if (Obj.tag == "Player")
-                    CDamageCalculator.Instance.SendDamage(Obj, m_GO);
+                    Obj.GetComponent<IEntity>().IsDamaged(m_Owner.GetStats().Attack);
                 else if (Obj.tag == "Monster")
-                    CDamageCalculator.Instance.SendHealing(Obj, m_GO);
+                    Obj.GetComponent<IEntity>().IsDamaged(m_Owner.GetStats().Attack, AttackType.Size);
             }
 
             m_GO.GetComponent<IEnemy>().ResetAtkTimer();
