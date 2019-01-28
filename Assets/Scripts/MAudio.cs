@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class MAudio : MonoBehaviour {
 
@@ -25,9 +28,14 @@ public class MAudio : MonoBehaviour {
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(this.gameObject);
+        BGMSource.volume= PlayerPrefs.GetFloat("BGM_VOL");
+        FXSource.volume = PlayerPrefs.GetFloat("FX_VOL");
 
-        //BGMClipList = new List<AudioClip>();
-        //FXClipList = new List<AudioClip>();
+        if(PlayerPrefs.GetInt("BGM_MUTE") == 1)
+            BGMSource.mute = true;
+        if (PlayerPrefs.GetInt("FX_MUTE") == 1)
+            FXSource.mute = true;
+
         instance = this;
 
         PlayBGM(BGMClipList[0]);
@@ -35,8 +43,9 @@ public class MAudio : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
+
     public void PlayBGM(AudioClip _clip)
     {
         if (!_clip)
@@ -56,4 +65,6 @@ public class MAudio : MonoBehaviour {
         FXSource.clip = _clip;
         FXSource.Play();
     }
+
+    
 }
