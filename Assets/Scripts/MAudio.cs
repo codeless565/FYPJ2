@@ -22,14 +22,19 @@ public class MAudio : MonoBehaviour {
     public AudioSource BGMSource;
     public AudioSource FXSource;
 
-    public List<AudioClip> BGMClipList;
-    public List<AudioClip> FXClipList;
-
     // Use this for initialization
     void Start () {
         DontDestroyOnLoad(this.gameObject);
-        BGMSource.volume= PlayerPrefs.GetFloat("BGM_VOL");
-        FXSource.volume = PlayerPrefs.GetFloat("FX_VOL");
+        if (!PlayerPrefs.HasKey("BGM_VOL") || !PlayerPrefs.HasKey("FX_VOL"))
+        {
+            BGMSource.volume = 1f;
+            FXSource.volume = 1f;
+        }
+        else
+        {
+            BGMSource.volume = PlayerPrefs.GetFloat("BGM_VOL");
+            FXSource.volume = PlayerPrefs.GetFloat("FX_VOL");
+        }
 
         if(PlayerPrefs.GetInt("BGM_MUTE") == 1)
             BGMSource.mute = true;
@@ -37,13 +42,13 @@ public class MAudio : MonoBehaviour {
             FXSource.mute = true;
 
         instance = this;
+        PlayBGM(AudioDatabase.Instance.getBGMAudio("mainmenu"));
 
-        PlayBGM(BGMClipList[0]);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
+    // Update is called once per frame
+    void Update () {
+        
     }
 
     public void PlayBGM(AudioClip _clip)

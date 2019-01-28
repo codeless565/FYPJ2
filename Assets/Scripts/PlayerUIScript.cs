@@ -100,12 +100,13 @@ public class PlayerUIScript : MonoBehaviour {
         SPSlider.value = GetComponent<CPlayer>().GetStats().SP;
         EXPSlider.value = GetComponent<CPlayer>().GetStats().EXP;
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
+
+    }
+
+    public void OpenQuestUI()
+    {
             UpdateQuestUI();
             m_playerQuestBoardUI.gameObject.SetActive(!m_playerQuestBoardUI.gameObject.activeSelf);
-        }
-
     }
 
 
