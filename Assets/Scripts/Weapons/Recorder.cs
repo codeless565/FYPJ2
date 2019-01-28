@@ -10,7 +10,7 @@ public class Recorder : CWeapon
 
     public override string Name
     {
-        get { return "Melodica"; }
+        get { return "Recorder"; }
     }
 
     public Recorder()

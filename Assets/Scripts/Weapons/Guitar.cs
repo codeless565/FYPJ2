@@ -21,7 +21,7 @@ public class Guitar : CWeapon
 
     public override string Name
     {
-        get { return "Melodica"; }
+        get { return "Guitar"; }
     }
 
     public Guitar()
