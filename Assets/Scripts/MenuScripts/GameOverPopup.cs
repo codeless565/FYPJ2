@@ -45,6 +45,9 @@ public class GameOverPopup : MonoBehaviour
             m_BounceTime -= Time.deltaTime;
 
         if (m_BounceTime < 0)
+        {
             SceneManager.LoadScene("MainMenu");
+            MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("mainmenu"));
+        }
     }
 }
