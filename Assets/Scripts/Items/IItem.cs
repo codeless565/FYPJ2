@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IItem
 {
-    bool UseItem(ref CStats _playerStats);
+    bool UseItem(CPlayer _player);
 
     string ItemKey
     { get; }

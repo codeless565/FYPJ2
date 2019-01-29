@@ -259,6 +259,21 @@ Prefab:
       propertyPath: IsInTown
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: m_BackGroundColor.r
+      value: 0.11764707
+      objectReference: {fileID: 0}
+    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: m_BackGroundColor.g
+      value: 0.03529412
+      objectReference: {fileID: 0}
+    - target: {fileID: 20042553058835626, guid: 15ca25e35842d854ca02c84dca99ba08,
+        type: 2}
+      propertyPath: m_BackGroundColor.b
+      value: 0.019607844
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15ca25e35842d854ca02c84dca99ba08, type: 2}
   m_IsPrefabAsset: 0

@@ -11,17 +11,15 @@ public class HPPotion : MonoBehaviour, IItem
         m_ItemSprite = GetComponent<SpriteRenderer>().sprite;
     }
 
-    public bool UseItem(ref CStats _playerStats)
+    public bool UseItem(CPlayer _player)
     {
-        if (_playerStats.HP >= _playerStats.MaxHP)
+        if (_player.GetStats().HP >= _player.GetStats().MaxHP)
             return false;
 
-        _playerStats.HP += _playerStats.MaxHP * 0.5f;
+        _player.UIScript.AddHealth(_player.GetStats().HP, _player.GetStats().MaxHP * 0.5f);
 
-        if (_playerStats.HP > _playerStats.MaxHP)
-            _playerStats.HP = _playerStats.MaxHP;
-
-        Debug.Log("Player hp: " + _playerStats.HP + " Max: " + _playerStats.MaxHP);
+        if (_player.GetStats().HP > _player.GetStats().MaxHP)
+            _player.GetStats().HP = _player.GetStats().MaxHP;
         return true;
     }
 

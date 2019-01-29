@@ -11,7 +11,7 @@ public class ReviveTicket : MonoBehaviour, IItem
         m_ItemSprite = GetComponent<SpriteRenderer>().sprite;
     }
 
-    public bool UseItem(ref CStats _playerStats)
+    public bool UseItem(CPlayer _player)
     {
         Debug.Log("Revive item used!");
         return true;

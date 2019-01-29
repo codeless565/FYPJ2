@@ -30,6 +30,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
     float OOCtimer = 0f;
 
+    public PlayerUIScript UIScript;
 
     private List<QuestBase> m_playerQuestList;
     public List<QuestBase> QuestList
@@ -86,7 +87,8 @@ public class CPlayer : MonoBehaviour ,IEntity
         m_PrestigeSystem = new PrestigeSystem();
         AchievementSystem.Instance.Init(this.GetStats());
 
-        GetComponent<PlayerUIScript>().Init();
+        UIScript = GetComponent<PlayerUIScript>();
+        UIScript.Init();
     }
 
     public void Update()
@@ -165,7 +167,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         //        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
         //}
         if(m_PlayerStats.SP <= 100f)
-        GetComponent<PlayerUIScript>().AddSP(m_PlayerStats.SP, Time.deltaTime);
+       UIScript.AddSP(m_PlayerStats.SP, Time.deltaTime);
 
         //Use item
         if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
@@ -189,6 +191,18 @@ public class CPlayer : MonoBehaviour ,IEntity
             UseItem(CItemDatabase.Instance.SPElixirData.ItemKey);
         }
 
+        //CHEAT
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            m_InventorySystem.AddNotes(1000);
+            m_InventorySystem.AddGems(1000);
+        }
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            m_InventorySystem.AddNotes(-1000);
+            m_InventorySystem.AddGems(-1000);
+        }
+
     }
 
 
@@ -203,10 +217,10 @@ public class CPlayer : MonoBehaviour ,IEntity
             {
                 Encore encoreprestige = (Encore)m_PrestigeSystem.GetPrestige(Encore.prestigename);
                 if(encoreprestige.isActive)
-                    GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1f * Time.deltaTime);
+                   UIScript.AddHealth(m_PlayerStats.HP, 1f * Time.deltaTime);
             }
             else
-                GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 0.5f*Time.deltaTime);
+               UIScript.AddHealth(m_PlayerStats.HP, 0.5f*Time.deltaTime);
 
 
         }
@@ -266,13 +280,13 @@ public class CPlayer : MonoBehaviour ,IEntity
         RemoveAllPrestigeStats();
 
         int CurrLevel = m_PlayerStats.Level += 1;
-        float excessEXP = GetComponent<PlayerUIScript>().m_TargetedEXP - m_PlayerStats.MaxEXP;
+        float excessEXP =UIScript.m_TargetedEXP - m_PlayerStats.MaxEXP;
         m_PlayerStats.EXP = 0f;
 
         m_PlayerStats.MaxEXP = m_PlayerStats.Level * 10;
-        GetComponent<PlayerUIScript>().EXPSlider.fillAmount = m_PlayerStats.MaxEXP;
-        GetComponent<PlayerUIScript>().m_FromEXP = m_PlayerStats.EXP;
-        GetComponent<PlayerUIScript>().m_TargetedEXP = m_PlayerStats.EXP;
+       UIScript.EXPSlider.fillAmount = m_PlayerStats.MaxEXP;
+       UIScript.m_FromEXP = m_PlayerStats.EXP;
+       UIScript.m_TargetedEXP = m_PlayerStats.EXP;
 
         // Update State according to level
         m_PlayerStats.MaxHP = CurrLevel * 10;
@@ -304,7 +318,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         //    m_PrestigeSystem.GetList().Add(new Euphoria());
 
         // Add Excess EXP
-        GetComponent<PlayerUIScript>().AddEXP(m_PlayerStats.EXP, excessEXP);
+       UIScript.AddEXP(m_PlayerStats.EXP, excessEXP);
 
 
         AddAllPrestigeStats();
@@ -346,7 +360,7 @@ public class CPlayer : MonoBehaviour ,IEntity
 
         if (temp != null)
         {
-            if (temp.UseItem(ref m_PlayerStats))
+            if (temp.UseItem(this))
                 m_InventorySystem.RemoveItem(_itemKey);
             return;
         }
@@ -396,7 +410,7 @@ public class CPlayer : MonoBehaviour ,IEntity
             }
         }
 
-        GetComponent<PlayerUIScript>().RemoveHealth(m_PlayerStats.HP, CDamageCalculator.Instance.CalculateDamage(_incomingDamage, m_PlayerStats.Defense));
+       UIScript.RemoveHealth(m_PlayerStats.HP, CDamageCalculator.Instance.CalculateDamage(_incomingDamage, m_PlayerStats.Defense));
         OOCtimer = 0f;
     }
 

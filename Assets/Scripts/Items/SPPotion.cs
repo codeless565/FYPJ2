@@ -11,17 +11,15 @@ public class SPPotion : MonoBehaviour, IItem
         m_ItemSprite = GetComponent<SpriteRenderer>().sprite;
     }
 
-    public bool UseItem(ref CStats _playerStats)
+    public bool UseItem(CPlayer _player)
     {
-        if (_playerStats.SP >= _playerStats.MaxSP)
+        if (_player.GetStats().SP >= _player.GetStats().MaxSP)
             return false;
 
-        _playerStats.SP += _playerStats.MaxSP * 0.5f;
+        _player.UIScript.AddSP(_player.GetStats().SP, _player.GetStats().MaxSP * 0.5f);
 
-        if (_playerStats.SP > _playerStats.MaxSP)
-            _playerStats.SP = _playerStats.MaxSP;
-
-        Debug.Log("Player sp: " + _playerStats.SP + " Max: " + _playerStats.MaxSP);
+        if (_player.GetStats().SP > _player.GetStats().MaxSP)
+            _player.GetStats().SP = _player.GetStats().MaxSP;
         return true;
     }
 
