@@ -13,22 +13,22 @@ public class QuestBoard : MonoBehaviour {
     private void Start()
     {
         //QBQuest.Instance.UpdateQuest(QBQuest.Instance.firstQuest,QuestType.REACH,QuestTarget.NONE);
+        QBQuest.Instance.QuestList.Clear();
         btnlist = new List<Button>();
+            for (int i = 0; i < 3; ++i)
+            {
+                QuestBase newquest = QBQuest.Instance.RandomizeQuest();
+                QBQuest.Instance.QuestList.Add(newquest);
 
-        for(int i = 0;i<3;++i)
-        {
-            QuestBase newquest = QBQuest.Instance.RandomizeQuest();
-            QBQuest.Instance.QuestList.Add(newquest);
+                Button newbtn = Instantiate(btnPrefab, QuestBoardCanvas.transform);
+                newbtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPos, 0, 0);
+                btnlist.Add(newbtn);
 
-            Button newbtn = Instantiate(btnPrefab, QuestBoardCanvas.transform);
-            newbtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(startPos, 0, 0);
-            btnlist.Add(newbtn);
+                btnlist[i].onClick.RemoveAllListeners();
+                btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
 
-            btnlist[i].onClick.RemoveAllListeners();
-            btnlist[i].onClick.AddListener(delegate { AddQuestToPlayer(newquest); });
-
-            startPos += 200;
-        }
+                startPos += 200;
+            }
 
 
         PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.REACH.ToString(), QuestTarget.NONE.ToString()));
@@ -51,14 +51,15 @@ public class QuestBoard : MonoBehaviour {
 
     private void Update()
     {
+        Debug.Log(QBQuest.Instance.QuestList.Count);
     }
 
     public void UpdateQuestBoardUI()
     {
-        for (int i = 0;i<QBQuest.Instance.QuestList.Count;++i)
+        for (int i = 0;i<3;++i)
         {            
             btnlist[i].transform.GetChild(0).GetComponent<Text>().text = QBQuest.Instance.QuestList[i].QuestString;
-            btnlist[i].transform.GetChild(1).GetComponent<Text>().text = QBQuest.Instance.QuestList[i].QuestReward + " " + QBQuest.Instance.QuestList[i].QuestRewardType;
+            //btnlist[i].transform.GetChild(1).GetComponent<Text>().text = QBQuest.Instance.QuestList[i].QuestReward + " " + QBQuest.Instance.QuestList[i].QuestRewardType;
         }
     }
     public void AddQuestToPlayer(QuestBase _quest)
