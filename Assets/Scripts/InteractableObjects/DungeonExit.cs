@@ -10,6 +10,7 @@ public class DungeonExit : MonoBehaviour {
         if (_other.tag == "Player")
         {
             CProgression.Instance.UpdateDungeonProgression();
+            //CProgression.Instance.UpdatePlayerSave()
             SceneManager.LoadScene("TownScene");
             MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("townscene"));
         }
