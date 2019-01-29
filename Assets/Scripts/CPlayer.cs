@@ -164,6 +164,7 @@ public class CPlayer : MonoBehaviour ,IEntity
         //    if(m_playerQuestList.Count > 0)
         //        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.QUEST, QuestType.SLAY.ToString(), QuestTarget.NOISE.ToString()));
         //}
+        if(m_PlayerStats.SP <= 100f)
         GetComponent<PlayerUIScript>().AddSP(m_PlayerStats.SP, Time.deltaTime);
 
         //Use item
@@ -202,10 +203,10 @@ public class CPlayer : MonoBehaviour ,IEntity
             {
                 Encore encoreprestige = (Encore)m_PrestigeSystem.GetPrestige(Encore.prestigename);
                 if(encoreprestige.isActive)
-                    GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 2);
+                    GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1f * Time.deltaTime);
             }
             else
-                GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 1);
+                GetComponent<PlayerUIScript>().AddHealth(m_PlayerStats.HP, 0.5f*Time.deltaTime);
 
 
         }
