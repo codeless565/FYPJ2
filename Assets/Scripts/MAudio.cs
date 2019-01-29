@@ -24,6 +24,11 @@ public class MAudio : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (GameObject.FindGameObjectsWithTag("AudioManager").Length > 1)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         DontDestroyOnLoad(this.gameObject);
         if (!PlayerPrefs.HasKey("BGM_VOL") || !PlayerPrefs.HasKey("FX_VOL"))
         {
