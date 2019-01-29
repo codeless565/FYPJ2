@@ -50,6 +50,8 @@ public class DungeonController : MonoBehaviour
         if (currentFloorSelection >= 1 && currentFloorSelection < CTDungeon.Instance.BossFloorRed)
         {
             SceneManager.LoadScene("DungeonLevel_Red");
+            MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("gamescene"));
+
             return;
         }
 
@@ -59,6 +61,7 @@ public class DungeonController : MonoBehaviour
             //SceneManager.LoadScene("DungeonLevel_Pink");
             return;
         }
+
 
     }
 
