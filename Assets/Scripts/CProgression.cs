@@ -146,7 +146,7 @@ public class CProgression
                 PlayerPrefs.GetInt("PlayerItems_ReviveTix"));
         }
         else
-            _player.m_InventorySystem.Init(0, int.MaxValue, 0, 0, 0, 0, 0, 0);
+            _player.m_InventorySystem.Init(0, 0, 0, 0, 0, 0, 0, 0);
 
         //Weapon
         if (PlayerPrefs.HasKey("PlayerWeapon_Equipped"))

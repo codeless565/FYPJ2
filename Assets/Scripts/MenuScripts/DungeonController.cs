@@ -37,18 +37,22 @@ public class DungeonController : MonoBehaviour
         //All here are boss or change in floor type
         if (currentFloorSelection == CTDungeon.Instance.BossFloorRed)
         {
+            CProgression.Instance.UpdatePlayerSave(GameObject.FindGameObjectWithTag("Player").GetComponent<CPlayer>());
             SceneManager.LoadScene("BossLevel_Red");
             return;
         }
 
         if (currentFloorSelection == CTDungeon.Instance.BossFloorPink)
         {
+            CProgression.Instance.UpdatePlayerSave(GameObject.FindGameObjectWithTag("Player").GetComponent<CPlayer>());
+            SceneManager.LoadScene("DungeonLevel_Red");
             Debug.Log("BossPinkStage Not Implemented owo");
             return;
         }
 
         if (currentFloorSelection >= 1 && currentFloorSelection < CTDungeon.Instance.BossFloorRed)
         {
+            CProgression.Instance.UpdatePlayerSave(GameObject.FindGameObjectWithTag("Player").GetComponent<CPlayer>());
             SceneManager.LoadScene("DungeonLevel_Red");
             MAudio.Instance.PlayBGM(AudioDatabase.Instance.getBGMAudio("gamescene"));
 
@@ -57,7 +61,8 @@ public class DungeonController : MonoBehaviour
 
         if (currentFloorSelection > CTDungeon.Instance.BossFloorRed && currentFloorSelection < CTDungeon.Instance.BossFloorPink)
         {
-            Debug.Log("DungeonLevel_Pink Not Implemented owo");
+            CProgression.Instance.UpdatePlayerSave(GameObject.FindGameObjectWithTag("Player").GetComponent<CPlayer>());
+            SceneManager.LoadScene("DungeonLevel_Red");
             //SceneManager.LoadScene("DungeonLevel_Pink");
             return;
         }
