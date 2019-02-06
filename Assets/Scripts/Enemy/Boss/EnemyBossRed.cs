@@ -110,7 +110,7 @@ public class EnemyBossRed : MonoBehaviour, IEnemy
 
     public void Delete()
     {
-        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, m_EnemyStats.Level * m_EnemyStats.EXP));
+        PostOffice.Instance.Send("Player", new Message(MESSAGE_TYPE.ADDEXP, m_EnemyStats.EXP));
         Destroy(gameObject);
     }
 
